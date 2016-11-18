@@ -24,7 +24,7 @@ namespace Videospieldatenbank
         public MainWindow()
         {
             InitializeComponent();
-            new DatabaseInteraction("localhost", 3306, "test", "igdb");
+            new DatabaseInteraction("tazed.tk", 3306, "gamedatabase", "igdb", "1337");
         }
     }
 }

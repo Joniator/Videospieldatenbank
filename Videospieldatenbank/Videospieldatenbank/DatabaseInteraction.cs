@@ -1,29 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using MySql.Data.MySqlClient;
 
 namespace Videospieldatenbank
 {
-    class DatabaseInteraction
+    internal class DatabaseInteraction
     {
-        private MySqlConnection _connection;
+        private readonly MySqlConnection _connection;
+
+        public DatabaseInteraction(string server, int port, string databaseName, string userId, string password)
+        {
+            try
+            {   
+                var connectionString = $"Server={server};" +
+                                                   $"port={port};" +
+                                                   $"Database={databaseName};" +
+                                                   $"Uid={userId};"+
+                                                   $"password={password}";
+
+                _connection = new MySqlConnection(connectionString);
+                _connection.Open();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                Environment.Exit(1);
+            }
+        }
 
         public bool Connected => _connection.State == ConnectionState.Open;
-
-        public DatabaseInteraction(string server, int port, string databaseName, string userId)
-        {
-            string connectionString = $"Server={server};" +
-                                      $"port={port};" +
-                                      $"Database={databaseName};" +
-                                      $"Uid={userId};";
-
-            _connection = new MySqlConnection(connectionString);
-            _connection.Open();
-        }
     }
 }
