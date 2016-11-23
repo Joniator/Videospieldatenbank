@@ -1,12 +1,37 @@
-﻿<Window x:Class="Videospieldatenbank.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Videospieldatenbank"
+        xmlns:Videospieldatenbank="clr-namespace:Videospieldatenbank" x:Class="Videospieldatenbank.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Videospieldatenbank" Height="700" Width="1050" MinHeight="550" MinWidth="725">
+
+    <Window.Background>
+        <ImageBrush ImageSource="resources/pictures/defaultWallpaper2.jpg" Stretch="UniformToFill"></ImageBrush>
+    </Window.Background>
+
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="435*"/>
+            <ColumnDefinition Width="607*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         
+        <StackPanel x:Name="NavigationStackPanel" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2"
+                    Grid.Column="0" CanHorizontallyScroll="True" CanVerticallyScroll="False">
+            <Button x:Name="ButtonContent" Content="Profil"/>
+            <Button x:Name="ButtonLibrary" Content="Bibliothek" Click="ButtonLibrary_OnClick"></Button>
+            <Button x:Name="ButtonFriends" Content="Freunde" Click="ButtonFriends_OnClick"/>
+            <Button x:Name="ButtonShop" Content="Shop"/>
+        </StackPanel>
+        <Frame Name="FrameLeft" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Frame Name="FrameRight" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+        <GridSplitter Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="2" Background="Black" ></GridSplitter>
     </Grid>
 </Window>

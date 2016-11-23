@@ -1,0 +1,28 @@
+﻿<Page x:Class="Videospieldatenbank.GameList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Videospieldatenbank"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300" Title="GameList">
+    
+    <Grid>
+        <TabControl Name="TabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Opacity="0.5">
+            <TabItem Name="TabItem_Games" Header="Games">
+                <ListBox Name="Listbox_TabItem_Games" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.CanContentScroll="True">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Name="MenuItemAdd" Header="Add" Click="MenuItemAdd_OnClick"></MenuItem>
+                            <MenuItem Name="MenuItemEdit" Header="Edit" Click="MenuItemEdit_OnClick"></MenuItem>
+                            <MenuItem Name="MenuItemDelete" Header="Delete" Click="MenuItemDelete_OnClick"></MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+            </TabItem>
+            <TabItem Name="TabItem_Launcher" Header="Launcher">
+                <ListBox Name="Listbox_TabItem_Launcher" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.CanContentScroll="True" ></ListBox>
+            </TabItem>            
+        </TabControl>
+    </Grid>
+</Page>
