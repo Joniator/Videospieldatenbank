@@ -9,7 +9,7 @@
         Title="Videospieldatenbank" Height="700" Width="1050" MinHeight="550" MinWidth="725">
 
     <Window.Background>
-        <ImageBrush ImageSource="resources/pictures/defaultWallpaper2.jpg" Stretch="UniformToFill"></ImageBrush>
+        <ImageBrush ImageSource="/Resources/Pictures/defaultWallpaper2.jpg" Stretch="UniformToFill"></ImageBrush>
     </Window.Background>
 
     <Grid>
@@ -25,7 +25,7 @@
         <StackPanel x:Name="NavigationStackPanel" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2"
                     Grid.Column="0" CanHorizontallyScroll="True" CanVerticallyScroll="False">
             <Button x:Name="ButtonContent" Content="Profil" Click="ButtonContent_OnClick"/>
-            <Button x:Name="ButtonLibrary" Content="Bibliothek" Click="ButtonLibrary_OnClick"></Button>
+            <Button x:Name="ButtonLibrary" Content="Bibliothek" Click="ButtonLibrary_OnClick" Height="40" Margin="10,10,10,0" VerticalAlignment="Top"></Button>
             <Button x:Name="ButtonFriends" Content="Freunde" Click="ButtonFriends_OnClick"/>
             <Button x:Name="ButtonShop" Content="Shop"/>
         </StackPanel>
