@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" Source="/resources/pictures/defaultWallpaper.jpg" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform"></Image>
+        <Image Grid.Column="0" Source="resources/pictures/defaultWallpaper.jpg" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform"></Image>
         <ListBox Name="ListBoxUserLinks" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="0"></ListBox>
         <ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="1"></ListBox>
         <ListBox Name="ListBoxInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1">
