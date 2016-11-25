@@ -23,7 +23,7 @@ namespace Videospieldatenbank
     {
         private readonly GameList _gameList = new GameList();
         private readonly GameInfo _gameInfo = new GameInfo();
-        public static Friends friends = null;
+        public static Friends Friends = null;
 
         public MainWindow()
         {
@@ -41,16 +41,16 @@ namespace Videospieldatenbank
 
         private void ButtonFriends_OnClick(object sender, RoutedEventArgs e)
         {
-            if(friends != null && friends.IsLoaded)
+            if(Friends != null && Friends.IsLoaded)
             {
-              friends.Activate();
+              Friends.Activate();
             }
             else
             {
-                if (friends == null)
-                    friends = new Friends();
+                if (Friends == null)
+                    Friends = new Friends();
 
-                friends.Show();
+                Friends.Show();
             }
         }
     }

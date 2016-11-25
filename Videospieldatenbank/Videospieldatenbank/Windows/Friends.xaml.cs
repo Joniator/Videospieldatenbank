@@ -27,7 +27,7 @@ namespace Videospieldatenbank
 
         private void Friends_OnClosed(object sender, EventArgs e)
         {
-            MainWindow.friends = null;
+            MainWindow.Friends = null;
         }
     }
 }
