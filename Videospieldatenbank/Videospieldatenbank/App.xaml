@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:Videospieldatenbank"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
 
         <LinearGradientBrush x:Key="Usercolor" 
