@@ -1,45 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
+﻿using System.Windows;
 
 namespace Videospieldatenbank
 {
     /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
+    ///     Interaktionslogik für MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly GameList _gameList = new GameList();
+        public static Friends friends;
         private readonly GameInfo _gameInfo = new GameInfo();
+        private readonly GameList _gameList = new GameList();
         private readonly OptionsDesign _optionsDesign = new OptionsDesign();
-        public static Friends friends = null;
-
-        public MainWindow()
-        {
-            //new DatabaseInteraction("tazed.tk", 3306, "gamedatabase", "igdb", "1337");
-        }
 
         private object FrameCheck(bool frameLR, bool frameF)
         {
-            if (FrameLeft.IsVisible || FrameLeft.IsVisible && !frameLR)
+            if (FrameLeft.IsVisible || (FrameLeft.IsVisible && !frameLR))
             {
                 FrameLeft.Visibility = Visibility.Collapsed;
                 FrameRight.Visibility = Visibility.Collapsed;
                 return true;
             }
-            if (!FrameLeft.IsVisible || !FrameLeft.IsVisible && frameLR)
+            if (!FrameLeft.IsVisible || (!FrameLeft.IsVisible && frameLR))
             {
                 FrameLeft.Visibility = Visibility.Visible;
                 FrameRight.Visibility = Visibility.Visible;
@@ -60,9 +41,9 @@ namespace Videospieldatenbank
 
         private void ButtonFriends_OnClick(object sender, RoutedEventArgs e)
         {
-            if(friends != null && friends.IsLoaded)
+            if ((friends != null) && friends.IsLoaded)
             {
-              friends.Activate();
+                friends.Activate();
             }
             else
             {
