@@ -1,19 +1,18 @@
-﻿using System;
-using System.Diagnostics;
-using MySql.Data;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 
-namespace Videospieldatenbank
+namespace Videospieldatenbank.Database
 {
     public class DatabaseConnector
     {
         private readonly MySqlConnection _mySqlConnection = new MySqlConnection();
-        public bool Connected => _mySqlConnection.Ping();
 
+        /// <summary>
+        ///     Stellt eine Verbindung mit der Datenbank her.
+        /// </summary>
         /// <exception cref="MySqlException">Verbindung zum Server fehlgeschlagen.</exception>
         public DatabaseConnector()
         {
-            MySqlConnectionStringBuilder builder = new MySqlConnectionStringBuilder()
+            var builder = new MySqlConnectionStringBuilder
             {
                 Server = "tazed.tk",
                 UserID = "igdb",
@@ -23,5 +22,7 @@ namespace Videospieldatenbank
             _mySqlConnection.ConnectionString = builder.ToString();
             _mySqlConnection.Open();
         }
+
+        public bool Connected => _mySqlConnection.Ping();
     }
 }

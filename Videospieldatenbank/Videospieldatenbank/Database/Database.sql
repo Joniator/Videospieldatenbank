@@ -5,6 +5,7 @@
 	name VARCHAR(512),
 	developer VARCHAR(512) ,
 	official_website VARCHAR(512),
+	wiki VARCHAR(512),
 	plattforms VARCHAR(512),
 	genre VARCHAR(512),
 	rating INTEGER
@@ -25,7 +26,7 @@ CREATE TABLE friends(
 );
 
 CREATE TABLE playtime(
-PRIMARY KEY (user_ID, igdb_url),
+	PRIMARY KEY (user_ID, igdb_url),
 	user_ID INTEGER,
 	igdb_url VARCHAR(512),
 	playtime TIME 
