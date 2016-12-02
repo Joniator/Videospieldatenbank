@@ -1,4 +1,4 @@
-﻿<Page x:Class="Videospieldatenbank.OptionsDesign"
+﻿<Page x:Class="Videospieldatenbank.Profil"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,16 +8,21 @@
       xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
       mc:Ignorable="d"
       d:DesignHeight="300" d:DesignWidth="300"
-      Title="OptionsDesign">
+      Title="Profil">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <xctk:ColorPicker Name="ColorPickerMain" AdvancedButtonHeader="test" Grid.Column="1" Margin="12,70,12,215" />
-        <xctk:ColorPicker Name="ColorPickerFrame" Grid.Column="1" Margin="12,50,12,235" />
-        <xctk:ColorPicker Name="ColorPickerButton" Grid.Column="1" Margin="12,30,12,255" />
-        <xctk:ColorPicker Name="ColorPicker" Grid.Column="1" Margin="12,10,12,275" />
+
+        <TabControl Name="TabControl" Grid.ColumnSpan="2">
+            <TabItem Name="TabItemAccount" Header="Account">
+                <Frame Name="FrameAccount"></Frame>
+            </TabItem>
+            <TabItem Name="TabItemLayout"  Header="Layout">
+                <Frame Name="FrameLayout"></Frame>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>
