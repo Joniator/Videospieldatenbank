@@ -7,7 +7,7 @@
 	official_website VARCHAR(512),
 	wiki VARCHAR(512),
 	plattforms VARCHAR(512),
-	genre VARCHAR(512),
+	genres VARCHAR(512),
 	rating INTEGER
 );
 

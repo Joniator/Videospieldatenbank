@@ -85,6 +85,12 @@
     </ApplicationDefinition>
     <Compile Include="Database\DatabaseConnector.cs" />
     <Compile Include="Database\Game.cs" />
+    <Compile Include="Pages\Settings\DesignSettings.xaml.cs">
+      <DependentUpon>DesignSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\ProfilSettings.xaml.cs">
+      <DependentUpon>ProfilSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>
@@ -94,9 +100,17 @@
     <Compile Include="Pages\GameList.xaml.cs">
       <DependentUpon>GameList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\OptionsDesign.xaml.cs">
-      <DependentUpon>OptionsDesign.xaml</DependentUpon>
+    <Compile Include="Pages\Profil.xaml.cs">
+      <DependentUpon>Profil.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\Settings\DesignSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\ProfilSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -125,7 +139,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\OptionsDesign.xaml">
+    <Page Include="Pages\Profil.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,6 +181,7 @@
   <ItemGroup>
     <Content Include="Database\Database.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
