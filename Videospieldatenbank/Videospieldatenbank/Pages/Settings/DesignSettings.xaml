@@ -1,0 +1,58 @@
+﻿<Page x:Class="Videospieldatenbank.Pages.Settings.DesignSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Videospieldatenbank.Pages.Settings"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="DesignSettings">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TabControl Name="TabControl" Grid.ColumnSpan="2">
+            <TabItem Header="Account"></TabItem>
+            <TabItem Header="Layout">
+                <TabControl Name="TabControlLayout">
+                    <TabItem Header="Fenster">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="HauptFenster" Grid.Column="0" Grid.Row="0"></Label>
+                            <Label Content="FreundeFenster" Grid.Column="0" Grid.Row="1"></Label>
+                            <Label Content="Spieleliste" Grid.Column="0" Grid.Row="2"></Label>
+                            <Label Content="Spieleinfo" Grid.Column="0" Grid.Row="3"></Label>
+                            <Label Content="Shop" Grid.Column="0" Grid.Row="4"></Label>
+                            <Label Content="Profil" Grid.Column="0" Grid.Row="5"></Label>
+                            
+                            <StackPanel Grid.Column="1" Grid.Row="0" Margin="0,0,0,0">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <Button Content="Farbe" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="70" Height="20"/>
+                                    <Button Content="Bild" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="70" Height="20" />
+                                </StackPanel>
+                                <xctk:ColorPicker Name="ColorPickerFrame"/>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Buttons"></TabItem>
+                </TabControl>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Page>
