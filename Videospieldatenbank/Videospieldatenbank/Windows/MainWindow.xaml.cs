@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Videospieldatenbank.Database;
 
 namespace Videospieldatenbank
 {
@@ -13,31 +12,50 @@ namespace Videospieldatenbank
         private readonly GameList _gameList = new GameList();
         private readonly OptionsDesign _optionsDesign = new OptionsDesign();
 
-        private object FrameCheck(bool frameLR, bool frameF)
+        /// <summary>
+        /// Disables unused frames and enables used frames.
+        /// </summary>
+        /// <param name="frameLR">true = enable frameLR; false = disable frameLR</param>
+        private void FrameCheck(bool frameLR)
         {
-            if (FrameLeft.IsVisible || (FrameLeft.IsVisible && !frameLR))
+            bool frameF = false;
+            if (!frameLR)
+                frameF = true;
+
+            //Checks for frameLR
+            if (FrameLeft.IsVisible && !frameLR)
             {
                 FrameLeft.Visibility = Visibility.Collapsed;
                 FrameRight.Visibility = Visibility.Collapsed;
-                return true;
+                GridSplitter.Visibility = Visibility.Collapsed;
             }
-            if (!FrameLeft.IsVisible || (!FrameLeft.IsVisible && frameLR))
+            if (!FrameLeft.IsVisible && frameLR)
             {
                 FrameLeft.Visibility = Visibility.Visible;
                 FrameRight.Visibility = Visibility.Visible;
-                return true;
+                GridSplitter.Visibility = Visibility.Visible;
             }
 
-            return false;
+            //Checks for frameF
+            if (FrameFull.IsVisible && !frameF)
+            {
+                FrameFull.Visibility = Visibility.Collapsed;
+            }
+            if (!FrameFull.IsVisible && frameF)
+            {
+                FrameFull.Visibility = Visibility.Visible;
+            }
         }
 
-        public MainWindow()
-        {
-
-        }
-
+        /// <summary>
+        /// Open Library.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonLibrary_OnClick(object sender, RoutedEventArgs e)
         {
+            FrameCheck(true);           
+
             if (FrameLeft.Content != _gameList)
                 FrameLeft.Content = _gameList;
 
@@ -45,6 +63,11 @@ namespace Videospieldatenbank
                 FrameRight.Content = _gameInfo;
         }
 
+        /// <summary>
+        /// Open FrindsList.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonFriends_OnClick(object sender, RoutedEventArgs e)
         {
             if ((friends != null) && friends.IsLoaded)
@@ -60,10 +83,16 @@ namespace Videospieldatenbank
             }
         }
 
+        /// <summary>
+        /// Open Profil/Settings.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonContent_OnClick(object sender, RoutedEventArgs e)
         {
-            if (FrameLeft.Content != _optionsDesign)
-                FrameLeft.Content = _optionsDesign;
+            FrameCheck(false);
+            if (FrameFull.Content != _optionsDesign)
+                FrameFull.Content = _optionsDesign;
         }
     }
 }
