@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Videospieldatenbank.Database;
 
 namespace Videospieldatenbank
 {
@@ -28,6 +29,11 @@ namespace Videospieldatenbank
             }
 
             return false;
+        }
+
+        public MainWindow()
+        {
+
         }
 
         private void ButtonLibrary_OnClick(object sender, RoutedEventArgs e)
