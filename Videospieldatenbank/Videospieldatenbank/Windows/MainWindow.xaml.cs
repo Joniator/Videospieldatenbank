@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Videospieldatenbank.Pages.Settings;
 
 namespace Videospieldatenbank
 {
@@ -10,7 +11,8 @@ namespace Videospieldatenbank
         public static Friends friends;
         private readonly GameInfo _gameInfo = new GameInfo();
         private readonly GameList _gameList = new GameList();
-        private readonly OptionsDesign _optionsDesign = new OptionsDesign();
+        private readonly Profil _profil = new Profil();
+        //private readonly DesignSettings _profilSettings = new DesignSettings();
 
         /// <summary>
         /// Disables unused frames and enables used frames.
@@ -18,9 +20,7 @@ namespace Videospieldatenbank
         /// <param name="frameLR">true = enable frameLR; false = disable frameLR</param>
         private void FrameCheck(bool frameLR)
         {
-            bool frameF = false;
-            if (!frameLR)
-                frameF = true;
+            bool frameF = !frameLR;
 
             //Checks for frameLR
             if (FrameLeft.IsVisible && !frameLR)
@@ -91,8 +91,8 @@ namespace Videospieldatenbank
         private void ButtonContent_OnClick(object sender, RoutedEventArgs e)
         {
             FrameCheck(false);
-            if (FrameFull.Content != _optionsDesign)
-                FrameFull.Content = _optionsDesign;
+            if (FrameFull.Content != _profil)
+                FrameFull.Content = _profil;
         }
     }
 }

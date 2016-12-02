@@ -24,5 +24,10 @@ namespace Videospieldatenbank.Pages.Settings
         {
             InitializeComponent();
         }
+
+        private void ButtonOk_OnClick(object sender, RoutedEventArgs e)
+        {
+            //http://stackoverflow.com/questions/18200902/changing-the-styles-at-runtime-in-wpf
+        }
     }
 }
