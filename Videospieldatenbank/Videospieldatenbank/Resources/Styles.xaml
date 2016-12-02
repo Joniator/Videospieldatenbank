@@ -2,46 +2,46 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:local="clr-namespace:Videospieldatenbank.Resources">
-    <LinearGradientBrush x:Key="Usercolor" 
-    StartPoint="0,0" EndPoint="1,1">
+    <LinearGradientBrush x:Key="Usercolor"
+                         StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="#88bb99" Offset="0" />
         <GradientStop Color="#99ff90" Offset="0.5" />
         <GradientStop Color="#88bb99" Offset="1" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="GreenYellowGradientBrush" 
-    StartPoint="0,0" EndPoint="1,1">
+    <LinearGradientBrush x:Key="GreenYellowGradientBrush"
+                         StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="#00ad00" Offset="0" />
         <GradientStop Color="#00ff00" Offset="0.5" />
         <GradientStop Color="#00ad00" Offset="1" />
     </LinearGradientBrush>
-    
+
     <Style TargetType="Frame">
-        <Setter Property="BorderThickness" Value="1"></Setter>
-        <Setter Property="BorderBrush" Value="Black"></Setter>
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="Black" />
     </Style>
     <Style TargetType="Button">
         <Setter Property="Background" Value="{StaticResource GreenYellowGradientBrush}" />
         <Setter Property="Width" Value="90" />
         <Setter Property="Margin" Value="10" />
-        <Setter Property="FontSize" Value="18"></Setter>
+        <Setter Property="FontSize" Value="18" />
     </Style>
     <Style TargetType="TabControl">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="2"></Setter>
-        <Setter Property="BorderBrush" Value="Black"></Setter>
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="Black" />
     </Style>
     <Style TargetType="TabItem">
         <Setter Property="Background" Value="{StaticResource GreenYellowGradientBrush}" />
-        <Setter Property="FontSize" Value="15"></Setter>
+        <Setter Property="FontSize" Value="15" />
     </Style>
     <Style TargetType="ListBox">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0"></Setter>
-        <Setter Property="FontSize" Value="15"></Setter>
-        <Setter Property="FontWeight" Value="ExtraBlack"></Setter>
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="ExtraBlack" />
     </Style>
     <Style TargetType="xctk:ColorPicker">
-        <Setter Property="Width" Value="125"></Setter>
-        <Setter Property="Height" Value="15"></Setter>
+        <Setter Property="Width" Value="125" />
+        <Setter Property="Height" Value="15" />
     </Style>
 </ResourceDictionary>
