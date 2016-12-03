@@ -4,8 +4,6 @@
 	cover_url VARCHAR(512),
 	name VARCHAR(512),
 	developer VARCHAR(512) ,
-	official_website VARCHAR(512),
-	wiki VARCHAR(512),
 	plattforms VARCHAR(512),
 	genres VARCHAR(512),
 	rating INTEGER

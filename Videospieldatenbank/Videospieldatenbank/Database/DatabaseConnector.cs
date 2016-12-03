@@ -45,7 +45,6 @@ namespace Videospieldatenbank.Database
                     game.CoverUrl = reader["cover_url"] as string;
                     game.Name = reader["name"] as string;
                     game.Developer = reader["developer"] as string;
-                    game.Website = reader["official_website"] as string;
                     game.Plattforms = (reader["plattforms"] as string).Split(';');
                     game.Genres = (reader["genres"] as string).Split(';');
                     game.Rating = (int) reader["rating"];
@@ -69,15 +68,16 @@ namespace Videospieldatenbank.Database
                 {
                     while (reader.Read())
                     {
-                        Game game = new Game();
-                        game.IgdbUrl = reader["igdb_url"] as string;
-                        game.CoverUrl = reader["cover_url"] as string;
-                        game.Name = reader["name"] as string;
-                        game.Developer = reader["developer"] as string;
-                        game.Website = reader["official_website"] as string;
-                        game.Plattforms = (reader["plattforms"] as string).Split(';');
-                        game.Genres = (reader["genres"] as string).Split(';');
-                        game.Rating = (int) reader["rating"];
+                        Game game = new Game
+                        {
+                            IgdbUrl = reader["igdb_url"] as string,
+                            CoverUrl = reader["cover_url"] as string,
+                            Name = reader["name"] as string,
+                            Developer = reader["developer"] as string,
+                            Plattforms = (reader["plattforms"] as string).Split(';'),
+                            Genres = (reader["genres"] as string).Split(';'),
+                            Rating = (int) reader["rating"]
+                        };
                         games.Add(game);
                     }
                 }

@@ -48,13 +48,9 @@ namespace Videospieldatenbank.Database
                 .First(n => n.Descendants("span").First().InnerText.Equals("Platforms: "))
                 .Descendants("a").Select(descendant => descendant.InnerText).ToArray();
 
-            game.Website = website.DocumentNode.Descendants("a")
-                .First(n => n.GetAttributeValue("data-reactid", "").Equals("51"))
-                .GetAttributeValue("src", "");
-
-            game.Wiki = website.DocumentNode.Descendants("a")
-                .First(n => n.GetAttributeValue("data-reactid", "").Equals("57"))
-                .GetAttributeValue("src", "");
+            game.Rating = int.Parse(website.DocumentNode.Descendants("svg")
+                .First(n => n.GetAttributeValue("class", "").Equals("gauge filter-great gauge-twin"))
+                .Descendants("text").First().InnerText);
             return game;
         }
     }
