@@ -97,6 +97,10 @@ namespace Videospieldatenbank.Database
             return game;
         }
 
+        /// <summary>
+        /// Erstellt ein Array mit den aktuellen Top 100 Spielen auf IGDB.
+        /// </summary>
+        /// <returns>Array mit den top 100 Spielen auf IGDB.</returns>
         public static Game[] GetTop100()
         {
             Game[] games = new Game[100];
