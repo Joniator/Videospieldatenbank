@@ -90,9 +90,35 @@ namespace Videospieldatenbank.Database
         /// </summary>
         /// <param name="igdbUrl">Link zu der igdb-Website des Spiels.</param>
         /// <returns>Gibt an ob das hinzufügen erfolgreich war.</returns>
-        public bool AddGame(string igdbUrl)
+        public bool AddGame(Game game)
         {
-            
+            using (MySqlCommand command = _mySqlConnection.CreateCommand())
+            {
+                string plattforms = "";
+                foreach (string plattform in game.Plattforms)
+                {
+                    plattforms += plattform + ";";
+                }
+                string genres = "";
+                foreach (string genre in game.Genres)
+                {
+                    genres += genre + ";";
+                }
+                command.CommandText = "INSERT INTO games("
+                                      +
+                                      "`igdb_url`, `cover_url`, `name`, `developer`, `plattforms`, `genres`, `rating`)"
+                                      +
+                                      $"VALUES ('{game.IgdbUrl}', '{game.CoverUrl}', '{game.Name}', '{game.Developer}', '{plattforms}', '{genres}', {game.Rating})";
+                Console.WriteLine(command.CommandText);
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch
+                {
+
+                }
+            }
             return true; 
         }
     }

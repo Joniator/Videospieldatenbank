@@ -26,32 +26,96 @@ namespace Videospieldatenbank.Database
 
             game.IgdbUrl = igdbUrl;
 
-            game.Name = website.DocumentNode.Descendants("h1")
+            try
+            {
+                game.Name = website.DocumentNode.Descendants("h1")
                 .First(n => n.GetAttributeValue("class", "").Equals("banner-title "))
                 .InnerText
                 .Replace("<!-- react-text: 14 -->", "")
                 .Replace("<!-- /react-text -->", "");
+            }
+            catch
+            {
+                game.Name = "N/A";
+            }
 
-            game.CoverUrl = website.DocumentNode.Descendants("img")
+            try
+            {
+                game.CoverUrl = "http:" + website.DocumentNode.Descendants("img")
                 .First(n => n.GetAttributeValue("class", "").Equals("img-responsive cover_big"))
                 .GetAttributeValue("src", "");
+            }
+            catch
+            {
+                game.CoverUrl = "N/A";
+            }
 
-            game.Developer = website.DocumentNode.Descendants("h3")
+            try
+            {
+                game.Developer = website.DocumentNode.Descendants("h3")
                 .First(n => n.GetAttributeValue("class", "").Equals("banner-subsubheading"))
                 .InnerText;
+            }
+            catch
+            {
+                game.Developer = "N/A";
+            }
 
-            game.Genres = website.DocumentNode.Descendants("p")
+            try
+            {
+                game.Genres = website.DocumentNode.Descendants("p")
                 .First(n => n.Descendants("span").First().InnerText.Equals("Genre: "))
                 .Descendants("a").Select(descendant => descendant.InnerText).ToArray();
-            
-            game.Plattforms = website.DocumentNode.Descendants("p")
+            }
+            catch
+            {
+                game.Genres = new string[0];
+            }
+
+            try
+            {
+                game.Plattforms = website.DocumentNode.Descendants("p")
                 .First(n => n.Descendants("span").First().InnerText.Equals("Platforms: "))
                 .Descendants("a").Select(descendant => descendant.InnerText).ToArray();
+            }
+            catch
+            {
+                game.Plattforms = new string[0];
+            }
 
-            game.Rating = int.Parse(website.DocumentNode.Descendants("svg")
-                .First(n => n.GetAttributeValue("class", "").Equals("gauge filter-great gauge-twin"))
+            try
+            {
+                game.Rating = int.Parse(website.DocumentNode.Descendants("svg")
+                .First(n => n.GetAttributeValue("class", "").Contains("gauge-twin"))
                 .Descendants("text").First().InnerText);
+            }
+            catch
+            {
+                game.Rating = 0;
+            }
+
             return game;
+        }
+
+        public static Game[] GetTop100()
+        {
+            Game[] games = new Game[100];
+            HtmlDocument website = new HtmlDocument();
+            using (WebClient client = new WebClient())
+                website.LoadHtml(client.DownloadString("https://www.igdb.com/top-100/games"));
+
+            IEnumerable<HtmlNode> rows = website.DocumentNode.Descendants("tbody").First()
+                .Descendants("tr");
+
+            int i = 0;
+            foreach (HtmlNode row in rows)
+            {
+                string url = row.Descendants("a")
+                    .First().GetAttributeValue("href", "");
+                games[i] = ParseGame("https://www.igdb.com" + url);
+                i++;
+            }
+            return games;
         }
     }
 }

@@ -11,10 +11,14 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            List<Game> games = new List<Game>();
-            games.Add(IgdbParser.ParseGame("https://www.igdb.com/games/ark-survival-evolved"));
-            games.Add(IgdbParser.ParseGame("https://www.igdb.com/games/the-witcher-3-wild-hunt"));
-            games.Add(IgdbParser.ParseGame("https://www.igdb.com/games/the-legend-of-zelda-a-link-to-the-past"));
+            DatabaseConnector dbConnector = new DatabaseConnector();
+            dbConnector.AddGame(IgdbParser.ParseGame("https://www.igdb.com/games/the-witcher-3-wild-hunt"));
+            dbConnector.AddGame(IgdbParser.ParseGame("https://www.igdb.com/games/the-legend-of-zelda-ocarina-of-time"));
+            Game[] games = IgdbParser.GetTop100();
+            foreach (Game game in games)
+            {
+                dbConnector.AddGame(game);
+            }
         }
     }
 }
