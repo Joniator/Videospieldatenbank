@@ -89,13 +89,19 @@
     </ApplicationDefinition>
     <Compile Include="Database\DatabaseConnector.cs" />
     <Compile Include="Database\Game.cs" />
+    <Compile Include="Database\GameDatabaseConnector.cs" />
     <Compile Include="Database\IgdbParser.cs" />
+    <Compile Include="Database\UserDatabaseConnector.cs" />
     <Compile Include="Pages\Settings\DesignSettings.xaml.cs">
       <DependentUpon>DesignSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\ProfilSettings.xaml.cs">
       <DependentUpon>ProfilSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tests\ImageUtilsTest.cs" />
+    <Compile Include="Tests\ITest.cs" />
+    <Compile Include="Tests\UserTest.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="Windows\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>

@@ -11,10 +11,11 @@
 
 CREATE TABLE user(
 	PRIMARY KEY (id),
-	id INTEGER,
+	id INTEGER AUTO_INCREMENT,
 	name VARCHAR(128),
 	password VARCHAR(128),
-	online BOOLEAN
+	online BOOLEAN,
+	picture VARCHAR(65536)
 );
 
 CREATE TABLE friends(
