@@ -16,7 +16,11 @@ namespace Test
             tests.Add(new UserTest());
             
             // Startet jeden Test in der Liste, true wenn 0 Tests gescheitert sind.
-            Console.WriteLine(tests.Where(n => !n.Test()).ToArray().Length == 0);
+            foreach (ITest test in tests)
+            {
+                Console.WriteLine(test.Test());
+            }
+            Console.Read();
         }
     }
 }

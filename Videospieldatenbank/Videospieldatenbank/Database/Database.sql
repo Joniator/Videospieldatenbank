@@ -15,7 +15,7 @@ CREATE TABLE user(
 	name VARCHAR(128),
 	password VARCHAR(128),
 	online BOOLEAN,
-	picture VARCHAR(65536)
+	picture VARBINARY(65556)
 );
 
 CREATE TABLE friends(

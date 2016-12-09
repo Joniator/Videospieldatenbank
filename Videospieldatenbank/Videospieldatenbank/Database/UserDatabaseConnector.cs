@@ -1,4 +1,6 @@
 ﻿using System;
+using MySql.Data.MySqlClient;
+using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Database
 {
@@ -108,20 +110,69 @@ namespace Videospieldatenbank.Database
             }
         }
 
-        public bool SetProfilePicture(string username, string password, byte[] picture)
+        /// <summary>
+        /// Setzt das Profilbild des Users
+        /// </summary>
+        /// <param name="picture">Array mit Image-Dateien</param>
+        /// <returns>True, wenn erfolgreich</returns>
+        public bool SetProfilePicture(byte[] picture)
         {
-            // TODO: Implement SetProfilePicture
-            throw new NotImplementedException();
+            if (Exists(_username))
+            {
+                using (var command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"UPDATE user SET picture=?image WHERE name='{_username}'";
+                    command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) {Value = picture.ByteArrayToString()});
+                    command.ExecuteNonQuery();
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public void DeleteUser(string username, string password)
+        public byte[] GetProfilePicture(string username)
         {
-            // TODO: Implement DeleteUser
+            if (Exists(_username))
+            {
+                using (var command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT picture FROM user WHERE name='{_username}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        byte[] image = new byte[65556];
+                        if (reader.Read())
+                            reader.GetBytes(0, 0, image, 0, image.Length);
+                        return image;
+                    }
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Löscht den Benutzer
+        /// </summary>
+        /// <param name="username">Username des zu löschenden Users.</param>
+        /// <param name="password">Passwort des zu löschenden Users.</param>
+        /// <returns>True, wenn das Löschen erfolgreich war.</returns>
+        public bool DeleteUser(string username, string password)
+        {
             if (CheckLogin(username, password))
             {
-                
+                using (var command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"DELETE FROM user WHERE name = '{username}' AND password = '{password}'";
+                    command.ExecuteNonQuery();
+                    return true;
+                }
             }
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
