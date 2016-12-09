@@ -22,13 +22,15 @@ namespace Videospieldatenbank.Tests
                 using (WebClient client = new WebClient())
                 {
                     byte[] image = client.DownloadData("http://www.skringers.com/wp-content/uploads/Beautiful-Landscape-Wallpapers-Island-150x150.jpg");
-                    
-                    return udb.Register("TestUser", "TestPassword") && 
-                        udb.Login("TestUser", "TestPassword") && 
-                        udb.SetProfilePicture(image) && 
-                        udb.GetProfilePicture("TestUser") != null &&
-                        udb.Logout() && 
-                        udb.DeleteUser("TestUser", "TestPassword");
+
+                    bool success = udb.Register("TestUser", "TestPassword") &&
+                                   udb.Login("TestUser", "TestPassword") &&
+                                   udb.SetProfilePicture(image) &&
+                                   udb.GetProfilePicture("TestUser") != null;
+                    var friendsList = udb.GetFriendsList();
+                    return success &&
+                    udb.Logout() &&
+                    udb.DeleteUser("TestUser", "TestPassword");
                 }
             }
             catch (Exception e)
