@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
@@ -85,12 +89,19 @@
     </ApplicationDefinition>
     <Compile Include="Database\DatabaseConnector.cs" />
     <Compile Include="Database\Game.cs" />
+    <Compile Include="Database\GameDatabaseConnector.cs" />
+    <Compile Include="Database\IgdbParser.cs" />
+    <Compile Include="Database\UserDatabaseConnector.cs" />
     <Compile Include="Pages\Settings\DesignSettings.xaml.cs">
       <DependentUpon>DesignSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\ProfilSettings.xaml.cs">
       <DependentUpon>ProfilSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tests\ImageUtilsTest.cs" />
+    <Compile Include="Tests\ITest.cs" />
+    <Compile Include="Tests\UserTest.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="Windows\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>

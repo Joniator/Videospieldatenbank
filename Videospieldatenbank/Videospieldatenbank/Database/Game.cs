@@ -11,8 +11,6 @@ namespace Videospieldatenbank.Database
         public string Name;
         public string[] Plattforms;
         public int Rating;
-        public string Website;
-        public string Wiki;
 
         public byte[] Cover
         {
