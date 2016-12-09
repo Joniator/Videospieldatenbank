@@ -1,17 +1,51 @@
 ﻿using System;
+using System.Collections.Generic;
 using MySql.Data.MySqlClient;
-using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Database
 {
     public class UserDatabaseConnector : DatabaseConnector
     {
-        private string _username;
-        private string _password;
         private bool _isLoggedIn;
+        private string _password;
+        private string _username;
+
+        public List<string> GetFriendsList()
+        {
+            List<string> list = new List<string>();
+            if (_isLoggedIn)
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT friend_id FROM friends WHERE user_ID ='{_username}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read()) list.Add(GetUsername(reader.GetString(0)));
+                    }
+                }
+            }
+            return list;
+        }
+
+        private string GetUsername(string id)
+        {
+            if (_isLoggedIn)
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT name FROM user WHERE id='{id}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            return reader.GetString(0);
+                    }
+                }
+            }
+            return "";
+        }
 
         /// <summary>
-        /// Überprüft die Anmeldedaten eines Users.
+        ///     Überprüft die Anmeldedaten eines Users.
         /// </summary>
         /// <param name="username">Der Name des Users.</param>
         /// <param name="password">Das Passwort des Users.</param>
@@ -19,10 +53,10 @@ namespace Videospieldatenbank.Database
         private bool CheckLogin(string username, string password)
         {
             if (!Exists(username)) return false;
-            using (var command = MySqlConnection.CreateCommand())
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = $"SELECT password FROM user WHERE name = '{username}'";
-                using (var reader = command.ExecuteReader())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.Read() && password == reader[0] as string;
                 }
@@ -30,7 +64,7 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        /// Meldet den User beim Server an.
+        ///     Meldet den User beim Server an.
         /// </summary>
         /// <param name="username">Name des Users.</param>
         /// <param name="password">Passwort des Users.</param>
@@ -39,7 +73,7 @@ namespace Videospieldatenbank.Database
         {
             if (CheckLogin(username, password))
             {
-                using (var command = MySqlConnection.CreateCommand())
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     _username = username;
                     _password = password;
@@ -55,13 +89,13 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        /// Meldet einen User beim Server ab.
+        ///     Meldet einen User beim Server ab.
         /// </summary>
         /// <returns>True, wenn erfolgreich.</returns>
         public bool Logout()
         {
             if (!_isLoggedIn) return false;
-            using (var command = MySqlConnection.CreateCommand())
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 // Setzt Onlinestatus des Users auf true.
                 command.CommandText = $"UPDATE user SET online=false WHERE name = '{_username}'";
@@ -71,7 +105,7 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        /// Erstellt einen neuen User.
+        ///     Erstellt einen neuen User.
         /// </summary>
         /// <param name="username">Username des neuen Users.</param>
         /// <param name="password">Password des neuen Users.</param>
@@ -80,30 +114,27 @@ namespace Videospieldatenbank.Database
         {
             if (!Exists(username))
             {
-                using (var command = MySqlConnection.CreateCommand())
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText = $"INSERT INTO user (name, password) VALUES ('{username}', '{password}')";
                     command.ExecuteNonQuery();
                     return true;
                 }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
-        /// Gibt an ob ein User bereits existiert.
+        ///     Gibt an ob ein User bereits existiert.
         /// </summary>
         /// <param name="username">Der zu überprüfende Username</param>
         /// <returns>True, wenn der User existiert.</returns>
         private bool Exists(string username)
         {
-            using (var command = MySqlConnection.CreateCommand())
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = $"SELECT * FROM user WHERE name = '{username}'";
-                using (var reader = command.ExecuteReader())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.Read();
                 }
@@ -111,7 +142,7 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        /// Setzt das Profilbild des Users
+        ///     Setzt das Profilbild des Users
         /// </summary>
         /// <param name="picture">Array mit Image-Dateien</param>
         /// <returns>True, wenn erfolgreich</returns>
@@ -119,44 +150,38 @@ namespace Videospieldatenbank.Database
         {
             if (Exists(_username))
             {
-                using (var command = MySqlConnection.CreateCommand())
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText = $"UPDATE user SET picture=?image WHERE name='{_username}'";
-                    command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) {Value = picture.ByteArrayToString()});
+                    command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) { Value = picture });
                     command.ExecuteNonQuery();
                     return true;
                 }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public byte[] GetProfilePicture(string username)
         {
             if (Exists(_username))
             {
-                using (var command = MySqlConnection.CreateCommand())
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText = $"SELECT picture FROM user WHERE name='{_username}'";
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        byte[] image = new byte[65556];
+                        var image = new byte[65556];
                         if (reader.Read())
                             reader.GetBytes(0, 0, image, 0, image.Length);
                         return image;
                     }
                 }
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>
-        /// Löscht den Benutzer
+        ///     Löscht den Benutzer
         /// </summary>
         /// <param name="username">Username des zu löschenden Users.</param>
         /// <param name="password">Passwort des zu löschenden Users.</param>
@@ -165,7 +190,7 @@ namespace Videospieldatenbank.Database
         {
             if (CheckLogin(username, password))
             {
-                using (var command = MySqlConnection.CreateCommand())
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText = $"DELETE FROM user WHERE name = '{username}' AND password = '{password}'";
                     command.ExecuteNonQuery();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace Videospieldatenbank.Utils
 {
     public static class ImageUtils
     {
+        [DebuggerStepThrough]
         /// <summary>
         /// Konvertiert einen String in ein Bytearray.
         /// </summary>
@@ -23,6 +25,7 @@ namespace Videospieldatenbank.Utils
             return byteArray;
         }
 
+        [DebuggerStepThrough]
         /// <summary>
         /// Konvertiert einen Bytearray in einen String.
         /// </summary>
@@ -38,6 +41,7 @@ namespace Videospieldatenbank.Utils
             return stringBuilder.ToString();
         }
 
+        [DebuggerStepThrough]
         /// <summary>
         /// Konvertiert einen Stringarray in einen String.
         /// </summary>
