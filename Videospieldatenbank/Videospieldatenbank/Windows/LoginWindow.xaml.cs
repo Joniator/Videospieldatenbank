@@ -20,7 +20,7 @@ namespace Videospieldatenbank.Windows
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private UserDatabaseConnector _userDatabaseConnector = new UserDatabaseConnector();
+        public static UserDatabaseConnector _userDatabaseConnector = new UserDatabaseConnector();
         public LoginWindow()
         {
             InitializeComponent();
@@ -48,6 +48,10 @@ namespace Videospieldatenbank.Windows
             {
                 MessageBox.Show("USERNAME is in use! Please take an other USERNAME");
             }
+            else
+            {
+                Login(username, password);
+            }
         }
 
         private void ButtonLogin_OnClick(object sender, RoutedEventArgs e)
@@ -57,12 +61,38 @@ namespace Videospieldatenbank.Windows
 
         private void ButtonRegister_OnClick(object sender, RoutedEventArgs e)
         {
-            if(TextBoxRegistPassword.Password == TextBoxRegistRePassword.Password)
-                Register(TextBoxRegistUsername.Text,TextBoxRegistPassword.Password);
+            if (TextBoxRegistUsername.Text.Length >= 3)
+            {
+                if (TextBoxRegistPassword.Password.Length >= 3)
+                {
+                    if (TextBoxRegistPassword.Password == TextBoxRegistRePassword.Password)
+                        Register(TextBoxRegistUsername.Text, TextBoxRegistPassword.Password);
+                    else
+                    {
+                        MessageBox.Show("Password is not equal!");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Password is too short! It must have more than three signs.");
+                }
+            }
             else
             {
-                MessageBox.Show("Password is not equal!");
+                MessageBox.Show("Username is too short! It must have more than three signs.");
             }
+        }
+
+        private void TabItemLogin_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                ButtonLogin_OnClick(null, null);
+        }
+
+        private void TabItemRegister_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                ButtonRegister_OnClick(null, null);
         }
     }
 }

@@ -8,7 +8,7 @@
         Title="Login" Height="300" Width="600" ResizeMode="NoResize" Topmost="True">
     <Grid>
         <TabControl>
-            <TabItem Name="TabItemLogin" Header="Login">
+            <TabItem Name="TabItemLogin" Header="Login" KeyDown="TabItemLogin_OnKeyDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -41,7 +41,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Name="TabItemRegister" Header="Register">
+            <TabItem Name="TabItemRegister" Header="Register" KeyDown="TabItemRegister_OnKeyDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
