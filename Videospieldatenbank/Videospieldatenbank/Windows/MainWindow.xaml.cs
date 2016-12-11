@@ -8,11 +8,15 @@ namespace Videospieldatenbank
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
         public static Friends friends;
         private readonly GameInfo _gameInfo = new GameInfo();
         private readonly GameList _gameList = new GameList();
         private readonly Profil _profil = new Profil();
-        //private readonly DesignSettings _profilSettings = new DesignSettings();
 
         /// <summary>
         /// Disables unused frames and enables used frames.
