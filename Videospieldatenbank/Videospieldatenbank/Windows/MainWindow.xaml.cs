@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Data.SqlTypes;
+using System.Windows;
+using Videospieldatenbank.Database;
 using Videospieldatenbank.Pages.Settings;
+using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank
 {
@@ -8,11 +12,15 @@ namespace Videospieldatenbank
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
         public static Friends friends;
         private readonly GameInfo _gameInfo = new GameInfo();
         private readonly GameList _gameList = new GameList();
         private readonly Profil _profil = new Profil();
-        //private readonly DesignSettings _profilSettings = new DesignSettings();
 
         /// <summary>
         /// Disables unused frames and enables used frames.
@@ -93,6 +101,30 @@ namespace Videospieldatenbank
             FrameCheck(false);
             if (FrameFull.Content != _profil)
                 FrameFull.Content = _profil;
+        }
+
+        private bool ExitMessageBox()
+        {
+            string text = "Do you really want to exit the program?";
+            string caption = "Exit";
+            MessageBoxResult result = MessageBox.Show(text, caption, MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                LoginWindow._userDatabaseConnector.Logout();
+                Application.Current.Shutdown();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            if (!ExitMessageBox())
+                e.Cancel = true;
         }
     }
 }
