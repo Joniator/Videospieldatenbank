@@ -187,12 +187,10 @@ namespace Videospieldatenbank.Database
                     using (MySqlCommand command = MySqlConnection.CreateCommand())
                     {
                         command.CommandText = $"UPDATE user SET picture=?image WHERE name='{_username}'";
-                        command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) { Value = picture });
+                        command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) { Value = value });
                         command.ExecuteNonQuery();
-                        return true;
                     }
                 }
-                return false;
             }
         }
 
