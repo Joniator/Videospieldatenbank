@@ -97,7 +97,7 @@ namespace Videospieldatenbank.Database
             if (!_isLoggedIn) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                // Setzt Onlinestatus des Users auf true.
+                // Setzt Onlinestatus des Users auf false.
                 command.CommandText = $"UPDATE user SET online=false WHERE name = '{_username}'";
                 command.ExecuteNonQuery();
                 return true;
@@ -161,6 +161,11 @@ namespace Videospieldatenbank.Database
             return false;
         }
 
+        /// <summary>
+        /// Ruft das Profilbild des Users ab.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public byte[] GetProfilePicture(string username)
         {
             if (Exists(_username))
