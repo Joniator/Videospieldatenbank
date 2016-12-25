@@ -10,6 +10,10 @@ namespace Videospieldatenbank.Database
         private string _password;
         private string _username;
 
+        /// <summary>
+        /// Gibt eine Liste mit allen Freunden des Users zurück.
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetFriendsList()
         {
             List<string> list = new List<string>();
@@ -27,6 +31,11 @@ namespace Videospieldatenbank.Database
             return list;
         }
 
+        /// <summary>
+        /// Ermittelt den Namen des Users anhand seiner ID.
+        /// </summary>
+        /// <param name="id">ID des Users.</param>
+        /// <returns>Name des Users.</returns>
         private string GetUsername(string id)
         {
             if (_isLoggedIn)
