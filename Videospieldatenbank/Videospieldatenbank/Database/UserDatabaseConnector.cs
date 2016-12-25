@@ -213,5 +213,27 @@ namespace Videospieldatenbank.Database
             }
             return false;
         }
+
+        /// <summary>
+        /// Gibt eine Liste der Spiele des users zurück
+        /// </summary>
+        /// <returns>Liste von igdb_urls.</returns>
+        public List<string> GetGames()
+        {
+            //TODO: Testen
+            List<string> list = new List<string>();
+            if (_isLoggedIn)
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT igdb_url FROM gameinfo WHERE user_ID ='{_username}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read()) list.Add(reader.GetString(0));
+                    }
+                }
+            }
+            return list;
+        }
     }
 }
