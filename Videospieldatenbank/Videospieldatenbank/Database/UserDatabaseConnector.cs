@@ -220,7 +220,7 @@ namespace Videospieldatenbank.Database
         /// <returns>Liste von igdb_urls.</returns>
         public List<string> GetGames()
         {
-            //TODO: Testen
+            //TODO: Testen von GetGames
             List<string> list = new List<string>();
             if (_isLoggedIn)
             {
@@ -234,6 +234,23 @@ namespace Videospieldatenbank.Database
                 }
             }
             return list;
+        }
+
+        public DateTime GetPlayTime(string igdbUrl)
+        {
+            //TODO: Testen von GetPlayTime
+            if (_isLoggedIn)
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT playtime FROM gameinfo WHERE user_ID ='{_username}' AND igdb_url='{igdbUrl}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read()) return reader.GetDateTime(0);
+                    }
+                }
+            }
+            return default(DateTime);
         }
     }
 }
