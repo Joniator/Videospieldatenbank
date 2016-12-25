@@ -151,26 +151,6 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        ///     Setzt das Profilbild des Users
-        /// </summary>
-        /// <param name="picture">Array mit Image-Dateien</param>
-        /// <returns>True, wenn erfolgreich</returns>
-        public bool SetProfilePicture(byte[] picture)
-        {
-            if (Exists(_username))
-            {
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
-                {
-                    command.CommandText = $"UPDATE user SET picture=?image WHERE name='{_username}'";
-                    command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) { Value = picture });
-                    command.ExecuteNonQuery();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
         /// Ruft das Profilbild des Users ab.
         /// </summary>
         /// <param name="username"></param>
@@ -181,7 +161,7 @@ namespace Videospieldatenbank.Database
             {
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT picture FROM user WHERE name='{_username}'";
+                    command.CommandText = $"SELECT picture FROM user WHERE name='{username}'";
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         var image = new byte[65556];
@@ -192,6 +172,28 @@ namespace Videospieldatenbank.Database
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Entspricht dem Profilbild des aktuellen Users.
+        /// </summary>
+        public byte[] ProfilePicture
+        {
+            get { return GetProfilePicture(_username); }
+            set
+            {
+                if (Exists(_username))
+                {
+                    using (MySqlCommand command = MySqlConnection.CreateCommand())
+                    {
+                        command.CommandText = $"UPDATE user SET picture=?image WHERE name='{_username}'";
+                        command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) { Value = picture });
+                        command.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         /// <summary>
