@@ -236,6 +236,11 @@ namespace Videospieldatenbank.Database
             return list;
         }
 
+        /// <summary>
+        /// Ermittelt die gespielte Zeit im angegebenen Spiel.
+        /// </summary>
+        /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
+        /// <returns></returns>
         public DateTime GetPlayTime(string igdbUrl)
         {
             //TODO: Testen von GetPlayTime
@@ -253,6 +258,11 @@ namespace Videospieldatenbank.Database
             return default(DateTime);
         }
 
+        /// <summary>
+        /// Erhöht die Playtime um einen gegebenen Wert.
+        /// </summary>
+        /// <param name="igdbUrl">Das Spiel das gespielt wurde.</param>
+        /// <param name="playedTime">Die Zeit die es gespielt wurde.</param>
         public void AddPlayTime(string igdbUrl, TimeSpan playedTime)
         {
             //TODO: Testen von AddPlayTime
