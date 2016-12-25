@@ -252,5 +252,18 @@ namespace Videospieldatenbank.Database
             }
             return default(DateTime);
         }
+
+        public void AddPlayTime(string igdbUrl, TimeSpan playedTime)
+        {
+            //TODO: Testen von AddPlayTime
+            DateTime newPlayTime = GetPlayTime(igdbUrl) + playedTime;
+            if (_isLoggedIn)
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"UPDATE gameinfo SET playtime='{newPlayTime.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE user_ID='{_username}' AND igdb_url='{igdbUrl}'";
+                }
+            }
+        }
     }
 }
