@@ -9,6 +9,9 @@ using HtmlAgilityPack;
 
 namespace Videospieldatenbank.Database
 {
+    /// <summary>
+    /// Beinhaltet Methoden zum Abfragen von Spielinformationen von IGDB.
+    /// </summary>
     public static class IgdbParser
     {
         /// <summary>

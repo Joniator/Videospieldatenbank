@@ -10,6 +10,10 @@ namespace Videospieldatenbank.Database
         private string _password;
         private string _username;
 
+        /// <summary>
+        /// Gibt eine Liste mit allen Freunden des Users zurück.
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetFriendsList()
         {
             List<string> list = new List<string>();
@@ -27,6 +31,11 @@ namespace Videospieldatenbank.Database
             return list;
         }
 
+        /// <summary>
+        /// Ermittelt den Namen des Users anhand seiner ID.
+        /// </summary>
+        /// <param name="id">ID des Users.</param>
+        /// <returns>Name des Users.</returns>
         private string GetUsername(string id)
         {
             if (_isLoggedIn)
@@ -97,7 +106,7 @@ namespace Videospieldatenbank.Database
             if (!_isLoggedIn) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                // Setzt Onlinestatus des Users auf true.
+                // Setzt Onlinestatus des Users auf false.
                 command.CommandText = $"UPDATE user SET online=false WHERE name = '{_username}'";
                 command.ExecuteNonQuery();
                 return true;
@@ -161,6 +170,11 @@ namespace Videospieldatenbank.Database
             return false;
         }
 
+        /// <summary>
+        /// Ruft das Profilbild des Users ab.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public byte[] GetProfilePicture(string username)
         {
             if (Exists(_username))
@@ -198,6 +212,68 @@ namespace Videospieldatenbank.Database
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gibt eine Liste der Spiele des users zurück
+        /// </summary>
+        /// <returns>Liste von igdb_urls.</returns>
+        public List<string> GetGames()
+        {
+            //TODO: Testen von GetGames
+            List<string> list = new List<string>();
+            if (_isLoggedIn)
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT igdb_url FROM gameinfo WHERE user_ID ='{_username}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read()) list.Add(reader.GetString(0));
+                    }
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Ermittelt die gespielte Zeit im angegebenen Spiel.
+        /// </summary>
+        /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
+        /// <returns></returns>
+        public DateTime GetPlayTime(string igdbUrl)
+        {
+            //TODO: Testen von GetPlayTime
+            if (_isLoggedIn)
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT playtime FROM gameinfo WHERE user_ID ='{_username}' AND igdb_url='{igdbUrl}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read()) return reader.GetDateTime(0);
+                    }
+                }
+            }
+            return default(DateTime);
+        }
+
+        /// <summary>
+        /// Erhöht die Playtime um einen gegebenen Wert.
+        /// </summary>
+        /// <param name="igdbUrl">Das Spiel das gespielt wurde.</param>
+        /// <param name="playedTime">Die Zeit die es gespielt wurde.</param>
+        public void AddPlayTime(string igdbUrl, TimeSpan playedTime)
+        {
+            //TODO: Testen von AddPlayTime
+            DateTime newPlayTime = GetPlayTime(igdbUrl) + playedTime;
+            if (_isLoggedIn)
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"UPDATE gameinfo SET playtime='{newPlayTime.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE user_ID='{_username}' AND igdb_url='{igdbUrl}'";
+                }
+            }
         }
     }
 }

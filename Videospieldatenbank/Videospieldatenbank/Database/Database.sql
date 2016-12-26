@@ -24,9 +24,10 @@ CREATE TABLE friends(
 	friend_ID INTEGER
 );
 
-CREATE TABLE playtime(
+CREATE TABLE gameinfo(
 	PRIMARY KEY (user_ID, igdb_url),
 	user_ID INTEGER,
 	igdb_url VARCHAR(512),
+	exec_path VARCHAR(512),
 	playtime TIME 
 );
