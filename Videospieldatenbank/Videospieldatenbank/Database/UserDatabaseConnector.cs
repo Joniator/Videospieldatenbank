@@ -29,6 +29,26 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Entspricht der UserID des angemeldeten Users.
+        /// </summary>
+        public int UserId
+        {
+            get
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT id FROM user WHERE name='{_username}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            return reader.GetInt32(0);
+                    }
+                }
+                throw new Exception("Fehler beim ermitteln der UserID");
+            }
+        }
+
+        /// <summary>
         ///     Gibt eine Liste mit allen Freunden des Users zurück.
         /// </summary>
         /// <returns></returns>
