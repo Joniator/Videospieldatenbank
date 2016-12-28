@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Videospieldatenbank.Database;
+using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Windows
 {
@@ -21,12 +22,27 @@ namespace Videospieldatenbank.Windows
     public partial class LoginWindow : Window
     {
         public static UserDatabaseConnector _userDatabaseConnector = new UserDatabaseConnector();
+        //Settings.Login settings = new Settings.Login();
         public LoginWindow()
         {
             InitializeComponent();
-
         }
 
+        void checkCheckBoxes()
+        {
+            if (CheckBoxSaveUsername.IsChecked == true)
+            {
+                Settings.Login.CheckBoxUsername = true;
+                Settings.Login.Username = TextBoxUsername.Text;
+            }
+            if (CheckBoxSavePassword.IsChecked == true)
+            {
+                Settings.Login.CheckBoxPassword = true;
+                Settings.Login.Password = TextBoxPassword.Password;
+            }
+
+            DataSave.Serializer("login", typeof(Settings.Login));
+        }
         void Login(string username, string password)
         {
             if (!_userDatabaseConnector.Login(username, password))
@@ -37,6 +53,7 @@ namespace Videospieldatenbank.Windows
             {
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
+                checkCheckBoxes();
 
                 this.Close();
             }
