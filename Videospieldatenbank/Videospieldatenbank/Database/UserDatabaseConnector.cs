@@ -241,6 +241,23 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Fügt das angegeben Spiel zur Nutzerbibliothek und ggf. Spieledatenbank hinzu.
+        /// </summary>
+        /// <param name="igdbUrl">Die URL des Spiels.</param>
+        /// <param name="execPath">Der Pfad der ausführbaren Datei des Spiels.</param>
+        public void AddGame(string igdbUrl, string execPath)
+        {
+            if (_isLoggedIn)
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue}')";
+                    command.ExecuteNonQuery();
+                    GameDatabaseConnector gdc = new GameDatabaseConnector();
+                    gdc.AddGame(IgdbParser.ParseGame(igdbUrl));
+                }
+        }
+
+        /// <summary>
         ///     Ermittelt die gespielte Zeit im angegebenen Spiel.
         /// </summary>
         /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
