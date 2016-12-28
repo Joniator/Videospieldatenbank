@@ -101,6 +101,8 @@
     <Compile Include="Tests\ImageUtilsTest.cs" />
     <Compile Include="Tests\ITest.cs" />
     <Compile Include="Tests\UserTest.cs" />
+    <Compile Include="Utils\DataSave.cs" />
+    <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Windows\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
