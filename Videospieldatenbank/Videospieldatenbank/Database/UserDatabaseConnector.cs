@@ -270,7 +270,7 @@ namespace Videospieldatenbank.Database
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText =
-                        $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue}')";
+                        $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue.ToString("yyyy-MM-dd HH:mm:ss")}')";
                     command.ExecuteNonQuery();
                     GameDatabaseConnector gdc = new GameDatabaseConnector();
                     gdc.AddGame(IgdbParser.ParseGame(igdbUrl));
@@ -284,12 +284,12 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public DateTime GetPlayTime(string igdbUrl)
         {
-            //TODO: Testen von GetPlayTime
+            //FIXME: DateTime wird in der Datenbank nicht richtig gespeichert/Datum wird weggelassen, entsprechender Error beim auslesen der Zeit aus der Datenbank.
             if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText =
-                        $"SELECT playtime FROM gameinfo WHERE user_ID ='{_username}' AND igdb_url='{igdbUrl}'";
+                        $"SELECT playtime FROM gameinfo WHERE user_ID ='{UserId}' AND igdb_url='{igdbUrl}'";
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read()) return reader.GetDateTime(0);

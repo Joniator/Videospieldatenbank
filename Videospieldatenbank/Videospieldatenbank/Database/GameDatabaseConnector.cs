@@ -85,7 +85,6 @@ namespace Videospieldatenbank.Database
                                       "`igdb_url`, `cover_url`, `name`, `developer`, `plattforms`, `genres`, `rating`)"
                                       +
                                       $"VALUES ('{game.IgdbUrl}', '{game.CoverUrl}', '{game.Name}', '{game.Developer}', '{plattforms}', '{genres}', {game.Rating})";
-                Console.WriteLine(command.CommandText);
                 try
                 {
                     command.ExecuteNonQuery();
