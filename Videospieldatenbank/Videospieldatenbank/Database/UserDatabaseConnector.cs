@@ -22,7 +22,7 @@ namespace Videospieldatenbank.Database
                     using (MySqlCommand command = MySqlConnection.CreateCommand())
                     {
                         command.CommandText = $"UPDATE user SET picture=?image WHERE name='{_username}'";
-                        command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) {Value = value});
+                        command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) { Value = value });
                         command.ExecuteNonQuery();
                     }
             }
@@ -241,6 +241,25 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        /// Überprüft ob der Benutzer das Spiel besitzt/hinzugefügt hat.
+        /// </summary>
+        /// <param name="igdbUrl"></param>
+        /// <returns></returns>
+        public bool OwnsGame(string igdbUrl)
+        {
+            if (_isLoggedIn)
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT * FROM gameinfo WHERE user_ID='{UserId}' AND igdb_url='{igdbUrl}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        return reader.Read();
+                    }
+                }
+            return false;
+        }
+
+        /// <summary>
         ///     Fügt das angegeben Spiel zur Nutzerbibliothek und ggf. Spieledatenbank hinzu.
         /// </summary>
         /// <param name="igdbUrl">Die URL des Spiels.</param>
@@ -250,7 +269,8 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue}')";
+                    command.CommandText =
+                        $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue}')";
                     command.ExecuteNonQuery();
                     GameDatabaseConnector gdc = new GameDatabaseConnector();
                     gdc.AddGame(IgdbParser.ParseGame(igdbUrl));
@@ -265,7 +285,7 @@ namespace Videospieldatenbank.Database
         public DateTime GetPlayTime(string igdbUrl)
         {
             //TODO: Testen von GetPlayTime
-            if (_isLoggedIn)
+            if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText =
@@ -287,7 +307,7 @@ namespace Videospieldatenbank.Database
         {
             //TODO: Testen von AddPlayTime
             DateTime newPlayTime = GetPlayTime(igdbUrl) + playedTime;
-            if (_isLoggedIn)
+            if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText =
