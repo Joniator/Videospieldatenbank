@@ -20,7 +20,7 @@ namespace Videospieldatenbank
 
         private void MenuItemAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            /*OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog();
 
@@ -41,7 +41,7 @@ namespace Videospieldatenbank
 
                 listBoxItem.Content = game.Name;
 
-                Listbox_TabItem_Games.Items.Add(listBoxItem);
+                Listbox_TabItem_Games.Items.Add(listBoxItem);*/
         }
 
         private void MenuItemEdit_OnClick(object sender, RoutedEventArgs e)

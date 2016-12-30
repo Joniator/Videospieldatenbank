@@ -269,7 +269,9 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText =
+                    // Updated den Execpath wenn der User das Spiel bereits besitzt oder fügt es neu hinzu wenn nicht.
+                    command.CommandText = OwnsGame(igdbUrl) ? 
+                        $"UPDATE gameinfo SET exec_path='{execPath}' WHERE igdb_url='{igdbUrl}'":
                         $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue.ToString("yyyy-MM-dd HH:mm:ss")}')";
                     command.ExecuteNonQuery();
 
