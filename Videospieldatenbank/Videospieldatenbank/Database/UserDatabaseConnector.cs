@@ -332,7 +332,7 @@ namespace Videospieldatenbank.Database
                     // Updated den Execpath wenn der User das Spiel bereits besitzt oder fügt es neu hinzu wenn nicht.
                     command.CommandText = OwnsGame(igdbUrl)
                         ? $"UPDATE gameinfo SET exec_path='{execPath}' WHERE igdb_url='{igdbUrl}'"
-                        : $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue.ToString("yyyy-MM-dd HH:mm:ss")}')";
+                        : $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '0')";
                     command.ExecuteNonQuery();
 
                     // Fügt das Spiel zur Datenbank hinzu für den Fall das es noch nicht existiert.
@@ -346,7 +346,7 @@ namespace Videospieldatenbank.Database
         /// </summary>
         /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
         /// <returns></returns>
-        public DateTime GetPlayTime(string igdbUrl)
+        public TimeSpan GetPlayTime(string igdbUrl)
         {
             //FIXME: DateTime wird in der Datenbank nicht richtig gespeichert/Datum wird weggelassen, entsprechender Error beim auslesen der Zeit aus der Datenbank.
             if (_isLoggedIn && OwnsGame(igdbUrl))
@@ -356,10 +356,10 @@ namespace Videospieldatenbank.Database
                         $"SELECT playtime FROM gameinfo WHERE user_ID ='{UserId}' AND igdb_url='{igdbUrl}'";
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        if (reader.Read()) return reader.GetDateTime(0);
+                        if (reader.Read()) return TimeSpan.FromMinutes(reader.GetInt32(0));
                     }
                 }
-            return default(DateTime);
+            return TimeSpan.Zero;
         }
 
         /// <summary>
@@ -370,12 +370,13 @@ namespace Videospieldatenbank.Database
         public void AddPlayTime(string igdbUrl, TimeSpan playedTime)
         {
             //TODO: Testen von AddPlayTime
-            DateTime newPlayTime = GetPlayTime(igdbUrl) + playedTime;
+            TimeSpan newPlayTime = GetPlayTime(igdbUrl) + playedTime;
             if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText =
-                        $"UPDATE gameinfo SET playtime='{newPlayTime.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE user_ID='{_username}' AND igdb_url='{igdbUrl}'";
+                        $"UPDATE gameinfo SET playtime='{(int) newPlayTime.TotalMinutes}' WHERE user_ID='{UserId}' AND igdb_url='{igdbUrl}'";
+                    command.ExecuteNonQuery();
                 }
         }
     }

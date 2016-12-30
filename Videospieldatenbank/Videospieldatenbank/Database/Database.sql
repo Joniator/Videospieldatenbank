@@ -29,5 +29,5 @@ CREATE TABLE gameinfo(
 	user_ID INTEGER,
 	igdb_url VARCHAR(512),
 	exec_path VARCHAR(512),
-	playtime TIME 
+	playtime INTEGER 
 );

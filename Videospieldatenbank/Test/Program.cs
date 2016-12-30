@@ -22,10 +22,14 @@ namespace Test
             us.AddGame("https://www.igdb.com/games/the-legend-of-zelda-ocarina-of-time", null);
             us.AddGame("https://www.igdb.com/games/super-mario-run", null);
             List<string> games = us.GetGames();
-            DateTime playTime = us.GetPlayTime("https://www.igdb.com/games/the-last-guardian");
+
+            TimeSpan playTime = us.GetPlayTime("https://www.igdb.com/games/the-last-guardian");
             Console.WriteLine(playTime.ToString());
-            us.AddPlayTime("https://www.igdb.com/games/the-last-guardian", TimeSpan.FromMinutes(20));
+
+            us.AddPlayTime("https://www.igdb.com/games/the-last-guardian", TimeSpan.FromMinutes(120));
+            playTime = us.GetPlayTime("https://www.igdb.com/games/the-last-guardian");
             Console.WriteLine(playTime.ToString());
+
             Console.Read();
         }
     }
