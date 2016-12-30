@@ -68,6 +68,56 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Markiert einen User als Freund.
+        /// </summary>
+        /// <param name="friendId">Die ID des als Freund zu markierenden Users.</param>
+        /// <returns></returns>
+        public bool AddFriend(int friendId)
+        {
+            if (!_isLoggedIn) return false;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"SELECT * FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    // User sind bereits als Freund markiert.
+                    if (reader.Read()) return false;
+                }
+            }
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"INSERT INTO friends(user_ID, friend_ID) VALUES ('{UserId}', '{friendId}')";
+                command.ExecuteNonQuery();
+                return true;
+            }
+        }
+
+        /// <summary>
+        ///     Entfernt einen User aus der Freundesliste
+        /// </summary>
+        /// <param name="friendId"></param>
+        /// <returns></returns>
+        public bool RemoveFriend(int friendId)
+        {
+            if (!_isLoggedIn) return false;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"SELECT * FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    // Nutzer sind nicht befreundet.
+                    if (!reader.Read()) return false;
+                }
+            }
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"DELETE FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
+                command.ExecuteNonQuery();
+                return true;
+            }
+        }
+
+        /// <summary>
         ///     Ermittelt den Namen des Users anhand seiner ID.
         /// </summary>
         /// <param name="id">ID des Users.</param>
@@ -202,6 +252,11 @@ namespace Videospieldatenbank.Database
             return null;
         }
 
+        /// <summary>
+        ///     Ruft das Profilbild des Users ab.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public byte[] GetProfilePicture(int userId)
         {
             return GetProfilePicture(GetUsername(userId));
@@ -275,9 +330,9 @@ namespace Videospieldatenbank.Database
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     // Updated den Execpath wenn der User das Spiel bereits besitzt oder fügt es neu hinzu wenn nicht.
-                    command.CommandText = OwnsGame(igdbUrl) ? 
-                        $"UPDATE gameinfo SET exec_path='{execPath}' WHERE igdb_url='{igdbUrl}'":
-                        $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue.ToString("yyyy-MM-dd HH:mm:ss")}')";
+                    command.CommandText = OwnsGame(igdbUrl)
+                        ? $"UPDATE gameinfo SET exec_path='{execPath}' WHERE igdb_url='{igdbUrl}'"
+                        : $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue.ToString("yyyy-MM-dd HH:mm:ss")}')";
                     command.ExecuteNonQuery();
 
                     // Fügt das Spiel zur Datenbank hinzu für den Fall das es noch nicht existiert.

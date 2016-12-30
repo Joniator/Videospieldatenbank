@@ -14,7 +14,10 @@ namespace Test
             GameDatabaseConnector gameDatabaseConnector = new GameDatabaseConnector();
 
             UserDatabaseConnector us = new UserDatabaseConnector();
-            us.Login("JonnyB", "stupidboy");
+            us.Login("Crossiny", "Swag1337");
+            us.AddFriend(24);
+            us.RemoveFriend(24);
+            List<int> friendsList = us.GetFriendsList();
             us.AddGame("https://www.igdb.com/games/the-last-guardian", null);
             us.AddGame("https://www.igdb.com/games/the-legend-of-zelda-ocarina-of-time", null);
             us.AddGame("https://www.igdb.com/games/super-mario-run", null);
