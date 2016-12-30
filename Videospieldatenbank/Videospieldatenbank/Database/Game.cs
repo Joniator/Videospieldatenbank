@@ -16,7 +16,7 @@ namespace Videospieldatenbank.Database
         {
             get
             {
-                using (var webClient = new WebClient())
+                using (WebClient webClient = new WebClient())
                 {
                     return webClient.DownloadData(CoverUrl);
                 }

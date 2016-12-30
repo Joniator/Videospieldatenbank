@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Videospieldatenbank.Utils
 {
     [Serializable]
-    static class Settings
+    internal static class Settings
     {
         [Serializable]
         public static class Login
@@ -17,6 +13,5 @@ namespace Videospieldatenbank.Utils
             public static string Username;
             public static string Password;
         }
-        
     }
 }

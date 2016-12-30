@@ -22,7 +22,7 @@ namespace Videospieldatenbank.Database
                     using (MySqlCommand command = MySqlConnection.CreateCommand())
                     {
                         command.CommandText = $"UPDATE user SET picture=?image WHERE name='{_username}'";
-                        command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) { Value = value });
+                        command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) {Value = value});
                         command.ExecuteNonQuery();
                     }
             }
@@ -241,7 +241,7 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        /// Überprüft ob der Benutzer das Spiel besitzt/hinzugefügt hat.
+        ///     Überprüft ob der Benutzer das Spiel besitzt/hinzugefügt hat.
         /// </summary>
         /// <param name="igdbUrl"></param>
         /// <returns></returns>
@@ -272,6 +272,8 @@ namespace Videospieldatenbank.Database
                     command.CommandText =
                         $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '{DateTime.MinValue.ToString("yyyy-MM-dd HH:mm:ss")}')";
                     command.ExecuteNonQuery();
+
+                    // Fügt das Spiel zur Datenbank hinzu für den Fall das es noch nicht existiert.
                     GameDatabaseConnector gdc = new GameDatabaseConnector();
                     gdc.AddGame(IgdbParser.ParseGame(igdbUrl));
                 }
