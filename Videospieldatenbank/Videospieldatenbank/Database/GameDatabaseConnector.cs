@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace Videospieldatenbank.Database
 {
@@ -74,6 +75,15 @@ namespace Videospieldatenbank.Database
         {
             using (var command = MySqlConnection.CreateCommand())
             {
+                command.CommandText = $"SELECT * FROM games WHERE igdb_url='{game.IgdbUrl}'";
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    // Gibt false zurück wenn das Spiel bereits existiert.
+                    if (reader.Read()) return false;
+                }
+            }
+            using (var command = MySqlConnection.CreateCommand())
+            {
                 var plattforms = "";
                 foreach (var plattform in game.Plattforms)
                     plattforms += plattform + ";";
@@ -91,6 +101,7 @@ namespace Videospieldatenbank.Database
                 }
                 catch
                 {
+                    return false;
                 }
             }
             return true;
