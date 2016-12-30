@@ -49,19 +49,19 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        ///     Gibt eine Liste mit allen Freunden des Users zurück.
+        ///     Gibt eine Liste mit den IDs aller Freunde des Users zurück.
         /// </summary>
         /// <returns></returns>
-        public List<string> GetFriendsList()
+        public List<int> GetFriendsList()
         {
-            List<string> list = new List<string>();
+            List<int> list = new List<int>();
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT friend_id FROM friends WHERE user_ID ='{_username}'";
+                    command.CommandText = $"SELECT friend_id FROM friends WHERE user_ID ='{UserId}'";
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read()) list.Add(GetUsername(reader.GetString(0)));
+                        while (reader.Read()) list.Add(reader.GetInt32(0));
                     }
                 }
             return list;
@@ -72,7 +72,7 @@ namespace Videospieldatenbank.Database
         /// </summary>
         /// <param name="id">ID des Users.</param>
         /// <returns>Name des Users.</returns>
-        private string GetUsername(string id)
+        private string GetUsername(int id)
         {
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
@@ -200,6 +200,11 @@ namespace Videospieldatenbank.Database
                     }
                 }
             return null;
+        }
+
+        public byte[] GetProfilePicture(int userId)
+        {
+            return GetProfilePicture(GetUsername(userId));
         }
 
         /// <summary>
