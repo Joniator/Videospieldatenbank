@@ -122,7 +122,7 @@ namespace Videospieldatenbank.Database
         /// </summary>
         /// <param name="id">ID des Users.</param>
         /// <returns>Name des Users.</returns>
-        private string GetUsername(int id)
+        public string GetUsername(int id)
         {
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
@@ -134,7 +134,27 @@ namespace Videospieldatenbank.Database
                             return reader.GetString(0);
                     }
                 }
-            return "";
+            throw new Exception("Fehler beim ermitteln des Usernames, eventuell existiert die ID nicht.");
+        }
+
+        /// <summary>
+        ///     Ermittelt die ID des Users anhand seines Namens.
+        /// </summary>
+        /// <param name="username">Name des Users.</param>
+        /// <returns>Name des Users.</returns>
+        public int GetId(string username)
+        {
+            if (_isLoggedIn)
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT id FROM user WHERE name='{username}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            return reader.GetInt32(0);
+                    }
+                }
+            throw new Exception("Fehler beim ermitteln der ID, eventuell existiert der Username nicht.");
         }
 
         /// <summary>
@@ -249,7 +269,7 @@ namespace Videospieldatenbank.Database
                         return image;
                     }
                 }
-            return null;
+            throw new Exception("Fehler beim herunterladen des Profilbildes, eventuell existiert der User nicht.");
         }
 
         /// <summary>
@@ -348,7 +368,6 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public TimeSpan GetPlayTime(string igdbUrl)
         {
-            //FIXME: DateTime wird in der Datenbank nicht richtig gespeichert/Datum wird weggelassen, entsprechender Error beim auslesen der Zeit aus der Datenbank.
             if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
@@ -359,7 +378,7 @@ namespace Videospieldatenbank.Database
                         if (reader.Read()) return TimeSpan.FromMinutes(reader.GetInt32(0));
                     }
                 }
-            return TimeSpan.Zero;
+            throw new Exception("Fehler beim ermitteln der Playtime.");
         }
 
         /// <summary>
@@ -369,7 +388,6 @@ namespace Videospieldatenbank.Database
         /// <param name="playedTime">Die Zeit die es gespielt wurde.</param>
         public void AddPlayTime(string igdbUrl, TimeSpan playedTime)
         {
-            //TODO: Testen von AddPlayTime
             TimeSpan newPlayTime = GetPlayTime(igdbUrl) + playedTime;
             if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())

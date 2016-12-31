@@ -15,6 +15,9 @@ namespace Test
 
             UserDatabaseConnector us = new UserDatabaseConnector();
             us.Login("Crossiny", "Swag1337");
+            int id = us.GetId("Crossiny");
+            Console.WriteLine(id);
+            Console.WriteLine(us.GetUsername(id));
             us.AddFriend(24);
             us.RemoveFriend(24);
             List<int> friendsList = us.GetFriendsList();
