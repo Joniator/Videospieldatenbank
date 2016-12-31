@@ -29,22 +29,92 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        ///     Gibt eine Liste mit allen Freunden des Users zurück.
+        ///     Entspricht der UserID des angemeldeten Users.
+        /// </summary>
+        public int UserId
+        {
+            get
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT id FROM user WHERE name='{_username}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            return reader.GetInt32(0);
+                    }
+                }
+                throw new Exception("Fehler beim ermitteln der UserID");
+            }
+        }
+
+        /// <summary>
+        ///     Gibt eine Liste mit den IDs aller Freunde des Users zurück.
         /// </summary>
         /// <returns></returns>
-        public List<string> GetFriendsList()
+        public List<int> GetFriendsList()
         {
-            List<string> list = new List<string>();
+            List<int> list = new List<int>();
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT friend_id FROM friends WHERE user_ID ='{_username}'";
+                    command.CommandText = $"SELECT friend_id FROM friends WHERE user_ID ='{UserId}'";
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read()) list.Add(GetUsername(reader.GetString(0)));
+                        while (reader.Read()) list.Add(reader.GetInt32(0));
                     }
                 }
             return list;
+        }
+
+        /// <summary>
+        ///     Markiert einen User als Freund.
+        /// </summary>
+        /// <param name="friendId">Die ID des als Freund zu markierenden Users.</param>
+        /// <returns></returns>
+        public bool AddFriend(int friendId)
+        {
+            if (!_isLoggedIn) return false;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"SELECT * FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    // User sind bereits als Freund markiert.
+                    if (reader.Read()) return false;
+                }
+            }
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"INSERT INTO friends(user_ID, friend_ID) VALUES ('{UserId}', '{friendId}')";
+                command.ExecuteNonQuery();
+                return true;
+            }
+        }
+
+        /// <summary>
+        ///     Entfernt einen User aus der Freundesliste
+        /// </summary>
+        /// <param name="friendId"></param>
+        /// <returns></returns>
+        public bool RemoveFriend(int friendId)
+        {
+            if (!_isLoggedIn) return false;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"SELECT * FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    // Nutzer sind nicht befreundet.
+                    if (!reader.Read()) return false;
+                }
+            }
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"DELETE FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
+                command.ExecuteNonQuery();
+                return true;
+            }
         }
 
         /// <summary>
@@ -52,7 +122,7 @@ namespace Videospieldatenbank.Database
         /// </summary>
         /// <param name="id">ID des Users.</param>
         /// <returns>Name des Users.</returns>
-        private string GetUsername(string id)
+        private string GetUsername(int id)
         {
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
@@ -183,6 +253,16 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Ruft das Profilbild des Users ab.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public byte[] GetProfilePicture(int userId)
+        {
+            return GetProfilePicture(GetUsername(userId));
+        }
+
+        /// <summary>
         ///     Löscht den Benutzer
         /// </summary>
         /// <param name="username">Username des zu löschenden Users.</param>
@@ -221,24 +301,65 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Überprüft ob der Benutzer das Spiel besitzt/hinzugefügt hat.
+        /// </summary>
+        /// <param name="igdbUrl"></param>
+        /// <returns></returns>
+        public bool OwnsGame(string igdbUrl)
+        {
+            if (_isLoggedIn)
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT * FROM gameinfo WHERE user_ID='{UserId}' AND igdb_url='{igdbUrl}'";
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        return reader.Read();
+                    }
+                }
+            return false;
+        }
+
+        /// <summary>
+        ///     Fügt das angegeben Spiel zur Nutzerbibliothek und ggf. Spieledatenbank hinzu.
+        /// </summary>
+        /// <param name="igdbUrl">Die URL des Spiels.</param>
+        /// <param name="execPath">Der Pfad der ausführbaren Datei des Spiels.</param>
+        public void AddGame(string igdbUrl, string execPath)
+        {
+            if (_isLoggedIn)
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    // Updated den Execpath wenn der User das Spiel bereits besitzt oder fügt es neu hinzu wenn nicht.
+                    command.CommandText = OwnsGame(igdbUrl)
+                        ? $"UPDATE gameinfo SET exec_path='{execPath}' WHERE igdb_url='{igdbUrl}'"
+                        : $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '0')";
+                    command.ExecuteNonQuery();
+
+                    // Fügt das Spiel zur Datenbank hinzu für den Fall das es noch nicht existiert.
+                    GameDatabaseConnector gdc = new GameDatabaseConnector();
+                    gdc.AddGame(IgdbParser.ParseGame(igdbUrl));
+                }
+        }
+
+        /// <summary>
         ///     Ermittelt die gespielte Zeit im angegebenen Spiel.
         /// </summary>
         /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
         /// <returns></returns>
-        public DateTime GetPlayTime(string igdbUrl)
+        public TimeSpan GetPlayTime(string igdbUrl)
         {
-            //TODO: Testen von GetPlayTime
-            if (_isLoggedIn)
+            //FIXME: DateTime wird in der Datenbank nicht richtig gespeichert/Datum wird weggelassen, entsprechender Error beim auslesen der Zeit aus der Datenbank.
+            if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText =
-                        $"SELECT playtime FROM gameinfo WHERE user_ID ='{_username}' AND igdb_url='{igdbUrl}'";
+                        $"SELECT playtime FROM gameinfo WHERE user_ID ='{UserId}' AND igdb_url='{igdbUrl}'";
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        if (reader.Read()) return reader.GetDateTime(0);
+                        if (reader.Read()) return TimeSpan.FromMinutes(reader.GetInt32(0));
                     }
                 }
-            return default(DateTime);
+            return TimeSpan.Zero;
         }
 
         /// <summary>
@@ -249,12 +370,13 @@ namespace Videospieldatenbank.Database
         public void AddPlayTime(string igdbUrl, TimeSpan playedTime)
         {
             //TODO: Testen von AddPlayTime
-            DateTime newPlayTime = GetPlayTime(igdbUrl) + playedTime;
-            if (_isLoggedIn)
+            TimeSpan newPlayTime = GetPlayTime(igdbUrl) + playedTime;
+            if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     command.CommandText =
-                        $"UPDATE gameinfo SET playtime='{newPlayTime.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE user_ID='{_username}' AND igdb_url='{igdbUrl}'";
+                        $"UPDATE gameinfo SET playtime='{(int) newPlayTime.TotalMinutes}' WHERE user_ID='{UserId}' AND igdb_url='{igdbUrl}'";
+                    command.ExecuteNonQuery();
                 }
         }
     }

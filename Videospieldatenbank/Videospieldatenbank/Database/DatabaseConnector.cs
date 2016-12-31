@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 
 namespace Videospieldatenbank.Database
 {
@@ -14,7 +12,7 @@ namespace Videospieldatenbank.Database
         /// <exception cref="MySqlException">Verbindung zum Server fehlgeschlagen.</exception>
         public DatabaseConnector()
         {
-            var builder = new MySqlConnectionStringBuilder
+            MySqlConnectionStringBuilder builder = new MySqlConnectionStringBuilder
             {
                 Server = "tazed.tk",
                 UserID = "igdb",
