@@ -98,7 +98,9 @@
     <Compile Include="Pages\Settings\ProfilSettings.xaml.cs">
       <DependentUpon>ProfilSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\DataSave.cs" />
+    <Compile Include="Pages\Shop.xaml.cs">
+      <DependentUpon>Shop.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Windows\Friends.xaml.cs">
@@ -118,6 +120,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Settings\ProfilSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Shop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

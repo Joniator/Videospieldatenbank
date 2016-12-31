@@ -2,6 +2,7 @@
 using System.Data.SqlTypes;
 using System.Windows;
 using Videospieldatenbank.Database;
+using Videospieldatenbank.Pages;
 using Videospieldatenbank.Pages.Settings;
 using Videospieldatenbank.Windows;
 
@@ -21,6 +22,7 @@ namespace Videospieldatenbank
         private readonly GameInfo _gameInfo = new GameInfo();
         private readonly GameList _gameList = new GameList();
         private readonly Profil _profil = new Profil();
+        private readonly Shop _shop = new Shop();
 
         /// <summary>
         /// Disables unused frames and enables used frames.
@@ -111,7 +113,7 @@ namespace Videospieldatenbank
 
             if (result == MessageBoxResult.Yes)
             {
-                LoginWindow._userDatabaseConnector.Logout();
+                LoginWindow.UserDatabaseConnector.Logout();
                 Application.Current.Shutdown();
                 return true;
             }
@@ -125,6 +127,13 @@ namespace Videospieldatenbank
         {
             if (!ExitMessageBox())
                 e.Cancel = true;
+        }
+
+        private void ButtonShop_OnClick(object sender, RoutedEventArgs e)
+        {
+            FrameCheck(false);
+            if (FrameFull.Content != _shop)
+                FrameFull.Content = _shop;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Videospieldatenbank.Windows
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public static UserDatabaseConnector _userDatabaseConnector = new UserDatabaseConnector();
+        public static UserDatabaseConnector UserDatabaseConnector = new UserDatabaseConnector();
         //Settings.Login settings = new Settings.Login();
         public LoginWindow()
         {
@@ -40,12 +40,10 @@ namespace Videospieldatenbank.Windows
                 Settings.Login.CheckBoxPassword = true;
                 Settings.Login.Password = TextBoxPassword.Password;
             }
-
-            DataSave.Serializer("login", typeof(Settings.Login));
         }
         void Login(string username, string password)
         {
-            if (!_userDatabaseConnector.Login(username, password))
+            if (!UserDatabaseConnector.Login(username, password))
             {
                 MessageBox.Show("USERNAME / PASSWORD is wrong or user doesn't exist!");
             }
@@ -61,7 +59,7 @@ namespace Videospieldatenbank.Windows
 
         void Register(string username, string password)
         {
-            if (!_userDatabaseConnector.Register(username, password))
+            if (!UserDatabaseConnector.Register(username, password))
             {
                 MessageBox.Show("USERNAME is in use! Please take an other USERNAME");
             }

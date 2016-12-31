@@ -27,7 +27,7 @@ namespace Videospieldatenbank
             if (listGames == null)
                 listGames = new List<Game>();
 
-            //in arbeit
+            /*
             {
                 Game game = null;
 
@@ -42,6 +42,7 @@ namespace Videospieldatenbank
                 listBoxItem.Content = game.Name;
 
                 Listbox_TabItem_Games.Items.Add(listBoxItem);
+                */
         }
 
         private void MenuItemEdit_OnClick(object sender, RoutedEventArgs e)
