@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using Videospieldatenbank.Database;
+using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank
 {
@@ -16,6 +18,11 @@ namespace Videospieldatenbank
         private void Friends_OnClosed(object sender, EventArgs e)
         {
             MainWindow.friends = null;
+        }
+
+        private void ButtonAddFriend_OnClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -28,7 +28,7 @@
             <Button x:Name="ButtonLibrary" Content="Bibliothek" Click="ButtonLibrary_OnClick" Height="40"
                     Margin="10,10,10,0" VerticalAlignment="Top" />
             <Button x:Name="ButtonFriends" Content="Freunde" Click="ButtonFriends_OnClick" />
-            <Button x:Name="ButtonShop" Content="Shop" />
+            <Button x:Name="ButtonShop" Content="Shop" Click="ButtonShop_OnClick" />
         </StackPanel>
         <Frame Name="FrameLeft" Visibility="Collapsed" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch" />

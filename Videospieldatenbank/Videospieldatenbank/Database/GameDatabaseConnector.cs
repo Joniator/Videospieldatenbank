@@ -66,6 +66,38 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Ruft Spielinformationen von allen Spielen ab.
+        /// </summary>
+        /// <returns>Array mit <see cref="Game" />-Objekt mit Spielinformationen.</returns>
+        public Game[] GetGameInfosAll()
+        {
+            var games = new List<Game>();
+            using (var command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = $"select * FROM games";
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var game = new Game
+                        {
+                            IgdbUrl = reader["igdb_url"] as string,
+                            CoverUrl = reader["cover_url"] as string,
+                            Name = reader["name"] as string,
+                            Developer = reader["developer"] as string,
+                            Plattforms = (reader["plattforms"] as string).Split(';'),
+                            Genres = (reader["genres"] as string).Split(';'),
+                            Rating = (int)reader["rating"]
+                        };
+                        games.Add(game);
+                    }
+                }
+            }
+            return games.ToArray();
+        }
+
+
+        /// <summary>
         ///     Fügt ein Spiel von igdb.com zur Datenbank hinzu.
         /// </summary>
         /// <param name="igdbUrl">Link zu der igdb-Website des Spiels.</param>
