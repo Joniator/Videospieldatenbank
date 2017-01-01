@@ -1,17 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Videospieldatenbank.Database;
+using Videospieldatenbank.Utils;
 
 namespace Test
 {
     class Program
     {
+        static byte[] GetHash(string s)
+        {
+            HashAlgorithm hashAlgorithm = HashAlgorithm.Create();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
+                {
+                    streamWriter.Write(s);
+                }
+                return hashAlgorithm.ComputeHash(memoryStream.ToArray());
+            }
+        }
         static void Main(string[] args)
         {
             GameDatabaseConnector gameDatabaseConnector = new GameDatabaseConnector();
+
+            byte[] b1 = GetHash("swag");
+            byte[] b2 = GetHash("YOLO");
+            byte[] b3 = GetHash("swag");
 
             UserDatabaseConnector us = new UserDatabaseConnector();
             us.Login("Crossiny", "Swag1337");
