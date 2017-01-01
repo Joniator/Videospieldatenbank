@@ -35,7 +35,7 @@
         <Frame Name="FrameRight" Visibility="Collapsed" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch" />
         <Frame Name="FrameFull" Visibility="Collapsed" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch" />
+               VerticalAlignment="Stretch"/>
 
         <GridSplitter Name="GridSplitter" Visibility="Collapsed" Grid.Row="1" Grid.Column="1"
                       HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="2" Background="Black" />

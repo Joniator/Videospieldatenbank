@@ -17,7 +17,14 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="1" Grid.Row="0" Margin="15"></Image>
-        
+        <Image Name="ImageProfil" Grid.Column="1" Grid.Row="0" Margin="30"></Image>
+        <Button Grid.Column="1" Grid.Row="0" Content="Set picture" FontSize="9" Margin="50,125,50,5" Width="50" Height="20" Click="ButtonSetPicture_Click"></Button>
+        <ListBox Name="ProfilInfo" Grid.Column="0" Grid.Row="0" >
+            <ListBoxItem Name="ListBoxItemUserName" Content="Username: "></ListBoxItem>
+            <ListBoxItem Name="ListBoxItemOnlineStatus" Content="Online: "></ListBoxItem>
+            <ListBoxItem Name="ListBoxItemFriends" Content="Friends: "></ListBoxItem>
+            <ListBoxItem Name="ListBoxItemTotalGames" Content="Total games: "></ListBoxItem>
+            <ListBoxItem Name="ListBoxItemTotalPlaytime" Content="Total playtime: "></ListBoxItem>
+        </ListBox>
     </Grid>
 </Page>
