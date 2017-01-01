@@ -19,10 +19,10 @@ namespace Videospieldatenbank
         }
 
         public static Friends friends;
-        private readonly GameInfo _gameInfo = new GameInfo();
-        private readonly GameList _gameList = new GameList();
-        private readonly Profil _profil = new Profil();
-        private readonly Shop _shop = new Shop();
+        private  GameInfo _gameInfo;
+        private  GameList _gameList;
+        private  Profil _profil;
+        private  Shop _shop;
 
         /// <summary>
         /// Disables unused frames and enables used frames.
@@ -64,6 +64,12 @@ namespace Videospieldatenbank
         /// <param name="e"></param>
         private void ButtonLibrary_OnClick(object sender, RoutedEventArgs e)
         {
+            if (_gameList == null || _gameInfo == null)
+            {
+                _gameList = new GameList();
+                _gameInfo = new GameInfo();
+            }
+
             FrameCheck(true);           
 
             if (FrameLeft.Content != _gameList)
@@ -100,9 +106,13 @@ namespace Videospieldatenbank
         /// <param name="e"></param>
         private void ButtonContent_OnClick(object sender, RoutedEventArgs e)
         {
+            if (_profil == null)
+                _profil = new Profil();
+
+            _profil.ReloadProfil();
             FrameCheck(false);
             if (FrameFull.Content != _profil)
-                FrameFull.Content = _profil;
+                FrameFull.Content = null; FrameFull.Content = _profil;
         }
 
         private bool ExitMessageBox()
@@ -131,9 +141,13 @@ namespace Videospieldatenbank
 
         private void ButtonShop_OnClick(object sender, RoutedEventArgs e)
         {
+            if (_shop == null)
+                _shop = new Shop();
+
             FrameCheck(false);
+
             if (FrameFull.Content != _shop)
-                FrameFull.Content = _shop;
+                FrameFull.Content = null; FrameFull.Content = _shop;
         }
     }
 }
