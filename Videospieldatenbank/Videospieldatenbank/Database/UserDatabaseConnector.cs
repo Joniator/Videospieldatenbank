@@ -116,7 +116,7 @@ namespace Videospieldatenbank.Database
             if (!IsFriend(friendId)) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                command.CommandText = "DELETE FROM friends WHERE user_ID=@userID AND friend_ID=@fríendID";
+                command.CommandText = "DELETE FROM friends WHERE user_ID=@userID AND friend_ID=@friendID";
                 command.Parameters.AddWithValue("@userID", UserId);
                 command.Parameters.AddWithValue("@friendID", friendId);
                 command.ExecuteNonQuery();
@@ -402,7 +402,7 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = "SELECT playtime FROM gameinfo WHERE user_ID=@userID' AND igdb_url=@igdbUrl";
+                    command.CommandText = "SELECT playtime FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
                     command.Parameters.AddWithValue("@userID", UserId);
                     command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                     using (MySqlDataReader reader = command.ExecuteReader())
