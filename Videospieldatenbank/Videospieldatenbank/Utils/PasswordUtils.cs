@@ -10,7 +10,7 @@ namespace Videospieldatenbank.Utils
         ///     Erstellt einen MD5-Hash aus dem gegebenen String.
         /// </summary>
         /// <param name="source">Der String dessen Hash ermittelt werden soll.</param>
-        /// <returns>Ein Bytearray dass den Hash enthält.</returns>
+        /// <returns>Ein String der den Hash im Hex-Format enthält.</returns>
         [DebuggerStepThrough]
         public static string GetHash(string source)
         {
