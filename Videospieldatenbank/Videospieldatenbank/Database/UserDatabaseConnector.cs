@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Database
 {
@@ -180,7 +181,7 @@ namespace Videospieldatenbank.Database
                 command.Parameters.AddWithValue("@username", username);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    return reader.Read() && (password == reader[0] as string);
+                    return reader.Read() && (PasswordUtils.GetHash(password) == reader[0] as string);
                 }
             }
         }
@@ -239,7 +240,7 @@ namespace Videospieldatenbank.Database
                 {
                     command.CommandText = "INSERT INTO user (name, password) VALUES (@username, @password)";
                     command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@password", password);
+                    command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
                     command.ExecuteNonQuery();
                     return true;
                 }
@@ -310,7 +311,7 @@ namespace Videospieldatenbank.Database
                 {
                     command.CommandText = "DELETE FROM user WHERE name=@username AND password=@password";
                     command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@password", password);
+                    command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
                     command.ExecuteNonQuery();
                     return true;
                 }

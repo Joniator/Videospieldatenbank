@@ -101,8 +101,9 @@
     <Compile Include="Pages\Shop.xaml.cs">
       <DependentUpon>Shop.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\PasswordUtils.cs" />
     <Compile Include="Utils\Settings.cs" />
-    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="Utils\ImageUtils.cs" />
     <Compile Include="Windows\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>
