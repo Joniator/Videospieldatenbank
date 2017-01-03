@@ -1,41 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Videospieldatenbank.Utils
 {
-    [Serializable]
-    static class Settings
+    static class LoginSettings
     {
-        public static void Serializer(string filename, object sObject)
+        public static bool CheckBoxUsername
         {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            FileStream fileStream = new FileStream(filename + ".sav", FileMode.OpenOrCreate);
-
-            try
+            get
             {
-                binaryFormatter.Serialize(fileStream, sObject);
+                Videospieldatenbank.Settings.Default.Reload();
+                return Videospieldatenbank.Settings.Default.CheckBoxUsername;
             }
-            catch (Exception)
+            set
             {
-                throw;
+                Videospieldatenbank.Settings.Default.CheckBoxUsername = value;
+                Videospieldatenbank.Settings.Default.Save();
             }
-
-            fileStream.Close();
         }
 
-        [Serializable]
-        public static class Login
+        public static bool CheckBoxPassword
         {
-            public static bool CheckBoxUsername;
-            public static bool CheckBoxPassword;
-            public static string Username;
-            public static string Password;
+            get
+            {
+                Videospieldatenbank.Settings.Default.Reload();
+                return Videospieldatenbank.Settings.Default.CheckBoxPassword;
+            }
+            set
+            {
+                Videospieldatenbank.Settings.Default.CheckBoxPassword = value;
+                Videospieldatenbank.Settings.Default.Save();
+            }
         }
-        
+        public static string Username
+        {
+            get
+            {
+                Videospieldatenbank.Settings.Default.Reload();
+                return Videospieldatenbank.Settings.Default.Username;
+            }
+            set
+            {
+                Videospieldatenbank.Settings.Default.Username = value;
+                Videospieldatenbank.Settings.Default.Save();
+            }
+        }
+
+        public static string Password
+        {
+            get
+            {
+                Videospieldatenbank.Settings.Default.Reload();
+                return Videospieldatenbank.Settings.Default.Password;
+            }
+            set
+            {
+                Videospieldatenbank.Settings.Default.Password = value;
+                Videospieldatenbank.Settings.Default.Save();
+            }
+        }
     }
+
 }
