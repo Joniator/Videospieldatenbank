@@ -291,7 +291,7 @@ namespace Videospieldatenbank.Database
         /// <summary>
         ///     Ruft das Profilbild des Users ab.
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         public byte[] GetProfilePicture(int userId)
         {

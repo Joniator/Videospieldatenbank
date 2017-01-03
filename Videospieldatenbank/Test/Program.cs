@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using Videospieldatenbank.Database;
@@ -13,28 +14,14 @@ namespace Test
 {
     class Program
     {
-        static byte[] GetHash(string s)
-        {
-            HashAlgorithm hashAlgorithm = HashAlgorithm.Create();
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
-                {
-                    streamWriter.Write(s);
-                }
-                return hashAlgorithm.ComputeHash(memoryStream.ToArray());
-            }
-        }
+
         static void Main(string[] args)
         {
             GameDatabaseConnector gameDatabaseConnector = new GameDatabaseConnector();
-
-            byte[] b1 = GetHash("swag");
-            byte[] b2 = GetHash("YOLO");
-            byte[] b3 = GetHash("swag");
-
             UserDatabaseConnector us = new UserDatabaseConnector();
-            us.Login("Crossiny", "Swag1337");
+            Console.WriteLine(PasswordUtils.GetHash("xD"));
+            bool login = us.Login("Crossiny", "Swag1337");
+            int usUserId = us.UserId;
             int id = us.GetId("Crossiny");
             Console.WriteLine(id);
             Console.WriteLine(us.GetUsername(id));
@@ -52,7 +39,7 @@ namespace Test
             us.AddPlayTime("https://www.igdb.com/games/the-last-guardian", TimeSpan.FromMinutes(120));
             playTime = us.GetPlayTime("https://www.igdb.com/games/the-last-guardian");
             Console.WriteLine(playTime.ToString());
-
+            us.Logout();
             Console.Read();
         }
     }
