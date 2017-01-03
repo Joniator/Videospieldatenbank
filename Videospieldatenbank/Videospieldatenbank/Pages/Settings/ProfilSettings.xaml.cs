@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,9 +14,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using Videospieldatenbank.Database;
 using Videospieldatenbank.Windows;
+using Xceed.Wpf.AvalonDock.Converters;
 using Xceed.Wpf.DataGrid.Converters;
+using System.Drawing;
 
 namespace Videospieldatenbank.Pages.Settings
 {
@@ -28,14 +32,14 @@ namespace Videospieldatenbank.Pages.Settings
         {
             InitializeComponent();
 
-            UserInfos(LoginWindow.UserDatabaseConnector.UserId);
+            UserInfos();
         }
 
         public void UserInfos(int userId)
         {
             try
             {
-                ImageProfil.Source = (ImageSource)new ImageSourceConverter().ConvertFrom(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
+                ImageProfil.Source = BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
             }
             catch (Exception)
             {
@@ -43,7 +47,7 @@ namespace Videospieldatenbank.Pages.Settings
             }
 
             ListBoxItemUserName.Content = "Username: " +
-                LoginWindow.UserDatabaseConnector.GetUsername(userId);
+                                          LoginWindow.UserDatabaseConnector.GetUsername(userId);
 
             if (LoginWindow.UserDatabaseConnector.Connected)
                 ListBoxItemOnlineStatus.Content = "Online: Yes";
@@ -54,9 +58,53 @@ namespace Videospieldatenbank.Pages.Settings
             ListBoxItemTotalGames.Content = "Total games: " + LoginWindow.UserDatabaseConnector.GetGames().Count;
         }
 
+        public void UserInfos()
+        {
+            UserInfos(LoginWindow.UserDatabaseConnector.UserId);
+        }
+
+        public byte[] ImageToBytes(ImageSource imageSource)
+        {
+            return (byte[])new ImageSourceConverter().ConvertTo(imageSource, typeof(byte[]));
+        }
+
+        public ImageSource BytesToImageSource(byte[] imageBytes)
+        {
+            return (ImageSource)new ImageSourceConverter().ConvertFrom(imageBytes);
+        }
+
         private void ButtonSetPicture_Click(object sender, RoutedEventArgs e)
         {
-            
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = false;
+            //openFileDialog.Filter = "jpg";
+            openFileDialog.ShowDialog();
+
+            try
+            {
+                LoginWindow.UserDatabaseConnector.ProfilePicture = File.ReadAllBytes(openFileDialog.FileName);
+                UserInfos();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void ButtonChangeUsername_Click(object sender, RoutedEventArgs e)
+        {
+            //LoginWindow.UserDatabaseConnector
+        }
+
+        private void ButtonGoOnOff_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow.UserDatabaseConnector.Logout();
+            UserInfos();
+        }
+
+        private void ButtonChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

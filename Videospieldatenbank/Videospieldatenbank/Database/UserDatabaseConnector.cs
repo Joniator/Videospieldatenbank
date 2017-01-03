@@ -23,6 +23,7 @@ namespace Videospieldatenbank.Database
                     {
                         command.CommandText = "UPDATE user SET picture=@image WHERE name=@username";
                         command.Parameters.AddWithValue("@image", value);
+                        command.Parameters.AddWithValue("@username", _username);
                         command.ExecuteNonQuery();
                     }
             }
