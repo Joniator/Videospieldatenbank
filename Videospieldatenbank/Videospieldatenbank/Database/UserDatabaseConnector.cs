@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Database
 {
     public class UserDatabaseConnector : DatabaseConnector
     {
         private bool _isLoggedIn;
-        private string _password;
         private string _username;
 
         /// <summary>
@@ -21,8 +21,8 @@ namespace Videospieldatenbank.Database
                 if (Exists(_username))
                     using (MySqlCommand command = MySqlConnection.CreateCommand())
                     {
-                        command.CommandText = $"UPDATE user SET picture=?image WHERE name='{_username}'";
-                        command.Parameters.Add(new MySqlParameter("?image", MySqlDbType.Binary) {Value = value});
+                        command.CommandText = "UPDATE user SET picture=@image WHERE name=@username";
+                        command.Parameters.AddWithValue("@image", value);
                         command.ExecuteNonQuery();
                     }
             }
@@ -37,7 +37,8 @@ namespace Videospieldatenbank.Database
             {
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT id FROM user WHERE name='{_username}'";
+                    command.CommandText = "SELECT id FROM user WHERE name=@username";
+                    command.Parameters.AddWithValue("@username", _username);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -58,7 +59,8 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT friend_id FROM friends WHERE user_ID ='{UserId}'";
+                    command.CommandText = "SELECT friend_id FROM friends WHERE user_ID=@userID";
+                    command.Parameters.AddWithValue("@userID", UserId);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read()) list.Add(reader.GetInt32(0));
@@ -74,21 +76,33 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public bool AddFriend(int friendId)
         {
-            if (!_isLoggedIn) return false;
+            if (IsFriend(friendId)) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                command.CommandText = $"SELECT * FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    // User sind bereits als Freund markiert.
-                    if (reader.Read()) return false;
-                }
-            }
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                command.CommandText = $"INSERT INTO friends(user_ID, friend_ID) VALUES ('{UserId}', '{friendId}')";
+                command.CommandText = "INSERT INTO friends(user_ID, friend_ID) VALUES (@userID, @friendID)";
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@friendID", friendId);
                 command.ExecuteNonQuery();
                 return true;
+            }
+        }
+
+        /// <summary>
+        ///     Überprüft ob die User befreundet sind.
+        /// </summary>
+        /// <param name="friendId"></param>
+        /// <returns></returns>
+        private bool IsFriend(int friendId)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM friends WHERE user_ID=@userID AND friend_ID=@friendID";
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@friendID", friendId);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    return reader.Read();
+                }
             }
         }
 
@@ -99,19 +113,12 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public bool RemoveFriend(int friendId)
         {
-            if (!_isLoggedIn) return false;
+            if (!IsFriend(friendId)) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                command.CommandText = $"SELECT * FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    // Nutzer sind nicht befreundet.
-                    if (!reader.Read()) return false;
-                }
-            }
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                command.CommandText = $"DELETE FROM friends WHERE user_ID='{UserId}' AND friend_ID='{friendId}'";
+                command.CommandText = "DELETE FROM friends WHERE user_ID=@userID AND friend_ID=@friendID";
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@friendID", friendId);
                 command.ExecuteNonQuery();
                 return true;
             }
@@ -127,7 +134,8 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT name FROM user WHERE id='{id}'";
+                    command.CommandText = "SELECT name FROM user WHERE id=@id";
+                    command.Parameters.AddWithValue("@id", id);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -147,7 +155,8 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT id FROM user WHERE name='{username}'";
+                    command.CommandText = "SELECT id FROM user WHERE name=@username";
+                    command.Parameters.AddWithValue("@username", username);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -168,10 +177,11 @@ namespace Videospieldatenbank.Database
             if (!Exists(username)) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                command.CommandText = $"SELECT password FROM user WHERE name = '{username}'";
+                command.CommandText = "SELECT password FROM user WHERE name=@username";
+                command.Parameters.AddWithValue("@username", username);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    return reader.Read() && (password == reader[0] as string);
+                    return reader.Read() && (PasswordUtils.GetHash(password) == reader[0] as string);
                 }
             }
         }
@@ -188,11 +198,11 @@ namespace Videospieldatenbank.Database
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     _username = username;
-                    _password = password;
                     _isLoggedIn = true;
 
                     // Setzt Onlinestatus des Users auf true.
-                    command.CommandText = $"UPDATE user SET online=true WHERE name = '{username}'";
+                    command.CommandText = "UPDATE user SET online=true WHERE name=@username";
+                    command.Parameters.AddWithValue("@username", username);
                     command.ExecuteNonQuery();
                     return true;
                 }
@@ -209,8 +219,10 @@ namespace Videospieldatenbank.Database
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 // Setzt Onlinestatus des Users auf false.
-                command.CommandText = $"UPDATE user SET online=false WHERE name = '{_username}'";
+                command.CommandText = "UPDATE user SET online=false WHERE name=@username";
+                command.Parameters.AddWithValue("@username", _username);
                 command.ExecuteNonQuery();
+                _isLoggedIn = false;
                 return true;
             }
         }
@@ -226,7 +238,9 @@ namespace Videospieldatenbank.Database
             if (!Exists(username))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"INSERT INTO user (name, password) VALUES ('{username}', '{password}')";
+                    command.CommandText = "INSERT INTO user (name, password) VALUES (@username, @password)";
+                    command.Parameters.AddWithValue("@username", username);
+                    command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
                     command.ExecuteNonQuery();
                     return true;
                 }
@@ -242,7 +256,8 @@ namespace Videospieldatenbank.Database
         {
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                command.CommandText = $"SELECT * FROM user WHERE name = '{username}'";
+                command.CommandText = "SELECT * FROM user WHERE name=@username";
+                command.Parameters.AddWithValue("@username", username);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.Read();
@@ -260,7 +275,8 @@ namespace Videospieldatenbank.Database
             if (Exists(_username))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT picture FROM user WHERE name='{username}'";
+                    command.CommandText = "SELECT picture FROM user WHERE name=@username";
+                    command.Parameters.AddWithValue("@username", username);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         byte[] image = new byte[65556];
@@ -275,7 +291,7 @@ namespace Videospieldatenbank.Database
         /// <summary>
         ///     Ruft das Profilbild des Users ab.
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         public byte[] GetProfilePicture(int userId)
         {
@@ -293,7 +309,9 @@ namespace Videospieldatenbank.Database
             if (CheckLogin(username, password))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"DELETE FROM user WHERE name = '{username}' AND password = '{password}'";
+                    command.CommandText = "DELETE FROM user WHERE name=@username AND password=@password";
+                    command.Parameters.AddWithValue("@username", username);
+                    command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
                     command.ExecuteNonQuery();
                     return true;
                 }
@@ -311,7 +329,8 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT igdb_url FROM gameinfo WHERE user_ID ='{_username}'";
+                    command.CommandText = "SELECT igdb_url FROM gameinfo WHERE user_ID=@userID";
+                    command.Parameters.AddWithValue("@userID", UserId);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read()) list.Add(reader.GetString(0));
@@ -330,7 +349,9 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn)
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT * FROM gameinfo WHERE user_ID='{UserId}' AND igdb_url='{igdbUrl}'";
+                    command.CommandText = "SELECT * FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                    command.Parameters.AddWithValue("@userID", UserId);
+                    command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         return reader.Read();
@@ -350,9 +371,19 @@ namespace Videospieldatenbank.Database
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
                     // Updated den Execpath wenn der User das Spiel bereits besitzt oder fügt es neu hinzu wenn nicht.
-                    command.CommandText = OwnsGame(igdbUrl)
-                        ? $"UPDATE gameinfo SET exec_path='{execPath}' WHERE igdb_url='{igdbUrl}'"
-                        : $"INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES ('{UserId}', '{igdbUrl}', '{execPath}', '0')";
+                    if (OwnsGame(igdbUrl))
+                    {
+                        command.CommandText = "UPDATE gameinfo SET exec_path=@execPath WHERE igdb_url=@igdbUrl";
+                        command.Parameters.AddWithValue("@execPath", execPath);
+                        command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                    }
+                    else
+                    {
+                        command.CommandText = "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
+                        command.Parameters.AddWithValue("@userID", UserId);
+                        command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                        command.Parameters.AddWithValue("@execPath", execPath);
+                    }
                     command.ExecuteNonQuery();
 
                     // Fügt das Spiel zur Datenbank hinzu für den Fall das es noch nicht existiert.
@@ -371,8 +402,9 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText =
-                        $"SELECT playtime FROM gameinfo WHERE user_ID ='{UserId}' AND igdb_url='{igdbUrl}'";
+                    command.CommandText = "SELECT playtime FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                    command.Parameters.AddWithValue("@userID", UserId);
+                    command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read()) return TimeSpan.FromMinutes(reader.GetInt32(0));
@@ -392,8 +424,10 @@ namespace Videospieldatenbank.Database
             if (_isLoggedIn && OwnsGame(igdbUrl))
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-                    command.CommandText =
-                        $"UPDATE gameinfo SET playtime='{(int) newPlayTime.TotalMinutes}' WHERE user_ID='{UserId}' AND igdb_url='{igdbUrl}'";
+                    command.CommandText = "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                    command.Parameters.AddWithValue("@playTime", (int) newPlayTime.TotalMinutes);
+                    command.Parameters.AddWithValue("@userID", UserId);
+                    command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                     command.ExecuteNonQuery();
                 }
         }

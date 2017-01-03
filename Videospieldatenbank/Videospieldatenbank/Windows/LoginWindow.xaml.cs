@@ -26,21 +26,26 @@ namespace Videospieldatenbank.Windows
         public LoginWindow()
         {
             InitializeComponent();
+            CheckBoxSaveUsername.IsChecked = LoginSettings.CheckBoxUsername;
+            TextBoxUsername.Text = LoginSettings.Username;
+            CheckBoxSavePassword.IsChecked = LoginSettings.CheckBoxPassword;
+            TextBoxPassword.Password = LoginSettings.Password;
         }
 
-        void checkCheckBoxes()
+        void CheckCheckBoxes()
         {
             if (CheckBoxSaveUsername.IsChecked == true)
             {
-                Settings.Login.CheckBoxUsername = true;
-                Settings.Login.Username = TextBoxUsername.Text;
+                LoginSettings.CheckBoxUsername = true;
+                LoginSettings.Username = TextBoxUsername.Text;
             }
             if (CheckBoxSavePassword.IsChecked == true)
             {
-                Settings.Login.CheckBoxPassword = true;
-                Settings.Login.Password = TextBoxPassword.Password;
+                LoginSettings.CheckBoxPassword = true;
+                LoginSettings.Password = TextBoxPassword.Password;
             }
         }
+
         void Login(string username, string password)
         {
             if (!UserDatabaseConnector.Login(username, password))
@@ -51,7 +56,7 @@ namespace Videospieldatenbank.Windows
             {
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
-                checkCheckBoxes();
+                CheckCheckBoxes();
 
                 this.Close();
             }
