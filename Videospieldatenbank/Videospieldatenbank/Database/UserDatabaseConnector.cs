@@ -212,6 +212,41 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Ändert den Usernamen.
+        /// </summary>
+        /// <param name="username">Der neue Username.</param>
+        /// <returns></returns>
+        public bool SetUsername(string username)
+        {
+            if (!Exists(_username) || Exists(username))
+                throw new Exception("Fehler beim Ändern des Usernames, eventuell ist der Name schon vergeben.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "UPDATE user SET name=@newUsername WHERE name=@oldUsername";
+                command.Parameters.AddWithValue("@oldUsername", _username);
+                command.Parameters.AddWithValue("@newUsername", username);
+                command.ExecuteNonQuery();
+                _username = username;
+                return true;
+            }
+        }
+
+        /// <summary>
+        ///     Ändert das Passwort des Users.
+        /// </summary>
+        /// <param name="newPassword"></param>
+        public void SetPassword(string newPassword)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "UPDATE user SET password=@password WHERE id=@userID";
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(newPassword));
+                command.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
         ///     Erstellt einen neuen User.
         /// </summary>
         /// <param name="username">Username des neuen Users.</param>
@@ -327,26 +362,6 @@ namespace Videospieldatenbank.Database
                 }
             }
             throw new Exception("Fehler beim ermitteln des Usernames, eventuell existiert die ID nicht.");
-        }
-
-        /// <summary>
-        ///     Ändert den Usernamen.
-        /// </summary>
-        /// <param name="username">Der neue Username.</param>
-        /// <returns></returns>
-        public bool SetUsername(string username)
-        {
-            if (!Exists(_username) || Exists(username))
-                throw new Exception("Fehler beim Ändern des Usernames, eventuell ist der Name schon vergeben.");
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                command.CommandText = "UPDATE user SET name=@newUsername WHERE name=@oldUsername";
-                command.Parameters.AddWithValue("@oldUsername", _username);
-                command.Parameters.AddWithValue("@newUsername", username);
-                command.ExecuteNonQuery();
-                _username = username;
-                return true;
-            }
         }
 
         /// <summary>

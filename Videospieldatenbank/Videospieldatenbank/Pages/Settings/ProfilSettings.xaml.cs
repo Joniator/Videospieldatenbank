@@ -15,7 +15,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-using Videospieldatenbank.Database;
 using Videospieldatenbank.Windows;
 using Xceed.Wpf.AvalonDock.Converters;
 using Xceed.Wpf.DataGrid.Converters;
@@ -96,7 +95,8 @@ namespace Videospieldatenbank.Pages.Settings
 
         private void ButtonChangeUsername_Click(object sender, RoutedEventArgs e)
         {
-            //LoginWindow.UserDatabaseConnector
+            ChangeUsernameDialog dialog = new ChangeUsernameDialog();
+            if (dialog.ShowDialog() == true) MessageBox.Show("Username changed!");
         }
 
         private void ButtonGoOnOff_Click(object sender, RoutedEventArgs e)
@@ -116,7 +116,8 @@ namespace Videospieldatenbank.Pages.Settings
 
         private void ButtonChangePassword_Click(object sender, RoutedEventArgs e)
         {
-
+            ChangePasswordDialog dialog = new ChangePasswordDialog();
+            if (dialog.ShowDialog() == true) MessageBox.Show("Password changed!");
         }
     }
 }

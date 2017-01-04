@@ -109,6 +109,12 @@
     <Compile Include="Utils\PasswordUtils.cs" />
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\ImageUtils.cs" />
+    <Compile Include="Windows\ChangePasswordDialog.xaml.cs">
+      <DependentUpon>ChangePasswordDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ChangeUsernameDialog.xaml.cs">
+      <DependentUpon>ChangeUsernameDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>
@@ -134,6 +140,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ChangePasswordDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ChangeUsernameDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
