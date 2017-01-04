@@ -7,7 +7,6 @@ namespace Videospieldatenbank.Database
 {
     public class UserDatabaseConnector : DatabaseConnector
     {
-        private bool _isLoggedIn;
         private string _username;
 
         /// <summary>
@@ -24,6 +23,35 @@ namespace Videospieldatenbank.Database
                     command.CommandText = "UPDATE user SET picture=@image WHERE name=@username";
                     command.Parameters.AddWithValue("@image", value);
                     command.Parameters.AddWithValue("@username", _username);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public bool OnlineStatus
+        {
+            get
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+
+                    command.CommandText = "SELECT online FROM user WHERE name=@username";
+                    command.Parameters.AddWithValue("@username", _username);
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read()) return reader.GetBoolean(0);
+                    }
+                    throw new Exception("Fehler beim ermitteln des Onlinestatus.");
+                }
+            }
+            set
+            {
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+
+                    command.CommandText = "UPDATE user SET online=@onlineStatus WHERE name=@username";
+                    command.Parameters.AddWithValue("@username", _username);
+                    command.Parameters.AddWithValue("@onlineStatus", value);
                     command.ExecuteNonQuery();
                 }
             }
@@ -57,7 +85,6 @@ namespace Videospieldatenbank.Database
         public List<int> GetFriendsList()
         {
             List<int> list = new List<int>();
-            if (!_isLoggedIn) throw new Exception("User not logged in.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT friend_id FROM friends WHERE user_ID=@userID";
@@ -132,7 +159,6 @@ namespace Videospieldatenbank.Database
         /// <returns>Name des Users.</returns>
         public string GetUsername(int id)
         {
-            if (!_isLoggedIn) throw new Exception("User not logged in.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT name FROM user WHERE id=@id";
@@ -168,7 +194,6 @@ namespace Videospieldatenbank.Database
         /// <returns>Name des Users.</returns>
         public int GetId(string username)
         {
-            if (!_isLoggedIn) throw new Exception("User not logged in.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT id FROM user WHERE name=@username";
@@ -211,17 +236,9 @@ namespace Videospieldatenbank.Database
         public bool Login(string username, string password)
         {
             if (!CheckLogin(username, password)) return false;
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                _username = username;
-                _isLoggedIn = true;
-
-                // Setzt Onlinestatus des Users auf true.
-                command.CommandText = "UPDATE user SET online=true WHERE name=@username";
-                command.Parameters.AddWithValue("@username", username);
-                command.ExecuteNonQuery();
-                return true;
-            }
+            _username = username;
+            OnlineStatus = true;
+            return true;
         }
 
         /// <summary>
@@ -230,14 +247,13 @@ namespace Videospieldatenbank.Database
         /// <returns>True, wenn erfolgreich.</returns>
         public bool Logout()
         {
-            if (!_isLoggedIn) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 // Setzt Onlinestatus des Users auf false.
                 command.CommandText = "UPDATE user SET online=false WHERE name=@username";
                 command.Parameters.AddWithValue("@username", _username);
                 command.ExecuteNonQuery();
-                _isLoggedIn = false;
+                OnlineStatus = false;
                 return true;
             }
         }
@@ -338,7 +354,6 @@ namespace Videospieldatenbank.Database
         public List<string> GetGames()
         {
             List<string> list = new List<string>();
-            if (!_isLoggedIn) return list;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT igdb_url FROM gameinfo WHERE user_ID=@userID";
@@ -358,7 +373,6 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public bool OwnsGame(string igdbUrl)
         {
-            if (!_isLoggedIn) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT * FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
@@ -378,7 +392,6 @@ namespace Videospieldatenbank.Database
         /// <param name="execPath">Der Pfad der ausführbaren Datei des Spiels.</param>
         public void AddGame(string igdbUrl, string execPath)
         {
-            if (!_isLoggedIn) throw new Exception("User not logged in.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 // Updated den Execpath wenn der User das Spiel bereits besitzt oder fügt es neu hinzu wenn nicht.
@@ -410,7 +423,6 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public TimeSpan GetPlayTime(string igdbUrl)
         {
-            if (!_isLoggedIn || !OwnsGame(igdbUrl)) throw new Exception("Fehler beim ermitteln der Playtime.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT playtime FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
@@ -431,7 +443,6 @@ namespace Videospieldatenbank.Database
         /// <param name="playedTime">Die Zeit die es gespielt wurde.</param>
         public void AddPlayTime(string igdbUrl, TimeSpan playedTime)
         {
-            if (!_isLoggedIn || !OwnsGame(igdbUrl)) throw new Exception("Fehler beim ermitteln der Playtime.");
             TimeSpan newPlayTime = GetPlayTime(igdbUrl) + playedTime;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
