@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using Videospieldatenbank.Database;
@@ -34,11 +35,14 @@ namespace Videospieldatenbank
             }
             StartButton.Click += (sender, args) =>
             {
-                Process process = Process.Start(LoginWindow.UserDatabaseConnector.GetExecPath(igdbUrl));
+                string execPath = LoginWindow.UserDatabaseConnector.GetExecPath(igdbUrl);
+                ProcessStartInfo psi = new ProcessStartInfo(execPath);
+                psi.WorkingDirectory = Path.GetDirectoryName(execPath);
+                Process process = Process.Start(psi);
                 process.EnableRaisingEvents = true;
                 process.Exited += (o, eventArgs) =>
-                {
-                    TimeSpan playtime = DateTime.Now - process.StartTime;
+                 {
+                    TimeSpan playtime = process.ExitTime - process.StartTime;
                     LoginWindow.UserDatabaseConnector.AddPlayTime(igdbUrl, playtime);
                     MessageBox.Show(playtime.TotalSeconds.ToString());
                 };
