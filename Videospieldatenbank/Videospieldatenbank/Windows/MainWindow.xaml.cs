@@ -16,10 +16,12 @@ namespace Videospieldatenbank
         public MainWindow()
         {
             InitializeComponent();
+            @this = this;
         }
 
+        private static MainWindow @this;
         public static Friends friends;
-        private  GameInfo _gameInfo;
+        public static GameInfo GameInfo;
         private  GameList _gameList;
         private  Profil _profil;
         private  Shop _shop;
@@ -64,10 +66,10 @@ namespace Videospieldatenbank
         /// <param name="e"></param>
         private void ButtonLibrary_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_gameList == null || _gameInfo == null)
+            if (_gameList == null || GameInfo == null)
             {
                 _gameList = new GameList();
-                _gameInfo = new GameInfo("https://www.igdb.com/games/doom");
+                GameInfo = new GameInfo("https://www.igdb.com/games/doom");
             }
 
             FrameCheck(true);           
@@ -75,10 +77,19 @@ namespace Videospieldatenbank
             if (FrameLeft.Content != _gameList)
                 FrameLeft.Content = _gameList;
 
-            if (FrameRight.Content != _gameInfo)
-                FrameRight.Content = _gameInfo;
+            if (FrameRight.Content != GameInfo)
+                FrameRight.Content = GameInfo;
         }
 
+        /// <summary>
+        ///     Zeigt das Spiel rechts in der GameInfo-Spalte an.
+        /// </summary>
+        /// <param name="igdbUrl"></param>
+        public static void SetGameInfo(string igdbUrl)
+        {
+                @this.FrameRight.Content = new GameInfo(igdbUrl);
+        }
+        
         /// <summary>
         /// Open FrindsList.
         /// </summary>

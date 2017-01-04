@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Win32;
+using Videospieldatenbank.Database;
 using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank
@@ -27,14 +28,30 @@ namespace Videospieldatenbank
             {
                 foreach (string game in games)
                 {
-                    Listbox_TabItem_Games.Items.Add(new ListBoxItem() { Content = game.Replace("https://www.igdb.com/games/", "").Replace("-", " "), Foreground = Brushes.Azure, Opacity = 100});
+                    using (GameDatabaseConnector gameDatabaseConnector = new GameDatabaseConnector())
+                    {
+                        Database.Game gameInfo = gameDatabaseConnector.GetGameInfo(game);
+
+                        ListBoxItem listBoxItem = new ListBoxItem()
+                        {
+                            Content = gameInfo.Name,
+                            Foreground = Brushes.Azure,
+                            Opacity = 100
+                        };
+                        listBoxItem.PreviewMouseDown += (sender, args) =>
+                        {
+                            MainWindow.SetGameInfo(game);
+                        };
+
+                        Listbox_TabItem_Games.Items.Add(listBoxItem);
+                    }
                 }
             }
             catch (Exception)
             {
-                
+
             }
-            
+
         }
 
         private void MenuItemAdd_OnClick(object sender, RoutedEventArgs e)
