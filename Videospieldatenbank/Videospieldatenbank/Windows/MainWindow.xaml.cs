@@ -77,13 +77,20 @@ namespace Videospieldatenbank
                 FrameLeft.Content = _gameList;
         }
 
+        public static void RefreshLibrary()
+        {
+            GameList.RefreshGameList();
+            @this.FrameRight.Content = GameInfo;
+        }
+
         /// <summary>
         ///     Zeigt das Spiel rechts in der GameInfo-Spalte an.
         /// </summary>
         /// <param name="igdbUrl"></param>
         public static void SetGameInfo(string igdbUrl)
         {
-                @this.FrameRight.Content = new GameInfo(igdbUrl);
+            GameInfo = new GameInfo(igdbUrl);
+            RefreshLibrary();
         }
         
         /// <summary>

@@ -14,9 +14,11 @@ namespace Videospieldatenbank
     /// </summary>
     public partial class GameInfo : Page
     {
+        public string IgdbUrl;
         public GameInfo(string igdbUrl)
         {
             InitializeComponent();
+            IgdbUrl = igdbUrl;
             GameDatabaseConnector gdc = new GameDatabaseConnector();
             Game gameInfo = gdc.GetGameInfo(igdbUrl);
             ListBoxItemName.Content += gameInfo.Name;
