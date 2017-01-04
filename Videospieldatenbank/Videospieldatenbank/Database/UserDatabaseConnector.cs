@@ -79,6 +79,8 @@ namespace Videospieldatenbank.Database
             }
         }
 
+        #region Friends
+
         /// <summary>
         ///     Gibt eine Liste mit den IDs aller Freunde des Users zurück.
         /// </summary>
@@ -135,24 +137,6 @@ namespace Videospieldatenbank.Database
             }
         }
 
-        /// <summary>
-        /// Überprüft ob ein User online ist.
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public bool IsOnline(string username)
-        {
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                command.CommandText = "SELECT online FROM user WHERE name=@username";
-                command.Parameters.AddWithValue("@username", username);
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read()) return reader.GetBoolean(0);
-                }
-                throw new Exception("Fehler beim ermitteln des Onlinestatus.");
-            }
-        }
 
         /// <summary>
         ///     Entfernt einen User aus der Freundesliste
@@ -172,65 +156,9 @@ namespace Videospieldatenbank.Database
             }
         }
 
-        /// <summary>
-        ///     Ermittelt den Namen des Users anhand seiner ID.
-        /// </summary>
-        /// <param name="id">ID des Users.</param>
-        /// <returns>Name des Users.</returns>
-        public string GetUsername(int id)
-        {
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                command.CommandText = "SELECT name FROM user WHERE id=@id";
-                command.Parameters.AddWithValue("@id", id);
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                        return reader.GetString(0);
-                }
-            }
-            throw new Exception("Fehler beim ermitteln des Usernames, eventuell existiert die ID nicht.");
-        }
+        #endregion
 
-        /// <summary>
-        ///     Ändert den Usernamen.
-        /// </summary>
-        /// <param name="username">Der neue Username.</param>
-        /// <returns></returns>
-        public bool SetUsername(string username)
-        {
-            if (!Exists(_username) || Exists(username))
-                throw new Exception("Fehler beim Ändern des Usernames, eventuell ist der Name schon vergeben.");
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                command.CommandText = "UPDATE user SET name=@newUsername WHERE name=@oldUsername";
-                command.Parameters.AddWithValue("@oldUsername", _username);
-                command.Parameters.AddWithValue("@newUsername", username);
-                command.ExecuteNonQuery();
-                _username = username;
-                return true;
-            }
-        }
-
-        /// <summary>
-        ///     Ermittelt die ID des Users anhand seines Namens.
-        /// </summary>
-        /// <param name="username">Name des Users.</param>
-        /// <returns>Name des Users.</returns>
-        public int GetId(string username)
-        {
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                command.CommandText = "SELECT id FROM user WHERE name=@username";
-                command.Parameters.AddWithValue("@username", username);
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                        return reader.GetInt32(0);
-                }
-            }
-            throw new Exception("Fehler beim ermitteln der ID, eventuell existiert der Username nicht.");
-        }
+        #region Account
 
         /// <summary>
         ///     Überprüft die Anmeldedaten eines Users.
@@ -303,22 +231,27 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        ///     Gibt an ob ein User bereits existiert.
+        ///     Löscht den Benutzer
         /// </summary>
-        /// <param name="username">Der zu überprüfende Username</param>
-        /// <returns>True, wenn der User existiert.</returns>
-        private bool Exists(string username)
+        /// <param name="username">Username des zu löschenden Users.</param>
+        /// <param name="password">Passwort des zu löschenden Users.</param>
+        /// <returns>True, wenn das Löschen erfolgreich war.</returns>
+        public bool DeleteUser(string username, string password)
         {
+            if (!CheckLogin(username, password)) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                command.CommandText = "SELECT * FROM user WHERE name=@username";
+                command.CommandText = "DELETE FROM user WHERE name=@username AND password=@password";
                 command.Parameters.AddWithValue("@username", username);
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    return reader.Read();
-                }
+                command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
+                command.ExecuteNonQuery();
+                return true;
             }
         }
+
+        #endregion
+
+        #region Profilbild
 
         /// <summary>
         ///     Ruft das Profilbild des Users ab.
@@ -353,24 +286,110 @@ namespace Videospieldatenbank.Database
             return GetProfilePicture(GetUsername(userId));
         }
 
+        #endregion
+
+        #region Userinfo
+
         /// <summary>
-        ///     Löscht den Benutzer
+        ///     Überprüft ob ein User online ist.
         /// </summary>
-        /// <param name="username">Username des zu löschenden Users.</param>
-        /// <param name="password">Passwort des zu löschenden Users.</param>
-        /// <returns>True, wenn das Löschen erfolgreich war.</returns>
-        public bool DeleteUser(string username, string password)
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public bool IsOnline(string username)
         {
-            if (!CheckLogin(username, password)) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                command.CommandText = "DELETE FROM user WHERE name=@username AND password=@password";
+                command.CommandText = "SELECT online FROM user WHERE name=@username";
                 command.Parameters.AddWithValue("@username", username);
-                command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) return reader.GetBoolean(0);
+                }
+                throw new Exception("Fehler beim ermitteln des Onlinestatus.");
+            }
+        }
+
+        /// <summary>
+        ///     Ermittelt den Namen des Users anhand seiner ID.
+        /// </summary>
+        /// <param name="id">ID des Users.</param>
+        /// <returns>Name des Users.</returns>
+        public string GetUsername(int id)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT name FROM user WHERE id=@id";
+                command.Parameters.AddWithValue("@id", id);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                        return reader.GetString(0);
+                }
+            }
+            throw new Exception("Fehler beim ermitteln des Usernames, eventuell existiert die ID nicht.");
+        }
+
+        /// <summary>
+        ///     Ändert den Usernamen.
+        /// </summary>
+        /// <param name="username">Der neue Username.</param>
+        /// <returns></returns>
+        public bool SetUsername(string username)
+        {
+            if (!Exists(_username) || Exists(username))
+                throw new Exception("Fehler beim Ändern des Usernames, eventuell ist der Name schon vergeben.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "UPDATE user SET name=@newUsername WHERE name=@oldUsername";
+                command.Parameters.AddWithValue("@oldUsername", _username);
+                command.Parameters.AddWithValue("@newUsername", username);
                 command.ExecuteNonQuery();
+                _username = username;
                 return true;
             }
         }
+
+        /// <summary>
+        ///     Ermittelt die ID des Users anhand seines Namens.
+        /// </summary>
+        /// <param name="username">Name des Users.</param>
+        /// <returns>Name des Users.</returns>
+        public int GetId(string username)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT id FROM user WHERE name=@username";
+                command.Parameters.AddWithValue("@username", username);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                        return reader.GetInt32(0);
+                }
+            }
+            throw new Exception("Fehler beim ermitteln der ID, eventuell existiert der Username nicht.");
+        }
+
+        /// <summary>
+        ///     Gibt an ob ein User bereits existiert.
+        /// </summary>
+        /// <param name="username">Der zu überprüfende Username</param>
+        /// <returns>True, wenn der User existiert.</returns>
+        private bool Exists(string username)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM user WHERE name=@username";
+                command.Parameters.AddWithValue("@username", username);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    return reader.Read();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Games
 
         /// <summary>
         ///     Gibt eine Liste der Spiele des users zurück
@@ -462,12 +481,12 @@ namespace Videospieldatenbank.Database
             }
             throw new Exception("Fehler beim ermitteln der Playtime.");
         }
-        
+
         /// <summary>
-         ///     Ermittelt die gespielte Zeit im angegebenen Spiel.
-         /// </summary>
-         /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
-         /// <returns></returns>
+        ///     Ermittelt die gespielte Zeit im angegebenen Spiel.
+        /// </summary>
+        /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
+        /// <returns></returns>
         public TimeSpan GetPlayTime(string igdbUrl)
         {
             return GetPlayTime(igdbUrl, UserId);
@@ -491,5 +510,7 @@ namespace Videospieldatenbank.Database
                 command.ExecuteNonQuery();
             }
         }
+
+        #endregion
     }
 }
