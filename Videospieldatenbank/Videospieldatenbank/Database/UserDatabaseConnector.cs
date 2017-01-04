@@ -511,6 +511,26 @@ namespace Videospieldatenbank.Database
             }
         }
 
+        /// <summary>
+        ///     Ermittelt den Pfad unter dem das Spiel gespeichert wurde.
+        /// </summary>
+        /// <param name="igdbUrl"></param>
+        /// <returns></returns>
+        public string GetExecPath(string igdbUrl)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT exec_path FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                command.Parameters.AddWithValue("@userID", UserId);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) return reader.GetString(0);
+                }
+            }
+            throw new Exception("Fehler beim ermitteln des exec_path, eventuell existiert das Spiel nicht oder es ist kein Pfad eingespeichert.");
+        }
+
         #endregion
     }
 }

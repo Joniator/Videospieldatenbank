@@ -94,7 +94,6 @@ namespace Videospieldatenbank.Database
             return games.ToArray();
         }
 
-
         /// <summary>
         ///     Fügt ein Spiel von igdb.com zur Datenbank hinzu.
         /// </summary>
