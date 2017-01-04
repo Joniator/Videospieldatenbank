@@ -44,7 +44,6 @@ namespace Videospieldatenbank
                  {
                     TimeSpan playtime = process.ExitTime - process.StartTime;
                     LoginWindow.UserDatabaseConnector.AddPlayTime(igdbUrl, playtime);
-                    MessageBox.Show(playtime.TotalSeconds.ToString());
                 };
             };
         }
