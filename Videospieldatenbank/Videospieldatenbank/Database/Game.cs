@@ -10,6 +10,9 @@ namespace Videospieldatenbank.Database
         public string IgdbUrl;
         public string Name;
         public string[] Plattforms;
+        public string GamePath;
+        public string LauncherName;
+        public string LauncherPath;
         public int Rating;
 
         public byte[] Cover
