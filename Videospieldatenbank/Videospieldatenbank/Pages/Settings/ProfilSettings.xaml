@@ -26,7 +26,7 @@
             <ListBoxItem Name="ListBoxItemTotalPlaytime" Content="Total playtime: "></ListBoxItem>
         </ListBox>
 
-        <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <StackPanel Name="StackPanelSettings" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Change username" FontSize="12" Width="100" Margin="5" Click="ButtonChangeUsername_Click"/>
             <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Change password" FontSize="12" Width="100" Margin="5" Click="ButtonChangePassword_Click"/>
             <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Go offline" FontSize="12" Width="100" Margin="5" Click="ButtonGoOnOff_Click"/>

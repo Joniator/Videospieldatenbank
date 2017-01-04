@@ -37,8 +37,20 @@ namespace Videospieldatenbank.Pages.Settings
 
         public void UserInfos(int userId)
         {
-            try
+            if (userId != LoginWindow.UserDatabaseConnector.UserId)
             {
+                StackPanelSettings.IsEnabled = false;
+                StackPanelSettings.Visibility = Visibility.Collapsed;
+            }
+            else if(userId == LoginWindow.UserDatabaseConnector.UserId)
+            {
+                StackPanelSettings.IsEnabled = true;
+                StackPanelSettings.Visibility = Visibility.Visible;
+            }
+
+        try
+
+        {
                 ImageProfil.Source = BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
             }
             catch (Exception)
