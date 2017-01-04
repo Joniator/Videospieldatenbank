@@ -67,7 +67,9 @@ namespace Videospieldatenbank.Pages.Settings
                 ListBoxItemOnlineStatus.Content = "Online: No";
 
             ListBoxItemFriends.Content = "Friends: " + LoginWindow.UserDatabaseConnector.GetFriendsList().Count;
-            ListBoxItemTotalGames.Content = "Total games: " + LoginWindow.UserDatabaseConnector.GetGames().Count;
+            List<string> games = LoginWindow.UserDatabaseConnector.GetGames();
+            ListBoxItemTotalGames.Content = "Total games: " + games.Count;
+            ListBoxItemTotalPlaytime.Content = "Total gametime: " + games.Select(n => LoginWindow.UserDatabaseConnector.GetPlayTime(n).TotalMinutes).Sum() + " Minutes";
         }
 
         public void UserInfos()
@@ -97,6 +99,7 @@ namespace Videospieldatenbank.Pages.Settings
         {
             ChangeUsernameDialog dialog = new ChangeUsernameDialog();
             if (dialog.ShowDialog() == true) MessageBox.Show("Username changed!");
+            UserInfos();
         }
 
         private void ButtonGoOnOff_Click(object sender, RoutedEventArgs e)
@@ -118,6 +121,7 @@ namespace Videospieldatenbank.Pages.Settings
         {
             ChangePasswordDialog dialog = new ChangePasswordDialog();
             if (dialog.ShowDialog() == true) MessageBox.Show("Password changed!");
+            UserInfos();
         }
     }
 }
