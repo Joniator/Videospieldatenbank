@@ -18,14 +18,14 @@ namespace Videospieldatenbank.Database
             get { return GetProfilePicture(_username); }
             set
             {
-                if (Exists(_username))
-                    using (MySqlCommand command = MySqlConnection.CreateCommand())
-                    {
-                        command.CommandText = "UPDATE user SET picture=@image WHERE name=@username";
-                        command.Parameters.AddWithValue("@image", value);
-                        command.Parameters.AddWithValue("@username", _username);
-                        command.ExecuteNonQuery();
-                    }
+                if (!Exists(_username)) return;
+                using (MySqlCommand command = MySqlConnection.CreateCommand())
+                {
+                    command.CommandText = "UPDATE user SET picture=@image WHERE name=@username";
+                    command.Parameters.AddWithValue("@image", value);
+                    command.Parameters.AddWithValue("@username", _username);
+                    command.ExecuteNonQuery();
+                }
             }
         }
 
@@ -57,16 +57,16 @@ namespace Videospieldatenbank.Database
         public List<int> GetFriendsList()
         {
             List<int> list = new List<int>();
-            if (_isLoggedIn)
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
+            if (!_isLoggedIn) throw new Exception("User not logged in.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT friend_id FROM friends WHERE user_ID=@userID";
+                command.Parameters.AddWithValue("@userID", UserId);
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    command.CommandText = "SELECT friend_id FROM friends WHERE user_ID=@userID";
-                    command.Parameters.AddWithValue("@userID", UserId);
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read()) list.Add(reader.GetInt32(0));
-                    }
+                    while (reader.Read()) list.Add(reader.GetInt32(0));
                 }
+            }
             return list;
         }
 
@@ -132,18 +132,33 @@ namespace Videospieldatenbank.Database
         /// <returns>Name des Users.</returns>
         public string GetUsername(int id)
         {
-            if (_isLoggedIn)
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
+            if (!_isLoggedIn) throw new Exception("User not logged in.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT name FROM user WHERE id=@id";
+                command.Parameters.AddWithValue("@id", id);
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    command.CommandText = "SELECT name FROM user WHERE id=@id";
-                    command.Parameters.AddWithValue("@id", id);
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                            return reader.GetString(0);
-                    }
+                    if (reader.Read())
+                        return reader.GetString(0);
                 }
+            }
             throw new Exception("Fehler beim ermitteln des Usernames, eventuell existiert die ID nicht.");
+        }
+
+        public bool SetUsername(string username)
+        {
+            if (!Exists(_username) || Exists(username))
+                throw new Exception("Fehler beim Ändern des Usernames, eventuell ist der Name schon vergeben.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "UPDATE user SET name=@newUsername WHERE name=@oldUsername";
+                command.Parameters.AddWithValue("@oldUsername", _username);
+                command.Parameters.AddWithValue("@newUsername", username);
+                command.ExecuteNonQuery();
+                _username = username;
+                return true;
+            }
         }
 
         /// <summary>
@@ -153,17 +168,17 @@ namespace Videospieldatenbank.Database
         /// <returns>Name des Users.</returns>
         public int GetId(string username)
         {
-            if (_isLoggedIn)
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
+            if (!_isLoggedIn) throw new Exception("User not logged in.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT id FROM user WHERE name=@username";
+                command.Parameters.AddWithValue("@username", username);
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    command.CommandText = "SELECT id FROM user WHERE name=@username";
-                    command.Parameters.AddWithValue("@username", username);
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                            return reader.GetInt32(0);
-                    }
+                    if (reader.Read())
+                        return reader.GetInt32(0);
                 }
+            }
             throw new Exception("Fehler beim ermitteln der ID, eventuell existiert der Username nicht.");
         }
 
@@ -195,19 +210,18 @@ namespace Videospieldatenbank.Database
         /// <returns>True, wenn Login erfolgreich war.</returns>
         public bool Login(string username, string password)
         {
-            if (CheckLogin(username, password))
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
-                {
-                    _username = username;
-                    _isLoggedIn = true;
+            if (!CheckLogin(username, password)) return false;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                _username = username;
+                _isLoggedIn = true;
 
-                    // Setzt Onlinestatus des Users auf true.
-                    command.CommandText = "UPDATE user SET online=true WHERE name=@username";
-                    command.Parameters.AddWithValue("@username", username);
-                    command.ExecuteNonQuery();
-                    return true;
-                }
-            return false;
+                // Setzt Onlinestatus des Users auf true.
+                command.CommandText = "UPDATE user SET online=true WHERE name=@username";
+                command.Parameters.AddWithValue("@username", username);
+                command.ExecuteNonQuery();
+                return true;
+            }
         }
 
         /// <summary>
@@ -236,16 +250,15 @@ namespace Videospieldatenbank.Database
         /// <returns>True, wenn die Registrierung erfolgreich war.</returns>
         public bool Register(string username, string password)
         {
-            if (!Exists(username))
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
-                {
-                    command.CommandText = "INSERT INTO user (name, password) VALUES (@username, @password)";
-                    command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
-                    command.ExecuteNonQuery();
-                    return true;
-                }
-            return false;
+            if (Exists(username)) return false;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "INSERT INTO user (name, password) VALUES (@username, @password)";
+                command.Parameters.AddWithValue("@username", username);
+                command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
+                command.ExecuteNonQuery();
+                return true;
+            }
         }
 
         /// <summary>
@@ -273,20 +286,20 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public byte[] GetProfilePicture(string username)
         {
-            if (Exists(_username))
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
+            if (!Exists(_username))
+                throw new Exception("Fehler beim herunterladen des Profilbildes, eventuell existiert der User nicht.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT picture FROM user WHERE name=@username";
+                command.Parameters.AddWithValue("@username", username);
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    command.CommandText = "SELECT picture FROM user WHERE name=@username";
-                    command.Parameters.AddWithValue("@username", username);
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        byte[] image = new byte[65556];
-                        if (reader.Read())
-                            reader.GetBytes(0, 0, image, 0, image.Length);
-                        return image;
-                    }
+                    byte[] image = new byte[65556];
+                    if (reader.Read())
+                        reader.GetBytes(0, 0, image, 0, image.Length);
+                    return image;
                 }
-            throw new Exception("Fehler beim herunterladen des Profilbildes, eventuell existiert der User nicht.");
+            }
         }
 
         /// <summary>
@@ -307,16 +320,15 @@ namespace Videospieldatenbank.Database
         /// <returns>True, wenn das Löschen erfolgreich war.</returns>
         public bool DeleteUser(string username, string password)
         {
-            if (CheckLogin(username, password))
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
-                {
-                    command.CommandText = "DELETE FROM user WHERE name=@username AND password=@password";
-                    command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
-                    command.ExecuteNonQuery();
-                    return true;
-                }
-            return false;
+            if (!CheckLogin(username, password)) return false;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM user WHERE name=@username AND password=@password";
+                command.Parameters.AddWithValue("@username", username);
+                command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(password));
+                command.ExecuteNonQuery();
+                return true;
+            }
         }
 
         /// <summary>
@@ -325,18 +337,17 @@ namespace Videospieldatenbank.Database
         /// <returns>Liste von igdb_urls.</returns>
         public List<string> GetGames()
         {
-            //TODO: Testen von GetGames
             List<string> list = new List<string>();
-            if (_isLoggedIn)
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
+            if (!_isLoggedIn) return list;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT igdb_url FROM gameinfo WHERE user_ID=@userID";
+                command.Parameters.AddWithValue("@userID", UserId);
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    command.CommandText = "SELECT igdb_url FROM gameinfo WHERE user_ID=@userID";
-                    command.Parameters.AddWithValue("@userID", UserId);
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read()) list.Add(reader.GetString(0));
-                    }
+                    while (reader.Read()) list.Add(reader.GetString(0));
                 }
+            }
             return list;
         }
 
@@ -347,18 +358,17 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public bool OwnsGame(string igdbUrl)
         {
-            if (_isLoggedIn)
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
+            if (!_isLoggedIn) return false;
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    command.CommandText = "SELECT * FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
-                    command.Parameters.AddWithValue("@userID", UserId);
-                    command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        return reader.Read();
-                    }
+                    return reader.Read();
                 }
-            return false;
+            }
         }
 
         /// <summary>
@@ -368,29 +378,29 @@ namespace Videospieldatenbank.Database
         /// <param name="execPath">Der Pfad der ausführbaren Datei des Spiels.</param>
         public void AddGame(string igdbUrl, string execPath)
         {
-            if (_isLoggedIn)
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
+            if (!_isLoggedIn) throw new Exception("User not logged in.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                // Updated den Execpath wenn der User das Spiel bereits besitzt oder fügt es neu hinzu wenn nicht.
+                if (OwnsGame(igdbUrl))
                 {
-                    // Updated den Execpath wenn der User das Spiel bereits besitzt oder fügt es neu hinzu wenn nicht.
-                    if (OwnsGame(igdbUrl))
-                    {
-                        command.CommandText = "UPDATE gameinfo SET exec_path=@execPath WHERE igdb_url=@igdbUrl";
-                        command.Parameters.AddWithValue("@execPath", execPath);
-                        command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
-                    }
-                    else
-                    {
-                        command.CommandText = "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
-                        command.Parameters.AddWithValue("@userID", UserId);
-                        command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
-                        command.Parameters.AddWithValue("@execPath", execPath);
-                    }
-                    command.ExecuteNonQuery();
-
-                    // Fügt das Spiel zur Datenbank hinzu für den Fall das es noch nicht existiert.
-                    GameDatabaseConnector gdc = new GameDatabaseConnector();
-                    gdc.AddGame(IgdbParser.ParseGame(igdbUrl));
+                    command.CommandText = "UPDATE gameinfo SET exec_path=@execPath WHERE igdb_url=@igdbUrl";
+                    command.Parameters.AddWithValue("@execPath", execPath);
+                    command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                 }
+                else
+                {
+                    command.CommandText = "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
+                    command.Parameters.AddWithValue("@userID", UserId);
+                    command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                    command.Parameters.AddWithValue("@execPath", execPath);
+                }
+                command.ExecuteNonQuery();
+
+                // Fügt das Spiel zur Datenbank hinzu für den Fall das es noch nicht existiert.
+                GameDatabaseConnector gdc = new GameDatabaseConnector();
+                gdc.AddGame(IgdbParser.ParseGame(igdbUrl));
+            }
         }
 
         /// <summary>
@@ -400,17 +410,17 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public TimeSpan GetPlayTime(string igdbUrl)
         {
-            if (_isLoggedIn && OwnsGame(igdbUrl))
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
+            if (!_isLoggedIn || !OwnsGame(igdbUrl)) throw new Exception("Fehler beim ermitteln der Playtime.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT playtime FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    command.CommandText = "SELECT playtime FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
-                    command.Parameters.AddWithValue("@userID", UserId);
-                    command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read()) return TimeSpan.FromMinutes(reader.GetInt32(0));
-                    }
+                    if (reader.Read()) return TimeSpan.FromMinutes(reader.GetInt32(0));
                 }
+            }
             throw new Exception("Fehler beim ermitteln der Playtime.");
         }
 
@@ -421,16 +431,16 @@ namespace Videospieldatenbank.Database
         /// <param name="playedTime">Die Zeit die es gespielt wurde.</param>
         public void AddPlayTime(string igdbUrl, TimeSpan playedTime)
         {
+            if (!_isLoggedIn || !OwnsGame(igdbUrl)) throw new Exception("Fehler beim ermitteln der Playtime.");
             TimeSpan newPlayTime = GetPlayTime(igdbUrl) + playedTime;
-            if (_isLoggedIn && OwnsGame(igdbUrl))
-                using (MySqlCommand command = MySqlConnection.CreateCommand())
-                {
-                    command.CommandText = "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
-                    command.Parameters.AddWithValue("@playTime", (int) newPlayTime.TotalMinutes);
-                    command.Parameters.AddWithValue("@userID", UserId);
-                    command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
-                    command.ExecuteNonQuery();
-                }
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                command.Parameters.AddWithValue("@playTime", (int)newPlayTime.TotalMinutes);
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                command.ExecuteNonQuery();
+            }
         }
     }
 }
