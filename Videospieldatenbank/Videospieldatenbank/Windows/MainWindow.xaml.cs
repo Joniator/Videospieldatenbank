@@ -80,7 +80,6 @@ namespace Videospieldatenbank
         public static void RefreshLibrary()
         {
             GameList.RefreshGameList();
-            @this.FrameRight.Content = GameInfo;
         }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace Videospieldatenbank
         public static void SetGameInfo(string igdbUrl)
         {
             GameInfo = new GameInfo(igdbUrl);
-            RefreshLibrary();
+            @this.FrameRight.Content = GameInfo;
         }
         
         /// <summary>
