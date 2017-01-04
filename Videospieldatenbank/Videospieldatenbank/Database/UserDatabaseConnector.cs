@@ -531,6 +531,17 @@ namespace Videospieldatenbank.Database
             throw new Exception("Fehler beim ermitteln des exec_path, eventuell existiert das Spiel nicht oder es ist kein Pfad eingespeichert.");
         }
 
+        public void RemoveGame(string igdbUrl)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.ExecuteNonQuery();
+            }
+        }
+
         #endregion
     }
 }
