@@ -504,7 +504,7 @@ namespace Videospieldatenbank.Database
             {
                 command.CommandText =
                     "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
-                command.Parameters.AddWithValue("@playTime", (int) newPlayTime.TotalMinutes);
+                command.Parameters.AddWithValue("@playTime", (int) Math.Ceiling(newPlayTime.TotalMinutes));
                 command.Parameters.AddWithValue("@userID", UserId);
                 command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                 command.ExecuteNonQuery();
