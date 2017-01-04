@@ -136,6 +136,25 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        /// Überprüft ob ein User online ist.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public bool IsOnline(string username)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT online FROM user WHERE name=@username";
+                command.Parameters.AddWithValue("@username", username);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) return reader.GetBoolean(0);
+                }
+                throw new Exception("Fehler beim ermitteln des Onlinestatus.");
+            }
+        }
+
+        /// <summary>
         ///     Entfernt einen User aus der Freundesliste
         /// </summary>
         /// <param name="friendId"></param>
@@ -427,13 +446,14 @@ namespace Videospieldatenbank.Database
         ///     Ermittelt die gespielte Zeit im angegebenen Spiel.
         /// </summary>
         /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
+        /// <param name="userId">Der User dessen Spielzeit ermittelt werden soll.</param>
         /// <returns></returns>
-        public TimeSpan GetPlayTime(string igdbUrl)
+        public TimeSpan GetPlayTime(string igdbUrl, int userId)
         {
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT playtime FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
-                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@userID", userId);
                 command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
@@ -441,6 +461,16 @@ namespace Videospieldatenbank.Database
                 }
             }
             throw new Exception("Fehler beim ermitteln der Playtime.");
+        }
+        
+        /// <summary>
+         ///     Ermittelt die gespielte Zeit im angegebenen Spiel.
+         /// </summary>
+         /// <param name="igdbUrl">Das Spiel dessen Zeit ermittelt werden soll</param>
+         /// <returns></returns>
+        public TimeSpan GetPlayTime(string igdbUrl)
+        {
+            return GetPlayTime(igdbUrl, UserId);
         }
 
         /// <summary>
