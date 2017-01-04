@@ -20,6 +20,7 @@ using Videospieldatenbank.Windows;
 using Xceed.Wpf.AvalonDock.Converters;
 using Xceed.Wpf.DataGrid.Converters;
 using System.Drawing;
+using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Pages.Settings
 {
@@ -51,7 +52,7 @@ namespace Videospieldatenbank.Pages.Settings
             try
 
             {
-                ImageProfil.Source = BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
+                ImageProfil.Source = ImageUtils.BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
             }
             catch (Exception)
             {
@@ -74,17 +75,7 @@ namespace Videospieldatenbank.Pages.Settings
         {
             UserInfos(LoginWindow.UserDatabaseConnector.UserId);
         }
-
-        public byte[] ImageToBytes(ImageSource imageSource)
-        {
-            return (byte[])new ImageSourceConverter().ConvertTo(imageSource, typeof(byte[]));
-        }
-
-        public ImageSource BytesToImageSource(byte[] imageBytes)
-        {
-            return (ImageSource)new ImageSourceConverter().ConvertFrom(imageBytes);
-        }
-
+        
         private void ButtonSetPicture_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
