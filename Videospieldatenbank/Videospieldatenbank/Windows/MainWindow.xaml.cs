@@ -67,7 +67,7 @@ namespace Videospieldatenbank
             if (_gameList == null || _gameInfo == null)
             {
                 _gameList = new GameList();
-                _gameInfo = new GameInfo();
+                _gameInfo = new GameInfo("https://www.igdb.com/games/doom");
             }
 
             FrameCheck(true);           
