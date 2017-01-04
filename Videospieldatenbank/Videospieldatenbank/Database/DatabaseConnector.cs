@@ -1,8 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System;
+using MySql.Data.MySqlClient;
 
 namespace Videospieldatenbank.Database
 {
-    public class DatabaseConnector
+    public class DatabaseConnector : IDisposable
     {
         protected readonly MySqlConnection MySqlConnection = new MySqlConnection();
 
@@ -24,5 +25,9 @@ namespace Videospieldatenbank.Database
         }
 
         public bool Connected => MySqlConnection.Ping();
+        public void Dispose()
+        {
+            MySqlConnection.Dispose();
+        }
     }
 }
