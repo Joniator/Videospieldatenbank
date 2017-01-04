@@ -42,15 +42,15 @@ namespace Videospieldatenbank.Pages.Settings
                 StackPanelSettings.IsEnabled = false;
                 StackPanelSettings.Visibility = Visibility.Collapsed;
             }
-            else if(userId == LoginWindow.UserDatabaseConnector.UserId)
+            else if (userId == LoginWindow.UserDatabaseConnector.UserId)
             {
                 StackPanelSettings.IsEnabled = true;
                 StackPanelSettings.Visibility = Visibility.Visible;
             }
 
-        try
+            try
 
-        {
+            {
                 ImageProfil.Source = BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
             }
             catch (Exception)
@@ -61,10 +61,10 @@ namespace Videospieldatenbank.Pages.Settings
             ListBoxItemUserName.Content = "Username: " +
                                           LoginWindow.UserDatabaseConnector.GetUsername(userId);
 
-            if (LoginWindow.UserDatabaseConnector.Connected)
+            if (LoginWindow.UserDatabaseConnector.OnlineStatus)
                 ListBoxItemOnlineStatus.Content = "Online: Yes";
             else
-                ListBoxItemOnlineStatus.Content += "Online: No";
+                ListBoxItemOnlineStatus.Content = "Online: No";
 
             ListBoxItemFriends.Content = "Friends: " + LoginWindow.UserDatabaseConnector.GetFriendsList().Count;
             ListBoxItemTotalGames.Content = "Total games: " + LoginWindow.UserDatabaseConnector.GetGames().Count;
@@ -110,7 +110,16 @@ namespace Videospieldatenbank.Pages.Settings
 
         private void ButtonGoOnOff_Click(object sender, RoutedEventArgs e)
         {
-            LoginWindow.UserDatabaseConnector.Logout();
+            if (LoginWindow.UserDatabaseConnector.OnlineStatus)
+            {
+                LoginWindow.UserDatabaseConnector.OnlineStatus = false;
+                (sender as Button).Content = "Go online";
+            }
+            else
+            {
+                LoginWindow.UserDatabaseConnector.OnlineStatus = true;
+                (sender as Button).Content = "Go offline";
+            }
             UserInfos();
         }
 
