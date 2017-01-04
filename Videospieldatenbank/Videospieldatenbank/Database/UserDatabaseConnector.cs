@@ -28,13 +28,15 @@ namespace Videospieldatenbank.Database
             }
         }
 
+        /// <summary>
+        ///     Gibt an ob der User als Online markiert ist.
+        /// </summary>
         public bool OnlineStatus
         {
             get
             {
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-
                     command.CommandText = "SELECT online FROM user WHERE name=@username";
                     command.Parameters.AddWithValue("@username", _username);
                     using (MySqlDataReader reader = command.ExecuteReader())
@@ -48,7 +50,6 @@ namespace Videospieldatenbank.Database
             {
                 using (MySqlCommand command = MySqlConnection.CreateCommand())
                 {
-
                     command.CommandText = "UPDATE user SET online=@onlineStatus WHERE name=@username";
                     command.Parameters.AddWithValue("@username", _username);
                     command.Parameters.AddWithValue("@onlineStatus", value);
@@ -172,6 +173,11 @@ namespace Videospieldatenbank.Database
             throw new Exception("Fehler beim ermitteln des Usernames, eventuell existiert die ID nicht.");
         }
 
+        /// <summary>
+        ///     Ändert den Usernamen.
+        /// </summary>
+        /// <param name="username">Der neue Username.</param>
+        /// <returns></returns>
         public bool SetUsername(string username)
         {
             if (!Exists(_username) || Exists(username))
@@ -403,7 +409,8 @@ namespace Videospieldatenbank.Database
                 }
                 else
                 {
-                    command.CommandText = "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
+                    command.CommandText =
+                        "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
                     command.Parameters.AddWithValue("@userID", UserId);
                     command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                     command.Parameters.AddWithValue("@execPath", execPath);
@@ -446,8 +453,9 @@ namespace Videospieldatenbank.Database
             TimeSpan newPlayTime = GetPlayTime(igdbUrl) + playedTime;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                command.CommandText = "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
-                command.Parameters.AddWithValue("@playTime", (int)newPlayTime.TotalMinutes);
+                command.CommandText =
+                    "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                command.Parameters.AddWithValue("@playTime", (int) newPlayTime.TotalMinutes);
                 command.Parameters.AddWithValue("@userID", UserId);
                 command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                 command.ExecuteNonQuery();
