@@ -5,6 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using Videospieldatenbank.Database;
+using Videospieldatenbank.Pages.Settings;
 using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank
@@ -14,6 +15,7 @@ namespace Videospieldatenbank
     /// </summary>
     public partial class Friends : Window
     {
+        private readonly ProfilSettings _profilSettings = new ProfilSettings();
         private string FriendsListName;
         public Friends()
         {
@@ -61,7 +63,15 @@ namespace Videospieldatenbank
 
         private void MenuItemProfil_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                FriendsProfilWindow friendsProfilWindow = new FriendsProfilWindow(LoginWindow.UserDatabaseConnector.GetId(FriendsListName));
+                friendsProfilWindow.Show();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)

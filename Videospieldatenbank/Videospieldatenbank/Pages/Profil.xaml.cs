@@ -21,7 +21,7 @@ namespace Videospieldatenbank
 
         public void ReloadProfil()
         {
-            _profilSettings.UserInfos(LoginWindow.UserDatabaseConnector.UserId);
+            _profilSettings.UserInfos();
         }
     }
 }

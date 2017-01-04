@@ -22,7 +22,7 @@ namespace Videospieldatenbank.Windows
     public partial class LoginWindow : Window
     {
         public static UserDatabaseConnector UserDatabaseConnector = new UserDatabaseConnector();
-        //Settings.Login settings = new Settings.Login();
+
         public LoginWindow()
         {
             InitializeComponent();
