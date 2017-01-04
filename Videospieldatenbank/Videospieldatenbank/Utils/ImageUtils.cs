@@ -1,36 +1,24 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using System.Windows.Media;
 
 namespace Videospieldatenbank.Utils
 {
     public static class ImageUtils
     {
-        /// <summary>
-        /// Konvertiert einen String in ein Bytearray.
-        /// </summary>
-        /// <param name="source">Der zu konvertierende String.</param>
-        /// <returns>Bytearray</returns>
-        [DebuggerStepThrough]
-        public static byte[] ToByteArray(this string source)
+        public static byte[] ImageToBytes(ImageSource imageSource)
         {
-            byte[] byteArray = new byte[source.Length];
-            for (int i = 0; i < source.Length; i++)
-                byteArray[i] = (byte) source[i];
-            return byteArray;
+            return (byte[])new ImageSourceConverter().ConvertTo(imageSource, typeof(byte[]));
         }
 
         /// <summary>
-        /// Konvertiert einen Bytearray in einen String.
+        ///     Konvertiert ein Bytearray in eine ImageSource.
         /// </summary>
-        /// <param name="array"></param>
+        /// <param name="imageBytes"></param>
         /// <returns></returns>
-        [DebuggerStepThrough]
-        public static string ByteArrayToString(this byte[] array)
+        public static ImageSource BytesToImageSource(byte[] imageBytes)
         {
-            StringBuilder stringBuilder = new StringBuilder(65536);
-            foreach (byte b in array)
-                stringBuilder.Append((char) b);
-            return stringBuilder.ToString();
+            return (ImageSource)new ImageSourceConverter().ConvertFrom(imageBytes);
         }
 
         /// <summary>

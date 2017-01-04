@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Videospieldatenbank.Database;
 using Videospieldatenbank.Utils;
 
@@ -21,8 +22,11 @@ namespace Test
             UserDatabaseConnector us = new UserDatabaseConnector();
             Console.WriteLine(PasswordUtils.GetHash("xD"));
             bool login = us.Login("Crossiny", "Swag1337");
+            us.ProfilePicture = new byte[0];
             int usUserId = us.UserId;
             int id = us.GetId("Crossiny");
+            us.SetUsername("Bossiny");
+            us.SetUsername("Crossiny");
             Console.WriteLine(id);
             Console.WriteLine(us.GetUsername(id));
             us.AddFriend(24);

@@ -20,6 +20,7 @@ using Videospieldatenbank.Windows;
 using Xceed.Wpf.AvalonDock.Converters;
 using Xceed.Wpf.DataGrid.Converters;
 using System.Drawing;
+using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Pages.Settings
 {
@@ -42,16 +43,16 @@ namespace Videospieldatenbank.Pages.Settings
                 StackPanelSettings.IsEnabled = false;
                 StackPanelSettings.Visibility = Visibility.Collapsed;
             }
-            else if(userId == LoginWindow.UserDatabaseConnector.UserId)
+            else if (userId == LoginWindow.UserDatabaseConnector.UserId)
             {
                 StackPanelSettings.IsEnabled = true;
                 StackPanelSettings.Visibility = Visibility.Visible;
             }
 
-        try
+            try
 
-        {
-                ImageProfil.Source = BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
+            {
+                ImageProfil.Source = ImageUtils.BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
             }
             catch (Exception)
             {
@@ -61,10 +62,10 @@ namespace Videospieldatenbank.Pages.Settings
             ListBoxItemUserName.Content = "Username: " +
                                           LoginWindow.UserDatabaseConnector.GetUsername(userId);
 
-            if (LoginWindow.UserDatabaseConnector.Connected)
+            if (LoginWindow.UserDatabaseConnector.OnlineStatus)
                 ListBoxItemOnlineStatus.Content = "Online: Yes";
             else
-                ListBoxItemOnlineStatus.Content += "Online: No";
+                ListBoxItemOnlineStatus.Content = "Online: No";
 
             ListBoxItemFriends.Content = "Friends: " + LoginWindow.UserDatabaseConnector.GetFriendsList().Count;
             ListBoxItemTotalGames.Content = "Total games: " + LoginWindow.UserDatabaseConnector.GetGames().Count;
@@ -74,17 +75,7 @@ namespace Videospieldatenbank.Pages.Settings
         {
             UserInfos(LoginWindow.UserDatabaseConnector.UserId);
         }
-
-        public byte[] ImageToBytes(ImageSource imageSource)
-        {
-            return (byte[])new ImageSourceConverter().ConvertTo(imageSource, typeof(byte[]));
-        }
-
-        public ImageSource BytesToImageSource(byte[] imageBytes)
-        {
-            return (ImageSource)new ImageSourceConverter().ConvertFrom(imageBytes);
-        }
-
+        
         private void ButtonSetPicture_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -110,7 +101,16 @@ namespace Videospieldatenbank.Pages.Settings
 
         private void ButtonGoOnOff_Click(object sender, RoutedEventArgs e)
         {
-            LoginWindow.UserDatabaseConnector.Logout();
+            if (LoginWindow.UserDatabaseConnector.OnlineStatus)
+            {
+                LoginWindow.UserDatabaseConnector.OnlineStatus = false;
+                (sender as Button).Content = "Go online";
+            }
+            else
+            {
+                LoginWindow.UserDatabaseConnector.OnlineStatus = true;
+                (sender as Button).Content = "Go offline";
+            }
             UserInfos();
         }
 
