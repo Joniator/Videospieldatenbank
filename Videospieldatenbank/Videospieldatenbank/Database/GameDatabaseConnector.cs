@@ -69,15 +69,15 @@ namespace Videospieldatenbank.Database
         /// <returns>Array mit <see cref="Game" />-Objekt mit Spielinformationen.</returns>
         public Game[] GetGameInfos()
         {
-            var games = new List<Game>();
-            using (var command = MySqlConnection.CreateCommand())
+            List<Game> games = new List<Game>();
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT * FROM games";
-                using (var reader = command.ExecuteReader())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        var game = new Game
+                        Game game = new Game
                         {
                             IgdbUrl = reader["igdb_url"] as string,
                             CoverUrl = reader["cover_url"] as string,
@@ -85,7 +85,7 @@ namespace Videospieldatenbank.Database
                             Developer = reader["developer"] as string,
                             Plattforms = (reader["plattforms"] as string).Split(';'),
                             Genres = (reader["genres"] as string).Split(';'),
-                            Rating = (int)reader["rating"]
+                            Rating = (int) reader["rating"]
                         };
                         games.Add(game);
                     }
@@ -118,8 +118,9 @@ namespace Videospieldatenbank.Database
                 string genres = "";
                 foreach (string genre in game.Genres)
                     genres += genre + ";";
-                command.CommandText = "INSERT INTO games(`igdb_url`, `cover_url`, `name`, `developer`, `plattforms`, `genres`, `rating`)" +
-                                      "VALUES (@igdbUrl, @coverUrl, @name, @developer, @plattforms, @genres, @rating)";
+                command.CommandText =
+                    "INSERT INTO games(`igdb_url`, `cover_url`, `name`, `developer`, `plattforms`, `genres`, `rating`)" +
+                    "VALUES (@igdbUrl, @coverUrl, @name, @developer, @plattforms, @genres, @rating)";
                 command.Parameters.AddWithValue("@igdbUrl", game.IgdbUrl);
                 command.Parameters.AddWithValue("@coverUrl", game.CoverUrl);
                 command.Parameters.AddWithValue("@name", game.Name);
@@ -127,7 +128,7 @@ namespace Videospieldatenbank.Database
                 command.Parameters.AddWithValue("@plattforms", plattforms);
                 command.Parameters.AddWithValue("@genres", genres);
                 command.Parameters.AddWithValue("@rating", game.Rating);
-                    command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
             }
             return true;
         }

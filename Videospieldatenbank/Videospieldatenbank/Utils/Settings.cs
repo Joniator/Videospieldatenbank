@@ -1,28 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-
-namespace Videospieldatenbank.Utils
+﻿namespace Videospieldatenbank.Utils
 {
-    static class LoginSettings
+    internal static class LoginSettings
     {
         public static bool CheckBoxUsername
         {
             get
             {
-                Videospieldatenbank.Settings.Default.Reload();
-                return Videospieldatenbank.Settings.Default.CheckBoxUsername;
+                Settings.Default.Reload();
+                return Settings.Default.CheckBoxUsername;
             }
             set
             {
-                Videospieldatenbank.Settings.Default.CheckBoxUsername = value;
-                Videospieldatenbank.Settings.Default.Save();
+                Settings.Default.CheckBoxUsername = value;
+                Settings.Default.Save();
             }
         }
 
@@ -30,26 +20,27 @@ namespace Videospieldatenbank.Utils
         {
             get
             {
-                Videospieldatenbank.Settings.Default.Reload();
-                return Videospieldatenbank.Settings.Default.CheckBoxPassword;
+                Settings.Default.Reload();
+                return Settings.Default.CheckBoxPassword;
             }
             set
             {
-                Videospieldatenbank.Settings.Default.CheckBoxPassword = value;
-                Videospieldatenbank.Settings.Default.Save();
+                Settings.Default.CheckBoxPassword = value;
+                Settings.Default.Save();
             }
         }
+
         public static string Username
         {
             get
             {
-                Videospieldatenbank.Settings.Default.Reload();
-                return Videospieldatenbank.Settings.Default.Username;
+                Settings.Default.Reload();
+                return Settings.Default.Username;
             }
             set
             {
-                Videospieldatenbank.Settings.Default.Username = value;
-                Videospieldatenbank.Settings.Default.Save();
+                Settings.Default.Username = value;
+                Settings.Default.Save();
             }
         }
 
@@ -57,15 +48,14 @@ namespace Videospieldatenbank.Utils
         {
             get
             {
-                Videospieldatenbank.Settings.Default.Reload();
-                return Videospieldatenbank.Settings.Default.Password;
+                Settings.Default.Reload();
+                return Settings.Default.Password;
             }
             set
             {
-                Videospieldatenbank.Settings.Default.Password = value;
-                Videospieldatenbank.Settings.Default.Save();
+                Settings.Default.Password = value;
+                Settings.Default.Save();
             }
         }
     }
-
 }

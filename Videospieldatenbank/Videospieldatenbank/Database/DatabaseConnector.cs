@@ -25,6 +25,7 @@ namespace Videospieldatenbank.Database
         }
 
         public bool Connected => MySqlConnection.Ping();
+
         public void Dispose()
         {
             MySqlConnection.Dispose();
