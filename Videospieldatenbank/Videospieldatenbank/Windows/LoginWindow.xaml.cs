@@ -50,7 +50,7 @@ namespace Videospieldatenbank.Windows
         {
             if (!UserDatabaseConnector.Login(username, password))
             {
-                MessageBox.Show("USERNAME / PASSWORD is wrong or user doesn't exist!");
+                MessageBox.Show("Login fehlgeschlagen, Username oder Passwort falsch.");
             }
             else
             {
@@ -66,7 +66,7 @@ namespace Videospieldatenbank.Windows
         {
             if (!UserDatabaseConnector.Register(username, password))
             {
-                MessageBox.Show("USERNAME is in use! Please take an other USERNAME");
+                MessageBox.Show("Registrieren fehlgeschlagen, der Username ist bereits vergeben.");
             }
             else
             {
@@ -89,17 +89,17 @@ namespace Videospieldatenbank.Windows
                         Register(TextBoxRegistUsername.Text, TextBoxRegistPassword.Password);
                     else
                     {
-                        MessageBox.Show("Password is not equal!");
+                        MessageBox.Show("Passwörter stimmen nicht überein!");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Password is too short! It must have more than three signs.");
+                    MessageBox.Show("Das Passwort ist zu kurz. (Min. 3 Zeichen)");
                 }
             }
             else
             {
-                MessageBox.Show("Username is too short! It must have more than three signs.");
+                MessageBox.Show("Der Username ist zu kurz. (Min. 3 Zeichen)");
             }
         }
 

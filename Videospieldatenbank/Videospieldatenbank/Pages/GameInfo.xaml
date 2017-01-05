@@ -27,7 +27,7 @@
             <ListBoxItem Name="ListBoxItemName" Content="Name: " />
             <ListBoxItem Name="ListBoxItemGametime" Content="Spielzeit: " />
             <ListBoxItem Name="ListBoxItemGenre" Content="Genre: " />
-            <ListBoxItem Name="ListBoxItemPuplisher" Content="Puplisher: " />
+            <ListBoxItem Name="ListBoxItemDeveloper" Content="Developer: " />
             <ListBoxItem Name="ListBoxItemLauncher" Content="Launcher: " />
         </ListBox>
     </Grid>

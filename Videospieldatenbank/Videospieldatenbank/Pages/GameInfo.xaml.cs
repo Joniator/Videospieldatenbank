@@ -24,7 +24,7 @@ namespace Videospieldatenbank
             ListBoxItemName.Content += gameInfo.Name;
             foreach (string genre in gameInfo.Genres)
                 ListBoxItemGenre.Content += genre + "; ";
-            ListBoxItemPuplisher.Content += gameInfo.Developer;
+            ListBoxItemDeveloper.Content += gameInfo.Developer;
             Cover.Source = ImageUtils.BytesToImageSource(gameInfo.Cover);
             try
             {

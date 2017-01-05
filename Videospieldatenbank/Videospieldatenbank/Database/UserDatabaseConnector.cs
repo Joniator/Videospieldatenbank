@@ -202,7 +202,6 @@ namespace Videospieldatenbank.Database
         {
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                // Setzt Onlinestatus des Users auf false.
                 command.CommandText = "UPDATE user SET online=false WHERE name=@username";
                 command.Parameters.AddWithValue("@username", _username);
                 command.ExecuteNonQuery();
@@ -332,6 +331,7 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public bool IsOnline(string username)
         {
+            if (!Exists(username)) throw new Exception("Fehler beim ermitteln des Onlinestatus, User existiert nicht.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT online FROM user WHERE name=@username";
@@ -371,6 +371,7 @@ namespace Videospieldatenbank.Database
         /// <returns>Name des Users.</returns>
         public int GetId(string username)
         {
+            if (!Exists(username)) throw new Exception("Fehler beim ermitteln der ID, User existiert nicht.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT id FROM user WHERE name=@username";
@@ -381,7 +382,7 @@ namespace Videospieldatenbank.Database
                         return reader.GetInt32(0);
                 }
             }
-            throw new Exception("Fehler beim ermitteln der ID, eventuell existiert der Username nicht.");
+            throw new Exception("Fehler beim ermitteln der ID.");
         }
 
         /// <summary>

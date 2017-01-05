@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Videospieldatenbank"
         mc:Ignorable="d"
-        Title="Friends" Height="500" Width="250" MinHeight="500" MinWidth="250" MaxHeight="750" MaxWidth="375"
+        Title="Freunde" Height="500" Width="250" MinHeight="500" MinWidth="250" MaxHeight="750" MaxWidth="375"
         WindowStartupLocation="CenterScreen" Visibility="Visible" WindowStyle="ToolWindow"
         Icon="/Resources/Pictures/defaultWallpaper.jpg" Closed="Friends_OnClosed">
 
@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <TextBox Name="TextBoxFriendName" Width="120" FontSize="20" Background="White" Margin="5"></TextBox>
-            <Button Name="ButtonAddFriend" Margin="5" Click="ButtonAddFriend_OnClick">Add</Button>
+            <Button Name="ButtonAddFriend" Margin="5" Click="ButtonAddFriend_OnClick">Hinzufügen</Button>
         </StackPanel>
         <ListBox Name="ListBoxFriends" Grid.Row="1"></ListBox>
     </Grid>

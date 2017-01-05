@@ -130,8 +130,8 @@ namespace Videospieldatenbank
 
         private bool ExitMessageBox()
         {
-            string text = "Do you really want to exit the program?";
-            string caption = "Exit";
+            string text = "Willst du wirklich beenden?";
+            string caption = "Beenden";
             MessageBoxResult result = MessageBox.Show(text, caption, MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
