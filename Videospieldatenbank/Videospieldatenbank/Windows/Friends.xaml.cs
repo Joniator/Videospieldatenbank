@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using Videospieldatenbank.Database;
 using Videospieldatenbank.Pages.Settings;
 using Videospieldatenbank.Windows;
 
@@ -17,6 +15,7 @@ namespace Videospieldatenbank
     {
         private readonly ProfilSettings _profilSettings = new ProfilSettings();
         private string FriendsListName;
+
         public Friends()
         {
             InitializeComponent();
@@ -30,14 +29,14 @@ namespace Videospieldatenbank
             menuItemProfil.Click += MenuItemProfil_Click;
             contextMenu.Items.Add(menuItemProfil);
 
-            MenuItem menuItemDelete = new MenuItem { Header = "Löschen" };
+            MenuItem menuItemDelete = new MenuItem {Header = "Löschen"};
             menuItemDelete.Click += MenuItemDelete_Click;
             contextMenu.Items.Add(menuItemDelete);
 
             try
             {
                 ListBoxFriends.Items.Clear();
-                foreach (var friend in LoginWindow.UserDatabaseConnector.GetFriendsList())
+                foreach (int friend in LoginWindow.UserDatabaseConnector.GetFriendsList())
                 {
                     ListBoxItem listBoxItem = new ListBoxItem
                     {
@@ -51,7 +50,6 @@ namespace Videospieldatenbank
             }
             catch (Exception)
             {
-                
             }
         }
 
@@ -65,12 +63,12 @@ namespace Videospieldatenbank
         {
             try
             {
-                FriendsProfilWindow friendsProfilWindow = new FriendsProfilWindow(LoginWindow.UserDatabaseConnector.GetId(FriendsListName));
+                FriendsProfilWindow friendsProfilWindow =
+                        new FriendsProfilWindow(LoginWindow.UserDatabaseConnector.GetId(FriendsListName));
                 friendsProfilWindow.Show();
             }
             catch (Exception)
             {
-
             }
         }
 
@@ -82,7 +80,6 @@ namespace Videospieldatenbank
             }
             catch (Exception)
             {
-
             }
             refreshFriendsList();
         }
@@ -96,11 +93,13 @@ namespace Videospieldatenbank
         {
             try
             {
-                LoginWindow.UserDatabaseConnector.AddFriend(LoginWindow.UserDatabaseConnector.GetId(TextBoxFriendName.Text));
+                LoginWindow.UserDatabaseConnector.AddFriend(
+                                                            LoginWindow.UserDatabaseConnector.GetId(
+                                                                                                    TextBoxFriendName
+                                                                                                            .Text));
             }
             catch (Exception)
             {
-                
             }
             refreshFriendsList();
         }

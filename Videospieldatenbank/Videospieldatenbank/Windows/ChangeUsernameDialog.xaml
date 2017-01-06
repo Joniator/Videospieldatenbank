@@ -8,15 +8,16 @@
         Title="ChangeUsernameDialog" Height="100" Width="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBlock Text="Neuer Username:" />
         <TextBox Name="NewUsername" Grid.Row="0" Grid.Column="1" />
-        <Button Name="SaveButton" Content="Ändern" Grid.Row="1" Grid.Column="1" Margin="0" Width="Auto" Click="SaveButton_Click" />
+        <Button Name="SaveButton" Content="Ändern" Grid.Row="1" Grid.Column="1" Margin="0" Width="Auto"
+                Click="SaveButton_Click" />
     </Grid>
 </Window>

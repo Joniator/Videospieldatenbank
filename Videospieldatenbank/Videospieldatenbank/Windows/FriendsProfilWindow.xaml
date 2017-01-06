@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Videospieldatenbank.Windows"
         mc:Ignorable="d"
-        Title="FriendsProfilWindow" Height="700" Width="1050" MinHeight="550" MinWidth="725">
+        Title="FriendsProfilWindow" Height="700" Width="1050" MinHeight="550" MinWidth="725" Background="Gray">
 
-    <Window.Background>
+    <!--<Window.Background>
         <ImageBrush ImageSource="/Resources/Pictures/defaultWallpaper2.jpg" Stretch="UniformToFill" />
-    </Window.Background>
-    
+    </Window.Background>-->
+
     <Grid>
-        <Frame Name="FrameFull" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Frame Name="FrameFull" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
     </Grid>
 </Window>

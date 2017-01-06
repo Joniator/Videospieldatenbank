@@ -13,15 +13,15 @@
         <ImageBrush ImageSource="/Resources/Pictures/defaultWallpaper.jpg" Stretch="UniformToFill" />
     </Window.Background>-->
 
-    <Grid >
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBox Name="TextBoxFriendName" Width="120" FontSize="20" Background="White" Margin="5"></TextBox>
-            <Button Name="ButtonAddFriend" Margin="5" Click="ButtonAddFriend_OnClick">Hinzufügen</Button>
+            <TextBox Name="TextBoxFriendName" Width="120" FontSize="20" Background="White" Margin="5" />
+            <Button Name="ButtonAddFriend" Margin="5" Click="ButtonAddFriend_OnClick" FontSize="15">Hinzufügen</Button>
         </StackPanel>
-        <ListBox Name="ListBoxFriends" Grid.Row="1"></ListBox>
+        <ListBox Name="ListBoxFriends" Grid.Row="1" />
     </Grid>
 </Window>
