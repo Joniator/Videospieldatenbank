@@ -38,7 +38,7 @@ namespace Videospieldatenbank
                         ListBoxItem listBoxItem = new ListBoxItem()
                         {
                             Content = gameInfo.Name,
-                            Foreground = Brushes.Azure,
+                            Foreground = Brushes.Black,
                             Opacity = 100
                         };
                         listBoxItem.PreviewMouseDown += (sender, args) =>

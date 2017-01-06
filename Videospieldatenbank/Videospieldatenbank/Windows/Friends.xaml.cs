@@ -42,7 +42,7 @@ namespace Videospieldatenbank
                     ListBoxItem listBoxItem = new ListBoxItem
                     {
                         Content = LoginWindow.UserDatabaseConnector.GetUsername(friend),
-                        Foreground = Brushes.WhiteSmoke,
+                        Foreground = Brushes.Black,
                         ContextMenu = contextMenu
                     };
                     listBoxItem.PreviewMouseRightButtonDown += ListBoxItem_MouseRightButtonDown;

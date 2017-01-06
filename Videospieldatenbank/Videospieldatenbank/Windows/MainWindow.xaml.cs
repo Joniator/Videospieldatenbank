@@ -70,6 +70,7 @@ namespace Videospieldatenbank
             {
                 _gameList = new GameList();
             }
+            RefreshLibrary();
 
             FrameCheck(true);           
 

@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="Freunde" Height="500" Width="250" MinHeight="500" MinWidth="250" MaxHeight="750" MaxWidth="375"
         WindowStartupLocation="CenterScreen" Visibility="Visible" WindowStyle="ToolWindow"
-        Icon="/Resources/Pictures/defaultWallpaper.jpg" Closed="Friends_OnClosed">
+        Icon="/Resources/Pictures/defaultWallpaper.jpg" Closed="Friends_OnClosed" Background="LightGray">
 
-    <Window.Background>
+    <!--<Window.Background>
         <ImageBrush ImageSource="/Resources/Pictures/defaultWallpaper.jpg" Stretch="UniformToFill" />
-    </Window.Background>
+    </Window.Background>-->
 
     <Grid >
         <Grid.RowDefinitions>
