@@ -45,6 +45,7 @@ namespace Videospieldatenbank
                 process.Exited += (o, eventArgs) =>
                  {
                     TimeSpan playtime = process.ExitTime - process.StartTime;
+                     MessageBox.Show(playtime.TotalSeconds.ToString(), "Programm wurde geschlossen.");
                     LoginWindow.UserDatabaseConnector.AddPlayTime(igdbUrl, playtime);
                 };
             };
