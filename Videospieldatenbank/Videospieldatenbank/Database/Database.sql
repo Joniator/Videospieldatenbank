@@ -4,8 +4,6 @@
 	cover_url VARCHAR(512),
 	name VARCHAR(512),
 	developer VARCHAR(512) ,
-	official_website VARCHAR(512),
-	wiki VARCHAR(512),
 	plattforms VARCHAR(512),
 	genres VARCHAR(512),
 	rating INTEGER
@@ -13,10 +11,11 @@
 
 CREATE TABLE user(
 	PRIMARY KEY (id),
-	id INTEGER,
+	id INTEGER AUTO_INCREMENT,
 	name VARCHAR(128),
 	password VARCHAR(128),
-	online BOOLEAN
+	online BOOLEAN,
+	picture VARBINARY(65556)
 );
 
 CREATE TABLE friends(
@@ -25,9 +24,10 @@ CREATE TABLE friends(
 	friend_ID INTEGER
 );
 
-CREATE TABLE playtime(
+CREATE TABLE gameinfo(
 	PRIMARY KEY (user_ID, igdb_url),
 	user_ID INTEGER,
 	igdb_url VARCHAR(512),
-	playtime TIME 
+	exec_path VARCHAR(512),
+	playtime INTEGER 
 );

@@ -10,15 +10,16 @@ namespace Videospieldatenbank.Database
         public string IgdbUrl;
         public string Name;
         public string[] Plattforms;
+        public string GamePath;
+        public string LauncherName;
+        public string LauncherPath;
         public int Rating;
-        public string Website;
-        public string Wiki;
 
         public byte[] Cover
         {
             get
             {
-                using (var webClient = new WebClient())
+                using (WebClient webClient = new WebClient())
                 {
                     return webClient.DownloadData(CoverUrl);
                 }

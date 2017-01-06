@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,22 +13,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Videospieldatenbank.Database;
 
-namespace Videospieldatenbank.Pages.Settings
+namespace Videospieldatenbank.Pages
 {
     /// <summary>
-    /// Interaktionslogik für DesignSettings.xaml
+    /// Interaktionslogik für Shop.xaml
     /// </summary>
-    public partial class DesignSettings : Page
+    public partial class Shop : Page
     {
-        public DesignSettings()
+        public Shop()
         {
             InitializeComponent();
-        }
-
-        private void ButtonOk_OnClick(object sender, RoutedEventArgs e)
-        {
-            //http://stackoverflow.com/questions/18200902/changing-the-styles-at-runtime-in-wpf
+            
         }
     }
 }

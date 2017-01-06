@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using Videospieldatenbank.Database;
+using Videospieldatenbank.Windows;
+using Xceed.Wpf.AvalonDock.Converters;
+using Xceed.Wpf.DataGrid.Converters;
+using System.Drawing;
+using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Pages.Settings
 {
@@ -23,6 +32,91 @@ namespace Videospieldatenbank.Pages.Settings
         public ProfilSettings()
         {
             InitializeComponent();
+
+            UserInfos();
+        }
+
+        public void UserInfos(int userId)
+        {
+            if (userId != LoginWindow.UserDatabaseConnector.UserId)
+            {
+                StackPanelSettings.IsEnabled = false;
+                StackPanelSettings.Visibility = Visibility.Collapsed;
+            }
+            else if (userId == LoginWindow.UserDatabaseConnector.UserId)
+            {
+                StackPanelSettings.IsEnabled = true;
+                StackPanelSettings.Visibility = Visibility.Visible;
+            }
+
+            try
+
+            {
+                ImageProfil.Source = ImageUtils.BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
+            }
+            catch (Exception)
+            {
+
+            }
+
+            ListBoxItemUserName.Content = "Username: " +
+                                          LoginWindow.UserDatabaseConnector.GetUsername(userId);
+
+            if (LoginWindow.UserDatabaseConnector.OnlineStatus)
+                ListBoxItemOnlineStatus.Content = "Online: Yes";
+            else
+                ListBoxItemOnlineStatus.Content = "Online: No";
+
+            ListBoxItemFriends.Content = "Friends: " + LoginWindow.UserDatabaseConnector.GetFriendsList().Count;
+            ListBoxItemTotalGames.Content = "Total games: " + LoginWindow.UserDatabaseConnector.GetGames().Count;
+        }
+
+        public void UserInfos()
+        {
+            UserInfos(LoginWindow.UserDatabaseConnector.UserId);
+        }
+        
+        private void ButtonSetPicture_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = false;
+            //openFileDialog.Filter = "jpg";
+            openFileDialog.ShowDialog();
+
+            try
+            {
+                LoginWindow.UserDatabaseConnector.ProfilePicture = File.ReadAllBytes(openFileDialog.FileName);
+                UserInfos();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void ButtonChangeUsername_Click(object sender, RoutedEventArgs e)
+        {
+            //LoginWindow.UserDatabaseConnector
+        }
+
+        private void ButtonGoOnOff_Click(object sender, RoutedEventArgs e)
+        {
+            if (LoginWindow.UserDatabaseConnector.OnlineStatus)
+            {
+                LoginWindow.UserDatabaseConnector.OnlineStatus = false;
+                (sender as Button).Content = "Go online";
+            }
+            else
+            {
+                LoginWindow.UserDatabaseConnector.OnlineStatus = true;
+                (sender as Button).Content = "Go offline";
+            }
+            UserInfos();
+        }
+
+        private void ButtonChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

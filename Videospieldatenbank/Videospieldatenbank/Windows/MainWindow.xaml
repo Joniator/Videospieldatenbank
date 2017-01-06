@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:Videospieldatenbank"
     xmlns:Videospieldatenbank="clr-namespace:Videospieldatenbank" x:Class="Videospieldatenbank.MainWindow"
     mc:Ignorable="d"
-    Title="Videospieldatenbank" Height="700" Width="1050" MinHeight="550" MinWidth="725">
+    Title="Videospieldatenbank" Height="700" Width="1050" MinHeight="550" MinWidth="725" Closing="MainWindow_OnClosing">
 
     <Window.Background>
         <ImageBrush ImageSource="/Resources/Pictures/defaultWallpaper2.jpg" Stretch="UniformToFill" />
@@ -28,14 +28,14 @@
             <Button x:Name="ButtonLibrary" Content="Bibliothek" Click="ButtonLibrary_OnClick" Height="40"
                     Margin="10,10,10,0" VerticalAlignment="Top" />
             <Button x:Name="ButtonFriends" Content="Freunde" Click="ButtonFriends_OnClick" />
-            <Button x:Name="ButtonShop" Content="Shop" />
+            <Button x:Name="ButtonShop" Content="Shop" Click="ButtonShop_OnClick" />
         </StackPanel>
         <Frame Name="FrameLeft" Visibility="Collapsed" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch" />
         <Frame Name="FrameRight" Visibility="Collapsed" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch" />
         <Frame Name="FrameFull" Visibility="Collapsed" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch" />
+               VerticalAlignment="Stretch"/>
 
         <GridSplitter Name="GridSplitter" Visibility="Collapsed" Grid.Row="1" Grid.Column="1"
                       HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="2" Background="Black" />
