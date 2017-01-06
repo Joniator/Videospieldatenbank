@@ -464,7 +464,7 @@ namespace Videospieldatenbank.Database
                 else
                 {
                     command.CommandText =
-                        "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
+                            "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
                     command.Parameters.AddWithValue("@userID", UserId);
                     command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                     command.Parameters.AddWithValue("@execPath", execPath);
@@ -519,7 +519,7 @@ namespace Videospieldatenbank.Database
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText =
-                    "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                        "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
                 command.Parameters.AddWithValue("@playTime", (int) Math.Ceiling(newPlayTime.TotalMinutes));
                 command.Parameters.AddWithValue("@userID", UserId);
                 command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
@@ -545,7 +545,7 @@ namespace Videospieldatenbank.Database
                 }
             }
             throw new Exception(
-                "Fehler beim ermitteln des exec_path, eventuell existiert das Spiel nicht oder es ist kein Pfad eingespeichert.");
+                                "Fehler beim ermitteln des exec_path, eventuell existiert das Spiel nicht oder es ist kein Pfad eingespeichert.");
         }
 
         public void RemoveGame(string igdbUrl)

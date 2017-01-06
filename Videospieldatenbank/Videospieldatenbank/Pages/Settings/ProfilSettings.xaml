@@ -1,36 +1,41 @@
 ﻿<Page x:Class="Videospieldatenbank.Pages.Settings.ProfilSettings"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Videospieldatenbank.Pages.Settings"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="300" d:DesignWidth="300"
       Title="ProfilSettings">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Image Name="ImageProfil" Grid.Column="1" Grid.Row="0" Margin="30" ></Image>
-        <ListBox Name="ProfilInfo" Grid.Column="0" Grid.Row="0" >
-            <ListBoxItem Name="ListBoxItemUserName" Content="Username: "></ListBoxItem>
-            <ListBoxItem Name="ListBoxItemOnlineStatus" Content="Online: "></ListBoxItem>
-            <ListBoxItem Name="ListBoxItemFriends" Content="Freunde: "></ListBoxItem>
-            <ListBoxItem Name="ListBoxItemTotalGames" Content="Spiele: "></ListBoxItem>
-            <ListBoxItem Name="ListBoxItemTotalPlaytime" Content="Spielzeit: "></ListBoxItem>
+        <Image Name="ImageProfil" Grid.Column="1" Grid.Row="0" Margin="30" />
+        <ListBox Name="ProfilInfo" Grid.Column="0" Grid.Row="0">
+            <ListBoxItem Name="ListBoxItemUserName" Content="Username: " />
+            <ListBoxItem Name="ListBoxItemOnlineStatus" Content="Online: " />
+            <ListBoxItem Name="ListBoxItemFriends" Content="Freunde: " />
+            <ListBoxItem Name="ListBoxItemTotalGames" Content="Spiele: " />
+            <ListBoxItem Name="ListBoxItemTotalPlaytime" Content="Spielzeit: " />
         </ListBox>
 
-        <StackPanel Name="StackPanelSettings" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Username ändern" FontSize="12" Width="100" Margin="5" Click="ButtonChangeUsername_Click"/>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Passwort ändern" FontSize="12" Width="100" Margin="5" Click="ButtonChangePassword_Click"/>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Offline anzeigen" FontSize="12" Width="100" Margin="5" Click="ButtonGoOnOff_Click"/>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Bild ändern" FontSize="12" Width="100" Height="20" Margin="5" Click="ButtonSetPicture_Click"/>
+        <StackPanel Name="StackPanelSettings" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Username ändern"
+                    FontSize="12" Width="100" Margin="5" Click="ButtonChangeUsername_Click" />
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Passwort ändern"
+                    FontSize="12" Width="100" Margin="5" Click="ButtonChangePassword_Click" />
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Content="Offline anzeigen"
+                    FontSize="12" Width="100" Margin="5" Click="ButtonGoOnOff_Click" />
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Bild ändern" FontSize="12" Width="100"
+                    Height="20" Margin="5" Click="ButtonSetPicture_Click" />
         </StackPanel>
     </Grid>
 </Page>

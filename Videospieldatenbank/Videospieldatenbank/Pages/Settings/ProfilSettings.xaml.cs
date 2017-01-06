@@ -1,28 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
-using Videospieldatenbank.Windows;
-using System.Drawing;
 using Videospieldatenbank.Utils;
+using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank.Pages.Settings
 {
     /// <summary>
-    /// Interaktionslogik für ProfilSettings.xaml
+    ///     Interaktionslogik für ProfilSettings.xaml
     /// </summary>
     public partial class ProfilSettings : Page
     {
@@ -50,11 +39,10 @@ namespace Videospieldatenbank.Pages.Settings
 
             {
                 ImageProfil.Source =
-                    ImageUtils.BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
+                        ImageUtils.BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
             }
             catch (Exception)
             {
-
             }
 
             ListBoxItemUserName.Content = "Username: " +
@@ -70,8 +58,10 @@ namespace Videospieldatenbank.Pages.Settings
             ListBoxItemTotalGames.Content = "Spiele: " + games.Count;
             ListBoxItemTotalPlaytime.Content = "Spielzeit: " +
                                                games.Select(
-                                                       n => LoginWindow.UserDatabaseConnector.GetPlayTime(n).TotalMinutes)
-                                                   .Sum() + " Minutes";
+                                                            n =>
+                                                                LoginWindow.UserDatabaseConnector.GetPlayTime(n)
+                                                                           .TotalMinutes)
+                                                    .Sum() + " Minutes";
         }
 
         public void UserInfos()
@@ -93,7 +83,6 @@ namespace Videospieldatenbank.Pages.Settings
             }
             catch (Exception)
             {
-
             }
         }
 
@@ -107,7 +96,6 @@ namespace Videospieldatenbank.Pages.Settings
             }
             catch (Exception)
             {
-
             }
         }
 

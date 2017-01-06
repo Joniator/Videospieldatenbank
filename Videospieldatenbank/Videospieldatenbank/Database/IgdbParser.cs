@@ -30,10 +30,10 @@ namespace Videospieldatenbank.Database
             try
             {
                 game.Name = website.DocumentNode.Descendants("h1")
-                    .First(n => n.GetAttributeValue("class", "").Equals("banner-title "))
-                    .InnerText
-                    .Replace("<!-- react-text: 14 -->", "")
-                    .Replace("<!-- /react-text -->", "");
+                                   .First(n => n.GetAttributeValue("class", "").Equals("banner-title "))
+                                   .InnerText
+                                   .Replace("<!-- react-text: 14 -->", "")
+                                   .Replace("<!-- /react-text -->", "");
             }
             catch
             {
@@ -43,8 +43,11 @@ namespace Videospieldatenbank.Database
             try
             {
                 game.CoverUrl = "http:" + website.DocumentNode.Descendants("img")
-                                    .First(n => n.GetAttributeValue("class", "").Equals("img-responsive cover_big"))
-                                    .GetAttributeValue("src", "");
+                                                 .First(
+                                                        n =>
+                                                            n.GetAttributeValue("class", "")
+                                                             .Equals("img-responsive cover_big"))
+                                                 .GetAttributeValue("src", "");
             }
             catch
             {
@@ -54,8 +57,8 @@ namespace Videospieldatenbank.Database
             try
             {
                 game.Developer = website.DocumentNode.Descendants("h3")
-                    .First(n => n.GetAttributeValue("class", "").Equals("banner-subsubheading"))
-                    .InnerText;
+                                        .First(n => n.GetAttributeValue("class", "").Equals("banner-subsubheading"))
+                                        .InnerText;
             }
             catch
             {
@@ -65,8 +68,8 @@ namespace Videospieldatenbank.Database
             try
             {
                 game.Genres = website.DocumentNode.Descendants("p")
-                    .First(n => n.Descendants("span").First().InnerText.Equals("Genre: "))
-                    .Descendants("a").Select(descendant => descendant.InnerText).ToArray();
+                                     .First(n => n.Descendants("span").First().InnerText.Equals("Genre: "))
+                                     .Descendants("a").Select(descendant => descendant.InnerText).ToArray();
             }
             catch
             {
@@ -76,8 +79,8 @@ namespace Videospieldatenbank.Database
             try
             {
                 game.Plattforms = website.DocumentNode.Descendants("p")
-                    .First(n => n.Descendants("span").First().InnerText.Equals("Platforms: "))
-                    .Descendants("a").Select(descendant => descendant.InnerText).ToArray();
+                                         .First(n => n.Descendants("span").First().InnerText.Equals("Platforms: "))
+                                         .Descendants("a").Select(descendant => descendant.InnerText).ToArray();
             }
             catch
             {
@@ -87,8 +90,8 @@ namespace Videospieldatenbank.Database
             try
             {
                 game.Rating = int.Parse(website.DocumentNode.Descendants("svg")
-                    .First(n => n.GetAttributeValue("class", "").Contains("gauge-twin"))
-                    .Descendants("text").First().InnerText);
+                                               .First(n => n.GetAttributeValue("class", "").Contains("gauge-twin"))
+                                               .Descendants("text").First().InnerText);
             }
             catch
             {
@@ -112,13 +115,13 @@ namespace Videospieldatenbank.Database
             }
 
             IEnumerable<HtmlNode> rows = website.DocumentNode.Descendants("tbody").First()
-                .Descendants("tr");
+                                                .Descendants("tr");
 
             int i = 0;
             foreach (HtmlNode row in rows)
             {
                 string url = row.Descendants("a")
-                    .First().GetAttributeValue("href", "");
+                                .First().GetAttributeValue("href", "");
                 games[i] = ParseGame("https://www.igdb.com" + url);
                 i++;
             }

@@ -15,8 +15,8 @@ namespace Videospieldatenbank
     public partial class GameList : Page
     {
         private static List<Game> listGames;
-        private string _selectedGame;
         private static GameList @this;
+        private string _selectedGame;
 
         public GameList()
         {
@@ -30,12 +30,11 @@ namespace Videospieldatenbank
             try
             {
                 foreach (string game in games)
-                {
                     using (GameDatabaseConnector gameDatabaseConnector = new GameDatabaseConnector())
                     {
                         Database.Game gameInfo = gameDatabaseConnector.GetGameInfo(game);
 
-                        ListBoxItem listBoxItem = new ListBoxItem()
+                        ListBoxItem listBoxItem = new ListBoxItem
                         {
                             Content = gameInfo.Name,
                             Foreground = Brushes.Black,
@@ -49,13 +48,10 @@ namespace Videospieldatenbank
 
                         Listbox_TabItem_Games.Items.Add(listBoxItem);
                     }
-                }
             }
             catch (Exception)
             {
-
             }
-
         }
 
         public static void RefreshGameList()
@@ -69,10 +65,6 @@ namespace Videospieldatenbank
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog();
-
-
-
-
         }
 
         private void MenuItemEdit_OnClick(object sender, RoutedEventArgs e)
@@ -82,8 +74,9 @@ namespace Videospieldatenbank
 
         private void MenuItemDelete_OnClick(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show($"Dies kann nicht rückgängig gemacht werden und löscht sämtliche Spielstatistiken für {_selectedGame}.", 
-                "Sicher?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (MessageBox.Show(
+                                $"Dies kann nicht rückgängig gemacht werden und löscht sämtliche Spielstatistiken für {_selectedGame}.",
+                                "Sicher?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 LoginWindow.UserDatabaseConnector.RemoveGame(_selectedGame);
                 MainWindow.RefreshLibrary();
@@ -96,9 +89,9 @@ namespace Videospieldatenbank
 
         public class Game
         {
-            public string Path;
-            public string Name;
             public string Launcher;
+            public string Name;
+            public string Path;
 
             public Game(string filename, string safeFileName)
             {
