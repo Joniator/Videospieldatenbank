@@ -202,12 +202,46 @@ namespace Videospieldatenbank.Database
         {
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
-                // Setzt Onlinestatus des Users auf false.
                 command.CommandText = "UPDATE user SET online=false WHERE name=@username";
                 command.Parameters.AddWithValue("@username", _username);
                 command.ExecuteNonQuery();
                 OnlineStatus = false;
                 return true;
+            }
+        }
+
+        /// <summary>
+        ///     Ändert den Usernamen.
+        /// </summary>
+        /// <param name="username">Der neue Username.</param>
+        /// <returns></returns>
+        public bool SetUsername(string username)
+        {
+            if (!Exists(_username) || Exists(username))
+                throw new Exception("Fehler beim Ändern des Usernames, eventuell ist der Name schon vergeben.");
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "UPDATE user SET name=@newUsername WHERE name=@oldUsername";
+                command.Parameters.AddWithValue("@oldUsername", _username);
+                command.Parameters.AddWithValue("@newUsername", username);
+                command.ExecuteNonQuery();
+                _username = username;
+                return true;
+            }
+        }
+
+        /// <summary>
+        ///     Ändert das Passwort des Users.
+        /// </summary>
+        /// <param name="newPassword"></param>
+        public void SetPassword(string newPassword)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "UPDATE user SET password=@password WHERE id=@userID";
+                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@password", PasswordUtils.GetHash(newPassword));
+                command.ExecuteNonQuery();
             }
         }
 
@@ -297,6 +331,7 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public bool IsOnline(string username)
         {
+            if (!Exists(username)) throw new Exception("Fehler beim ermitteln des Onlinestatus, User existiert nicht.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT online FROM user WHERE name=@username";
@@ -330,32 +365,13 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
-        ///     Ändert den Usernamen.
-        /// </summary>
-        /// <param name="username">Der neue Username.</param>
-        /// <returns></returns>
-        public bool SetUsername(string username)
-        {
-            if (!Exists(_username) || Exists(username))
-                throw new Exception("Fehler beim Ändern des Usernames, eventuell ist der Name schon vergeben.");
-            using (MySqlCommand command = MySqlConnection.CreateCommand())
-            {
-                command.CommandText = "UPDATE user SET name=@newUsername WHERE name=@oldUsername";
-                command.Parameters.AddWithValue("@oldUsername", _username);
-                command.Parameters.AddWithValue("@newUsername", username);
-                command.ExecuteNonQuery();
-                _username = username;
-                return true;
-            }
-        }
-
-        /// <summary>
         ///     Ermittelt die ID des Users anhand seines Namens.
         /// </summary>
         /// <param name="username">Name des Users.</param>
         /// <returns>Name des Users.</returns>
         public int GetId(string username)
         {
+            if (!Exists(username)) throw new Exception("Fehler beim ermitteln der ID, User existiert nicht.");
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT id FROM user WHERE name=@username";
@@ -366,7 +382,7 @@ namespace Videospieldatenbank.Database
                         return reader.GetInt32(0);
                 }
             }
-            throw new Exception("Fehler beim ermitteln der ID, eventuell existiert der Username nicht.");
+            throw new Exception("Fehler beim ermitteln der ID.");
         }
 
         /// <summary>
@@ -504,9 +520,41 @@ namespace Videospieldatenbank.Database
             {
                 command.CommandText =
                     "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
-                command.Parameters.AddWithValue("@playTime", (int) newPlayTime.TotalMinutes);
+                command.Parameters.AddWithValue("@playTime", (int) Math.Ceiling(newPlayTime.TotalMinutes));
                 command.Parameters.AddWithValue("@userID", UserId);
                 command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
+        ///     Ermittelt den Pfad unter dem das Spiel gespeichert wurde.
+        /// </summary>
+        /// <param name="igdbUrl"></param>
+        /// <returns></returns>
+        public string GetExecPath(string igdbUrl)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT exec_path FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                command.Parameters.AddWithValue("@userID", UserId);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) return reader.GetString(0);
+                }
+            }
+            throw new Exception(
+                "Fehler beim ermitteln des exec_path, eventuell existiert das Spiel nicht oder es ist kein Pfad eingespeichert.");
+        }
+
+        public void RemoveGame(string igdbUrl)
+        {
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM gameinfo WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
+                command.Parameters.AddWithValue("@userID", UserId);
                 command.ExecuteNonQuery();
             }
         }

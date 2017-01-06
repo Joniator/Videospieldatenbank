@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Win32;
+using Videospieldatenbank.Database;
 using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank
@@ -14,10 +15,13 @@ namespace Videospieldatenbank
     public partial class GameList : Page
     {
         private static List<Game> listGames;
+        private string _selectedGame;
+        private static GameList @this;
 
         public GameList()
         {
             InitializeComponent();
+            @this = this;
             FillGameList(LoginWindow.UserDatabaseConnector.GetGames());
         }
 
@@ -27,14 +31,37 @@ namespace Videospieldatenbank
             {
                 foreach (string game in games)
                 {
-                    Listbox_TabItem_Games.Items.Add(new ListBoxItem() { Content = game.Replace("https://www.igdb.com/games/", "").Replace("-", " "), Foreground = Brushes.Azure, Opacity = 100});
+                    using (GameDatabaseConnector gameDatabaseConnector = new GameDatabaseConnector())
+                    {
+                        Database.Game gameInfo = gameDatabaseConnector.GetGameInfo(game);
+
+                        ListBoxItem listBoxItem = new ListBoxItem()
+                        {
+                            Content = gameInfo.Name,
+                            Foreground = Brushes.Azure,
+                            Opacity = 100
+                        };
+                        listBoxItem.PreviewMouseDown += (sender, args) =>
+                        {
+                            MainWindow.SetGameInfo(game);
+                            _selectedGame = game;
+                        };
+
+                        Listbox_TabItem_Games.Items.Add(listBoxItem);
+                    }
                 }
             }
             catch (Exception)
             {
-                
+
             }
-            
+
+        }
+
+        public static void RefreshGameList()
+        {
+            @this.Listbox_TabItem_Games.Items.Clear();
+            @this.FillGameList(LoginWindow.UserDatabaseConnector.GetGames());
         }
 
         private void MenuItemAdd_OnClick(object sender, RoutedEventArgs e)
@@ -55,7 +82,16 @@ namespace Videospieldatenbank
 
         private void MenuItemDelete_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (MessageBox.Show($"Dies kann nicht rückgängig gemacht werden und löscht sämtliche Spielstatistiken für {_selectedGame}.", 
+                "Sicher?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                LoginWindow.UserDatabaseConnector.RemoveGame(_selectedGame);
+                MainWindow.RefreshLibrary();
+            }
+            else
+            {
+                MessageBox.Show("Abgebrochen.");
+            }
         }
 
         public class Game

@@ -9,7 +9,7 @@
 
     <Grid>
         <TabControl Name="TabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Opacity="0.5">
-            <TabItem Name="TabItem_Games" Header="Games">
+            <TabItem Name="TabItem_Games" Header="Spiele">
                 <ListBox Name="Listbox_TabItem_Games" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                          ScrollViewer.CanContentScroll="True">
                     <ListBox.ContextMenu>

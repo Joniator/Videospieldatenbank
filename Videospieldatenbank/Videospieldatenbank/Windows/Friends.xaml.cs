@@ -30,7 +30,7 @@ namespace Videospieldatenbank
             menuItemProfil.Click += MenuItemProfil_Click;
             contextMenu.Items.Add(menuItemProfil);
 
-            MenuItem menuItemDelete = new MenuItem { Header = "Delete" };
+            MenuItem menuItemDelete = new MenuItem { Header = "Löschen" };
             menuItemDelete.Click += MenuItemDelete_Click;
             contextMenu.Items.Add(menuItemDelete);
 

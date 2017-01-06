@@ -15,7 +15,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-using Videospieldatenbank.Database;
 using Videospieldatenbank.Windows;
 using Xceed.Wpf.AvalonDock.Converters;
 using Xceed.Wpf.DataGrid.Converters;
@@ -63,12 +62,14 @@ namespace Videospieldatenbank.Pages.Settings
                                           LoginWindow.UserDatabaseConnector.GetUsername(userId);
 
             if (LoginWindow.UserDatabaseConnector.OnlineStatus)
-                ListBoxItemOnlineStatus.Content = "Online: Yes";
+                ListBoxItemOnlineStatus.Content = "Online";
             else
-                ListBoxItemOnlineStatus.Content = "Online: No";
+                ListBoxItemOnlineStatus.Content = "Offline";
 
-            ListBoxItemFriends.Content = "Friends: " + LoginWindow.UserDatabaseConnector.GetFriendsList().Count;
-            ListBoxItemTotalGames.Content = "Total games: " + LoginWindow.UserDatabaseConnector.GetGames().Count;
+            ListBoxItemFriends.Content = "Freunde: " + LoginWindow.UserDatabaseConnector.GetFriendsList().Count;
+            List<string> games = LoginWindow.UserDatabaseConnector.GetGames();
+            ListBoxItemTotalGames.Content = "Spiele: " + games.Count;
+            ListBoxItemTotalPlaytime.Content = "Spielzeit: " + games.Select(n => LoginWindow.UserDatabaseConnector.GetPlayTime(n).TotalMinutes).Sum() + " Minutes";
         }
 
         public void UserInfos()
@@ -96,7 +97,9 @@ namespace Videospieldatenbank.Pages.Settings
 
         private void ButtonChangeUsername_Click(object sender, RoutedEventArgs e)
         {
-            //LoginWindow.UserDatabaseConnector
+            ChangeUsernameDialog dialog = new ChangeUsernameDialog();
+            if (dialog.ShowDialog() == true) MessageBox.Show("Username geändert!");
+            UserInfos();
         }
 
         private void ButtonGoOnOff_Click(object sender, RoutedEventArgs e)
@@ -104,19 +107,21 @@ namespace Videospieldatenbank.Pages.Settings
             if (LoginWindow.UserDatabaseConnector.OnlineStatus)
             {
                 LoginWindow.UserDatabaseConnector.OnlineStatus = false;
-                (sender as Button).Content = "Go online";
+                (sender as Button).Content = "Online anzeigen";
             }
             else
             {
                 LoginWindow.UserDatabaseConnector.OnlineStatus = true;
-                (sender as Button).Content = "Go offline";
+                (sender as Button).Content = "Offline anzeigen";
             }
             UserInfos();
         }
 
         private void ButtonChangePassword_Click(object sender, RoutedEventArgs e)
         {
-
+            ChangePasswordDialog dialog = new ChangePasswordDialog();
+            if (dialog.ShowDialog() == true) MessageBox.Show("Passwort geändert!");
+            UserInfos();
         }
     }
 }
