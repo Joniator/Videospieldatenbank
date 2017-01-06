@@ -16,10 +16,12 @@ namespace Videospieldatenbank
         public MainWindow()
         {
             InitializeComponent();
+            @this = this;
         }
 
+        private static MainWindow @this;
         public static Friends friends;
-        private  GameInfo _gameInfo;
+        public static GameInfo GameInfo;
         private  GameList _gameList;
         private  Profil _profil;
         private  Shop _shop;
@@ -64,21 +66,32 @@ namespace Videospieldatenbank
         /// <param name="e"></param>
         private void ButtonLibrary_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_gameList == null || _gameInfo == null)
+            if (_gameList == null || GameInfo == null)
             {
                 _gameList = new GameList();
-                _gameInfo = new GameInfo("https://www.igdb.com/games/doom");
             }
 
             FrameCheck(true);           
 
             if (FrameLeft.Content != _gameList)
                 FrameLeft.Content = _gameList;
-
-            if (FrameRight.Content != _gameInfo)
-                FrameRight.Content = _gameInfo;
         }
 
+        public static void RefreshLibrary()
+        {
+            GameList.RefreshGameList();
+        }
+
+        /// <summary>
+        ///     Zeigt das Spiel rechts in der GameInfo-Spalte an.
+        /// </summary>
+        /// <param name="igdbUrl"></param>
+        public static void SetGameInfo(string igdbUrl)
+        {
+            GameInfo = new GameInfo(igdbUrl);
+            @this.FrameRight.Content = GameInfo;
+        }
+        
         /// <summary>
         /// Open FrindsList.
         /// </summary>
@@ -117,8 +130,8 @@ namespace Videospieldatenbank
 
         private bool ExitMessageBox()
         {
-            string text = "Do you really want to exit the program?";
-            string caption = "Exit";
+            string text = "Willst du wirklich beenden?";
+            string caption = "Beenden";
             MessageBoxResult result = MessageBox.Show(text, caption, MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)

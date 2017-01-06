@@ -18,9 +18,7 @@ namespace Videospieldatenbank.Utils
             {
                 StringBuilder hexBuilder = new StringBuilder();
                 foreach (byte b in hashAlgorithm.ComputeHash(Encoding.Unicode.GetBytes(source)))
-                {
                     hexBuilder.AppendFormat("{0:x2}", b);
-                }
                 return hexBuilder.ToString();
             }
         }

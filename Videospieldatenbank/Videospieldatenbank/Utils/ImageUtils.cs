@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text;
 using System.Windows.Media;
 
 namespace Videospieldatenbank.Utils
@@ -8,7 +7,7 @@ namespace Videospieldatenbank.Utils
     {
         public static byte[] ImageToBytes(ImageSource imageSource)
         {
-            return (byte[])new ImageSourceConverter().ConvertTo(imageSource, typeof(byte[]));
+            return (byte[]) new ImageSourceConverter().ConvertTo(imageSource, typeof(byte[]));
         }
 
         /// <summary>
@@ -18,11 +17,11 @@ namespace Videospieldatenbank.Utils
         /// <returns></returns>
         public static ImageSource BytesToImageSource(byte[] imageBytes)
         {
-            return (ImageSource)new ImageSourceConverter().ConvertFrom(imageBytes);
+            return (ImageSource) new ImageSourceConverter().ConvertFrom(imageBytes);
         }
 
         /// <summary>
-        /// Konvertiert einen Stringarray in einen String.
+        ///     Konvertiert einen Stringarray in einen String.
         /// </summary>
         /// <param name="array">Das zu konvertierende Array.</param>
         /// <param name="delimiter">Das Zeichen mit dem die Einträge getrennt werden.</param>
