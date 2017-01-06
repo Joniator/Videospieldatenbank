@@ -1,6 +1,5 @@
 ﻿using System.Windows.Controls;
 using Videospieldatenbank.Pages.Settings;
-using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank
 {

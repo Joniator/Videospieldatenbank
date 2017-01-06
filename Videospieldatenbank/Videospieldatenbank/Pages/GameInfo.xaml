@@ -17,11 +17,13 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Image Name="Cover" Grid.Column="0" Source="/Resources/Pictures/defaultWallpaper.jpg" HorizontalAlignment="Center"
+        <Image Name="Cover" Grid.Column="0" Source="/Resources/Pictures/defaultWallpaper.jpg"
+               HorizontalAlignment="Center"
                VerticalAlignment="Center" Stretch="Uniform" />
         <ListBox Name="ListBoxUserLinks" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"
                  Grid.Row="0" />
-        <Button Name="StartButton" Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="1" />
+        <Button Name="StartButton" Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Grid.Column="1" Grid.Row="1" />
         <ListBox Name="ListBoxInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0"
                  Grid.Row="1">
             <ListBoxItem Name="ListBoxItemName" Content="Name: " />

@@ -119,8 +119,8 @@ namespace Videospieldatenbank.Database
                 foreach (string genre in game.Genres)
                     genres += genre + ";";
                 command.CommandText =
-                    "INSERT INTO games(`igdb_url`, `cover_url`, `name`, `developer`, `plattforms`, `genres`, `rating`)" +
-                    "VALUES (@igdbUrl, @coverUrl, @name, @developer, @plattforms, @genres, @rating)";
+                        "INSERT INTO games(`igdb_url`, `cover_url`, `name`, `developer`, `plattforms`, `genres`, `rating`)" +
+                        "VALUES (@igdbUrl, @coverUrl, @name, @developer, @plattforms, @genres, @rating)";
                 command.Parameters.AddWithValue("@igdbUrl", game.IgdbUrl);
                 command.Parameters.AddWithValue("@coverUrl", game.CoverUrl);
                 command.Parameters.AddWithValue("@name", game.Name);
