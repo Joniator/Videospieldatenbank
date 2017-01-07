@@ -18,10 +18,10 @@
 
         <TabControl Name="TabControl" Grid.ColumnSpan="2">
             <TabItem Name="TabItemAccount" Header="Account">
-                <Frame Name="FrameAccount"></Frame>
+                <Frame Name="FrameAccount" />
             </TabItem>
-            <TabItem Name="TabItemLayout"  Header="Layout">
-                <Frame Name="FrameLayout"></Frame>
+            <TabItem Name="TabItemLayout" Header="Layout">
+                <Frame Name="FrameLayout" />
             </TabItem>
         </TabControl>
     </Grid>

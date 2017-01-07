@@ -48,15 +48,14 @@ namespace Videospieldatenbank.Pages.Settings
             ListBoxItemUserName.Content = "Username: " + LoginWindow.UserDatabaseConnector.GetUsername(userId);
 
             ListBoxItemOnlineStatus.Content = LoginWindow.UserDatabaseConnector.IsOnline(userId)
-                        ? "Online"
-                        : "Offline";
+                                                  ? "Online"
+                                                  : "Offline";
 
             ListBoxItemFriends.Content = "Freunde: " + LoginWindow.UserDatabaseConnector.GetFriendsList(userId).Count;
             List<string> games = LoginWindow.UserDatabaseConnector.GetGames(userId);
             ListBoxItemTotalGames.Content = "Spiele: " + games.Count;
-            ListBoxItemTotalPlaytime.Content = "Spielzeit: " +
-                                               games.Select(n => LoginWindow.UserDatabaseConnector.GetPlayTime(n, userId)
-                                                                            .TotalMinutes).Sum() + " Minutes";
+            ListBoxItemTotalPlaytime.Content = "Spielzeit: " + games.Select(n => LoginWindow.UserDatabaseConnector.GetPlayTime(n, userId)
+                                                                                            .TotalMinutes).Sum() + " Minutes";
         }
 
         public void UserInfos()

@@ -15,6 +15,7 @@ namespace Videospieldatenbank
     public partial class GameInfo : Page
     {
         public string IgdbUrl;
+
         public GameInfo(string igdbUrl)
         {
             InitializeComponent();
@@ -29,7 +30,8 @@ namespace Videospieldatenbank
             try
             {
                 TimeSpan playTime = LoginWindow.UserDatabaseConnector.GetPlayTime(igdbUrl);
-                ListBoxItemGametime.Content += $"{Math.Floor(playTime.TotalHours).ToString("00")}:{playTime.Minutes.ToString("00")}";
+                ListBoxItemGametime.Content +=
+                        $"{Math.Floor(playTime.TotalHours).ToString("00")}:{playTime.Minutes.ToString("00")}";
             }
             catch (Exception)
             {
@@ -43,8 +45,9 @@ namespace Videospieldatenbank
                 Process process = Process.Start(psi);
                 process.EnableRaisingEvents = true;
                 process.Exited += (o, eventArgs) =>
-                 {
+                {
                     TimeSpan playtime = process.ExitTime - process.StartTime;
+                    MessageBox.Show(playtime.TotalSeconds.ToString(), "Programm wurde geschlossen.");
                     LoginWindow.UserDatabaseConnector.AddPlayTime(igdbUrl, playtime);
                 };
             };

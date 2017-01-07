@@ -1,9 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Data.SqlTypes;
 using System.Windows;
-using Videospieldatenbank.Database;
 using Videospieldatenbank.Pages;
-using Videospieldatenbank.Pages.Settings;
 using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank
@@ -13,21 +10,21 @@ namespace Videospieldatenbank
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static MainWindow @this;
+        public static Friends friends;
+        public static GameInfo GameInfo;
+        private GameList _gameList;
+        private Profil _profil;
+        private Shop _shop;
+
         public MainWindow()
         {
             InitializeComponent();
             @this = this;
         }
 
-        private static MainWindow @this;
-        public static Friends friends;
-        public static GameInfo GameInfo;
-        private  GameList _gameList;
-        private  Profil _profil;
-        private  Shop _shop;
-
         /// <summary>
-        /// Disables unused frames and enables used frames.
+        ///     Disables unused frames and enables used frames.
         /// </summary>
         /// <param name="frameLR">true = enable frameLR; false = disable frameLR</param>
         private void FrameCheck(bool frameLR)
@@ -50,29 +47,23 @@ namespace Videospieldatenbank
 
             //Checks for frameF
             if (FrameFull.IsVisible && !frameF)
-            {
                 FrameFull.Visibility = Visibility.Collapsed;
-            }
             if (!FrameFull.IsVisible && frameF)
-            {
                 FrameFull.Visibility = Visibility.Visible;
-            }
         }
 
         /// <summary>
-        /// Open Library.
+        ///     Open Library.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ButtonLibrary_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_gameList == null || GameInfo == null)
-            {
+            if ((_gameList == null) || (GameInfo == null))
                 _gameList = new GameList();
-            }
             RefreshLibrary();
 
-            FrameCheck(true);           
+            FrameCheck(true);
 
             if (FrameLeft.Content != _gameList)
                 FrameLeft.Content = _gameList;
@@ -92,9 +83,9 @@ namespace Videospieldatenbank
             GameInfo = new GameInfo(igdbUrl);
             @this.FrameRight.Content = GameInfo;
         }
-        
+
         /// <summary>
-        /// Open FrindsList.
+        ///     Open FrindsList.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -114,7 +105,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Open Profil/Settings.
+        ///     Open Profil/Settings.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -126,7 +117,8 @@ namespace Videospieldatenbank
             _profil.ReloadProfil();
             FrameCheck(false);
             if (FrameFull.Content != _profil)
-                FrameFull.Content = null; FrameFull.Content = _profil;
+                FrameFull.Content = null;
+            FrameFull.Content = _profil;
         }
 
         private bool ExitMessageBox()
@@ -141,10 +133,7 @@ namespace Videospieldatenbank
                 Application.Current.Shutdown();
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
@@ -161,7 +150,8 @@ namespace Videospieldatenbank
             FrameCheck(false);
 
             if (FrameFull.Content != _shop)
-                FrameFull.Content = null; FrameFull.Content = _shop;
+                FrameFull.Content = null;
+            FrameFull.Content = _shop;
         }
     }
 }

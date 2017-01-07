@@ -8,7 +8,7 @@
       d:DesignHeight="300" d:DesignWidth="300" Title="GameList">
 
     <Grid>
-        <TabControl Name="TabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Opacity="0.5">
+        <TabControl Name="TabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TabItem Name="TabItem_Games" Header="Spiele">
                 <ListBox Name="Listbox_TabItem_Games" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                          ScrollViewer.CanContentScroll="True">

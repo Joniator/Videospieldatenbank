@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Videospieldatenbank.Database;
 using Videospieldatenbank.Utils;
 
 namespace Videospieldatenbank.Windows
 {
     /// <summary>
-    /// Interaktionslogik für LoginWindow.xaml
+    ///     Interaktionslogik für LoginWindow.xaml
     /// </summary>
     public partial class LoginWindow : Window
     {
@@ -32,7 +21,7 @@ namespace Videospieldatenbank.Windows
             TextBoxPassword.Password = LoginSettings.Password;
         }
 
-        void CheckCheckBoxes()
+        private void CheckCheckBoxes()
         {
             if (CheckBoxSaveUsername.IsChecked == true)
             {
@@ -46,7 +35,7 @@ namespace Videospieldatenbank.Windows
             }
         }
 
-        void Login(string username, string password)
+        private void Login(string username, string password)
         {
             if (!UserDatabaseConnector.Login(username, password))
             {
@@ -58,49 +47,35 @@ namespace Videospieldatenbank.Windows
                 mainWindow.Show();
                 CheckCheckBoxes();
 
-                this.Close();
+                Close();
             }
         }
 
-        void Register(string username, string password)
+        private void Register(string username, string password)
         {
             if (!UserDatabaseConnector.Register(username, password))
-            {
                 MessageBox.Show("Registrieren fehlgeschlagen, der Username ist bereits vergeben.");
-            }
             else
-            {
                 Login(username, password);
-            }
         }
 
         private void ButtonLogin_OnClick(object sender, RoutedEventArgs e)
         {
-            Login(TextBoxUsername.Text,TextBoxPassword.Password);
+            Login(TextBoxUsername.Text, TextBoxPassword.Password);
         }
 
         private void ButtonRegister_OnClick(object sender, RoutedEventArgs e)
         {
             if (TextBoxRegistUsername.Text.Length >= 3)
-            {
                 if (TextBoxRegistPassword.Password.Length >= 3)
-                {
                     if (TextBoxRegistPassword.Password == TextBoxRegistRePassword.Password)
                         Register(TextBoxRegistUsername.Text, TextBoxRegistPassword.Password);
                     else
-                    {
                         MessageBox.Show("Passwörter stimmen nicht überein!");
-                    }
-                }
                 else
-                {
                     MessageBox.Show("Das Passwort ist zu kurz. (Min. 3 Zeichen)");
-                }
-            }
             else
-            {
                 MessageBox.Show("Der Username ist zu kurz. (Min. 3 Zeichen)");
-            }
         }
 
         private void TabItemLogin_OnKeyDown(object sender, KeyEventArgs e)
