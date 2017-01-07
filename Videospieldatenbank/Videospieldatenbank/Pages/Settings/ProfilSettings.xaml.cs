@@ -1,28 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
-using Videospieldatenbank.Windows;
-using System.Drawing;
 using Videospieldatenbank.Utils;
+using Videospieldatenbank.Windows;
 
 namespace Videospieldatenbank.Pages.Settings
 {
     /// <summary>
-    /// Interaktionslogik für ProfilSettings.xaml
+    ///     Interaktionslogik für ProfilSettings.xaml
     /// </summary>
     public partial class ProfilSettings : Page
     {
@@ -50,28 +39,24 @@ namespace Videospieldatenbank.Pages.Settings
 
             {
                 ImageProfil.Source =
-                    ImageUtils.BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
+                        ImageUtils.BytesToImageSource(LoginWindow.UserDatabaseConnector.GetProfilePicture(userId));
             }
             catch (Exception)
             {
-
             }
 
-            ListBoxItemUserName.Content = "Username: " +
-                                          LoginWindow.UserDatabaseConnector.GetUsername(userId);
+            ListBoxItemUserName.Content = "Username: " + LoginWindow.UserDatabaseConnector.GetUsername(userId);
 
-            if (LoginWindow.UserDatabaseConnector.OnlineStatus)
-                ListBoxItemOnlineStatus.Content = "Online";
-            else
-                ListBoxItemOnlineStatus.Content = "Offline";
+            ListBoxItemOnlineStatus.Content = LoginWindow.UserDatabaseConnector.IsOnline(userId)
+                        ? "Online"
+                        : "Offline";
 
-            ListBoxItemFriends.Content = "Freunde: " + LoginWindow.UserDatabaseConnector.GetFriendsList().Count;
-            List<string> games = LoginWindow.UserDatabaseConnector.GetGames();
+            ListBoxItemFriends.Content = "Freunde: " + LoginWindow.UserDatabaseConnector.GetFriendsList(userId).Count;
+            List<string> games = LoginWindow.UserDatabaseConnector.GetGames(userId);
             ListBoxItemTotalGames.Content = "Spiele: " + games.Count;
             ListBoxItemTotalPlaytime.Content = "Spielzeit: " +
-                                               games.Select(
-                                                       n => LoginWindow.UserDatabaseConnector.GetPlayTime(n).TotalMinutes)
-                                                   .Sum() + " Minutes";
+                                               games.Select(n => LoginWindow.UserDatabaseConnector.GetPlayTime(n, userId)
+                                                                            .TotalMinutes).Sum() + " Minutes";
         }
 
         public void UserInfos()
@@ -93,7 +78,6 @@ namespace Videospieldatenbank.Pages.Settings
             }
             catch (Exception)
             {
-
             }
         }
 
@@ -107,7 +91,6 @@ namespace Videospieldatenbank.Pages.Settings
             }
             catch (Exception)
             {
-
             }
         }
 

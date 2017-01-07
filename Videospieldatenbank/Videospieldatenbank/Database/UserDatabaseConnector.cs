@@ -84,14 +84,15 @@ namespace Videospieldatenbank.Database
         /// <summary>
         ///     Gibt eine Liste mit den IDs aller Freunde des Users zurück.
         /// </summary>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        public List<int> GetFriendsList()
+        public List<int> GetFriendsList(int userId)
         {
             List<int> list = new List<int>();
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "SELECT friend_id FROM friends WHERE user_ID=@userID";
-                command.Parameters.AddWithValue("@userID", UserId);
+                command.Parameters.AddWithValue("@userID", userId);
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read()) list.Add(reader.GetInt32(0));
@@ -101,13 +102,22 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Gibt eine Liste mit den IDs aller Freunde des Users zurück.
+        /// </summary>
+        /// <returns></returns>
+        public List<int> GetFriendsList()
+        {
+            return GetFriendsList(UserId);
+        }
+
+        /// <summary>
         ///     Markiert einen User als Freund.
         /// </summary>
         /// <param name="friendId">Die ID des als Freund zu markierenden Users.</param>
         /// <returns></returns>
         public bool AddFriend(int friendId)
         {
-            if (IsFriend(friendId)) return false;
+            if (IsFriend(friendId) || friendId == UserId) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "INSERT INTO friends(user_ID, friend_ID) VALUES (@userID, @friendID)";
@@ -327,6 +337,16 @@ namespace Videospieldatenbank.Database
         /// <summary>
         ///     Überprüft ob ein User online ist.
         /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool IsOnline(int userId)
+        {
+            return IsOnline(GetUsername(userId));
+        }
+
+        /// <summary>
+        ///     Überprüft ob ein User online ist.
+        /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
         public bool IsOnline(string username)
@@ -427,6 +447,26 @@ namespace Videospieldatenbank.Database
         }
 
         /// <summary>
+        ///     Gibt eine Liste der Spiele des users zurück
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Liste von igdb_urls.</returns>
+        public List<string> GetGames(int userId)
+        {
+            List<string> list = new List<string>();
+            using (MySqlCommand command = MySqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT igdb_url FROM gameinfo WHERE user_ID=@userID";
+                command.Parameters.AddWithValue("@userID", userId);
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read()) list.Add(reader.GetString(0));
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
         ///     Überprüft ob der Benutzer das Spiel besitzt/hinzugefügt hat.
         /// </summary>
         /// <param name="igdbUrl"></param>
@@ -464,7 +504,7 @@ namespace Videospieldatenbank.Database
                 else
                 {
                     command.CommandText =
-                        "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
+                            "INSERT INTO gameinfo(`user_ID`, `igdb_url`, `exec_path`, `playtime`) VALUES (@userID, @igdbUrl, @execPath, '0')";
                     command.Parameters.AddWithValue("@userID", UserId);
                     command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
                     command.Parameters.AddWithValue("@execPath", execPath);
@@ -519,7 +559,7 @@ namespace Videospieldatenbank.Database
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText =
-                    "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
+                        "UPDATE gameinfo SET playtime=@playTime WHERE user_ID=@userID AND igdb_url=@igdbUrl";
                 command.Parameters.AddWithValue("@playTime", (int) Math.Ceiling(newPlayTime.TotalMinutes));
                 command.Parameters.AddWithValue("@userID", UserId);
                 command.Parameters.AddWithValue("@igdbUrl", igdbUrl);
@@ -545,9 +585,13 @@ namespace Videospieldatenbank.Database
                 }
             }
             throw new Exception(
-                "Fehler beim ermitteln des exec_path, eventuell existiert das Spiel nicht oder es ist kein Pfad eingespeichert.");
+                                "Fehler beim ermitteln des exec_path, eventuell existiert das Spiel nicht oder es ist kein Pfad eingespeichert.");
         }
 
+        /// <summary>
+        ///     Entfernt das Spiel aus der Bibliothek des Users.
+        /// </summary>
+        /// <param name="igdbUrl"></param>
         public void RemoveGame(string igdbUrl)
         {
             using (MySqlCommand command = MySqlConnection.CreateCommand())
