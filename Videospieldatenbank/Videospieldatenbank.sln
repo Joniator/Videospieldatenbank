@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.25914.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Videospieldatenbank", "Videospieldatenbank\Videospieldatenbank.csproj", "{18FC5359-5CF5-46BC-A085-26E4552B20E2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1F2ECD01-34C3-4830-B1AC-762405213387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{18FC5359-5CF5-46BC-A085-26E4552B20E2}.Debug|x64.Build.0 = Debug|x64
 		{18FC5359-5CF5-46BC-A085-26E4552B20E2}.Release|x64.ActiveCfg = Release|x64
 		{18FC5359-5CF5-46BC-A085-26E4552B20E2}.Release|x64.Build.0 = Release|x64
-		{1F2ECD01-34C3-4830-B1AC-762405213387}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1F2ECD01-34C3-4830-B1AC-762405213387}.Debug|x64.Build.0 = Debug|Any CPU
-		{1F2ECD01-34C3-4830-B1AC-762405213387}.Release|x64.ActiveCfg = Release|Any CPU
-		{1F2ECD01-34C3-4830-B1AC-762405213387}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

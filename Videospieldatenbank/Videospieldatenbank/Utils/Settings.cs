@@ -1,5 +1,8 @@
 ﻿namespace Videospieldatenbank.Utils
 {
+    /// <summary>
+    /// Greift auf die Settingsdatei zu.
+    /// </summary>
     internal static class LoginSettings
     {
         public static bool CheckBoxUsername

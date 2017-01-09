@@ -14,16 +14,10 @@
                          ScrollViewer.CanContentScroll="True">
                     <ListBox.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Name="MenuItemAdd" Header="Add" Click="MenuItemAdd_OnClick" />
-                            <MenuItem Name="MenuItemEdit" Header="Edit" Click="MenuItemEdit_OnClick" />
                             <MenuItem Name="MenuItemDelete" Header="Delete" Click="MenuItemDelete_OnClick" />
                         </ContextMenu>
                     </ListBox.ContextMenu>
                 </ListBox>
-            </TabItem>
-            <TabItem Name="TabItem_Launcher" Header="Launcher">
-                <ListBox Name="Listbox_TabItem_Launcher" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                         ScrollViewer.CanContentScroll="True" />
             </TabItem>
         </TabControl>
     </Grid>

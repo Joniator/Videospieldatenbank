@@ -11,18 +11,6 @@
       Title="Profil">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <TabControl Name="TabControl" Grid.ColumnSpan="2">
-            <TabItem Name="TabItemAccount" Header="Account">
-                <Frame Name="FrameAccount" />
-            </TabItem>
-            <TabItem Name="TabItemLayout" Header="Layout">
-                <Frame Name="FrameLayout" />
-            </TabItem>
-        </TabControl>
+        <Frame Name="FrameProfileSettings"></Frame>
     </Grid>
 </Page>

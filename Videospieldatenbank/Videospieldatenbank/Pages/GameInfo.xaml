@@ -17,12 +17,11 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Image Name="Cover" Grid.Column="0" Source="/Resources/Pictures/defaultWallpaper.jpg"
+        <Image Name="Cover" Grid.Column="0"
                HorizontalAlignment="Center"
                VerticalAlignment="Center" Stretch="Uniform" />
-        <ListBox Name="ListBoxUserLinks" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"
-                 Grid.Row="0" />
-        <Button Name="StartButton" Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+        
+        <Button Name="StartButton" Content="Start" Width="150" Height="45" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 Grid.Column="1" Grid.Row="1" />
         <ListBox Name="ListBoxInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0"
                  Grid.Row="1">
@@ -30,7 +29,6 @@
             <ListBoxItem Name="ListBoxItemGametime" Content="Spielzeit: " />
             <ListBoxItem Name="ListBoxItemGenre" Content="Genre: " />
             <ListBoxItem Name="ListBoxItemDeveloper" Content="Developer: " />
-            <ListBoxItem Name="ListBoxItemLauncher" Content="Launcher: " />
         </ListBox>
     </Grid>
 </Page>

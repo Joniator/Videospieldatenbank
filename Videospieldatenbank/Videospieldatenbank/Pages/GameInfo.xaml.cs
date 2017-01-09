@@ -14,12 +14,16 @@ namespace Videospieldatenbank
     /// </summary>
     public partial class GameInfo : Page
     {
-        public string IgdbUrl;
+        private string _igdbUrl;
 
+        /// <summary>
+        /// Füllt die Informationen der Spiele aus.
+        /// </summary>
+        /// <param name="igdbUrl">Der Spielelink von igdb.com</param>
         public GameInfo(string igdbUrl)
         {
             InitializeComponent();
-            IgdbUrl = igdbUrl;
+            _igdbUrl = igdbUrl;
             GameDatabaseConnector gdc = new GameDatabaseConnector();
             Game gameInfo = gdc.GetGameInfo(igdbUrl);
             ListBoxItemName.Content += gameInfo.Name;
@@ -45,6 +49,8 @@ namespace Videospieldatenbank
                 Process process = Process.Start(psi);
                 process.EnableRaisingEvents = true;
                 process.Exited += (o, eventArgs) =>
+
+                // Zeigt nach dem beenden des Spiels die Laufzeit an.
                 {
                     TimeSpan playtime = process.ExitTime - process.StartTime;
                     MessageBox.Show(playtime.TotalSeconds.ToString(), "Programm wurde geschlossen.");

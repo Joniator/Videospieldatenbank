@@ -22,6 +22,10 @@ namespace Videospieldatenbank.Pages.Settings
             UserInfos();
         }
 
+        /// <summary>
+        /// Füllt die Informationen der entsprechenden User aus.
+        /// </summary>
+        /// <param name="userId">Die Id des entsprechenden User</param>
         public void UserInfos(int userId)
         {
             if (userId != LoginWindow.UserDatabaseConnector.UserId)
@@ -57,17 +61,22 @@ namespace Videospieldatenbank.Pages.Settings
             ListBoxItemTotalPlaytime.Content = "Spielzeit: " + games.Select(n => LoginWindow.UserDatabaseConnector.GetPlayTime(n, userId)
                                                                                             .TotalMinutes).Sum() + " Minutes";
         }
-
+        /// <summary>
+        /// Wird nur für den Mainuser verwendet.
+        /// </summary>
         public void UserInfos()
         {
             UserInfos(LoginWindow.UserDatabaseConnector.UserId);
         }
 
+        /// <summary>
+        /// Setzt das Profilbild des aktuellen Users.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonSetPicture_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = false;
-            //openFileDialog.Filter = "jpg";
             openFileDialog.ShowDialog();
 
             try
@@ -80,6 +89,11 @@ namespace Videospieldatenbank.Pages.Settings
             }
         }
 
+        /// <summary>
+        /// Ändert den Username des aktuellen Users.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonChangeUsername_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -93,6 +107,11 @@ namespace Videospieldatenbank.Pages.Settings
             }
         }
 
+        /// <summary>
+        /// Setzt den Onlinestatus des aktuellen Users auf Offline.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonGoOnOff_Click(object sender, RoutedEventArgs e)
         {
             if (LoginWindow.UserDatabaseConnector.OnlineStatus)
@@ -108,6 +127,11 @@ namespace Videospieldatenbank.Pages.Settings
             UserInfos();
         }
 
+        /// <summary>
+        /// Ändert das Passwort des aktuellen Users.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonChangePassword_Click(object sender, RoutedEventArgs e)
         {
             ChangePasswordDialog dialog = new ChangePasswordDialog();

@@ -14,15 +14,19 @@ namespace Videospieldatenbank
     public partial class Friends : Window
     {
         private readonly ProfilSettings _profilSettings = new ProfilSettings();
-        private string FriendsListName;
+        private string _friendsListName;
 
         public Friends()
         {
             InitializeComponent();
-            refreshFriendsList();
+            RefreshFriendsList();
         }
 
-        private void refreshFriendsList()
+        /// <summary>
+        /// Aktualisiert die FriendsList und füg die Menuitems Profil und Löschen hinzu,
+        /// welche das Profil eines Freundes anzeigt oder einen Freund löscht.
+        /// </summary>
+        private void RefreshFriendsList()
         {
             ContextMenu contextMenu = new ContextMenu();
             MenuItem menuItemProfil = new MenuItem {Header = "Profil"};
@@ -53,18 +57,28 @@ namespace Videospieldatenbank
             }
         }
 
+        /// <summary>
+        /// Speichert beim rechtsklicken auf einen Freund dessen Namen zwischen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBoxItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             ListBoxItem listBoxItem = sender as ListBoxItem;
-            FriendsListName = listBoxItem.Content as string;
+            _friendsListName = listBoxItem.Content as string;
         }
 
+        /// <summary>
+        /// Öffnet das Profil vom ausgewählten Freund.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItemProfil_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 FriendsProfilWindow friendsProfilWindow =
-                        new FriendsProfilWindow(LoginWindow.UserDatabaseConnector.GetId(FriendsListName));
+                        new FriendsProfilWindow(LoginWindow.UserDatabaseConnector.GetId(_friendsListName));
                 friendsProfilWindow.Show();
             }
             catch (Exception)
@@ -72,23 +86,38 @@ namespace Videospieldatenbank
             }
         }
 
+        /// <summary>
+        /// Löscht den ausgwählten Freund.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                LoginWindow.UserDatabaseConnector.RemoveFriend(LoginWindow.UserDatabaseConnector.GetId(FriendsListName));
+                LoginWindow.UserDatabaseConnector.RemoveFriend(LoginWindow.UserDatabaseConnector.GetId(_friendsListName));
             }
             catch (Exception)
             {
             }
-            refreshFriendsList();
+            RefreshFriendsList();
         }
 
+        /// <summary>
+        /// Setzt das Objekt vom "Friends"-Window in MainWindow beim Schließen des Fensters gleich null. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Friends_OnClosed(object sender, EventArgs e)
         {
             MainWindow.friends = null;
         }
 
+        /// <summary>
+        /// Fügt einen Vorhandenen User als Freund hinzu, welcher in durch die Textbox ausgwählt wurde. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonAddFriend_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -101,7 +130,7 @@ namespace Videospieldatenbank
             catch (Exception)
             {
             }
-            refreshFriendsList();
+            RefreshFriendsList();
         }
     }
 }
