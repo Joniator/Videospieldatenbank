@@ -23,7 +23,7 @@ namespace Videospieldatenbank.Pages.Settings
         }
 
         /// <summary>
-        /// Füllt die Informationen der entsprechenden User aus.
+        ///     Füllt die Informationen der entsprechenden User aus.
         /// </summary>
         /// <param name="userId">Die Id des entsprechenden User</param>
         public void UserInfos(int userId)
@@ -58,11 +58,15 @@ namespace Videospieldatenbank.Pages.Settings
             ListBoxItemFriends.Content = "Freunde: " + LoginWindow.UserDatabaseConnector.GetFriendsList(userId).Count;
             List<string> games = LoginWindow.UserDatabaseConnector.GetGames(userId);
             ListBoxItemTotalGames.Content = "Spiele: " + games.Count;
-            ListBoxItemTotalPlaytime.Content = "Spielzeit: " + games.Select(n => LoginWindow.UserDatabaseConnector.GetPlayTime(n, userId)
-                                                                                            .TotalMinutes).Sum() + " Minutes";
+            ListBoxItemTotalPlaytime.Content = "Spielzeit: " +
+                                               games.Select(
+                                                            n =>
+                                                                LoginWindow.UserDatabaseConnector.GetPlayTime(n, userId)
+                                                                           .TotalMinutes).Sum() + " Minutes";
         }
+
         /// <summary>
-        /// Wird nur für den Mainuser verwendet.
+        ///     Wird nur für den Mainuser verwendet.
         /// </summary>
         public void UserInfos()
         {
@@ -70,7 +74,7 @@ namespace Videospieldatenbank.Pages.Settings
         }
 
         /// <summary>
-        /// Setzt das Profilbild des aktuellen Users.
+        ///     Setzt das Profilbild des aktuellen Users.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -90,7 +94,7 @@ namespace Videospieldatenbank.Pages.Settings
         }
 
         /// <summary>
-        /// Ändert den Username des aktuellen Users.
+        ///     Ändert den Username des aktuellen Users.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -108,7 +112,7 @@ namespace Videospieldatenbank.Pages.Settings
         }
 
         /// <summary>
-        /// Setzt den Onlinestatus des aktuellen Users auf Offline.
+        ///     Setzt den Onlinestatus des aktuellen Users auf Offline.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -128,7 +132,7 @@ namespace Videospieldatenbank.Pages.Settings
         }
 
         /// <summary>
-        /// Ändert das Passwort des aktuellen Users.
+        ///     Ändert das Passwort des aktuellen Users.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

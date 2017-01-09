@@ -24,7 +24,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Füllt die Listbox mit den Games des Users von der Datenbank.
+        ///     Füllt die Listbox mit den Games des Users von der Datenbank.
         /// </summary>
         /// <param name="games">Die Liste mit den Games von der Datenbank.</param>
         private void FillGameList(List<string> games)
@@ -34,7 +34,7 @@ namespace Videospieldatenbank
                 foreach (string game in games)
                     using (GameDatabaseConnector gameDatabaseConnector = new GameDatabaseConnector())
                     {
-                        Database.Game gameInfo = gameDatabaseConnector.GetGameInfo(game);
+                        Game gameInfo = gameDatabaseConnector.GetGameInfo(game);
 
                         ListBoxItem listBoxItem = new ListBoxItem
                         {
@@ -57,7 +57,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Aktualisiert die GameList.
+        ///     Aktualisiert die GameList.
         /// </summary>
         public static void RefreshGameList()
         {
@@ -66,7 +66,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Tritt beim löschen eines Spiels auf.
+        ///     Tritt beim löschen eines Spiels auf.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

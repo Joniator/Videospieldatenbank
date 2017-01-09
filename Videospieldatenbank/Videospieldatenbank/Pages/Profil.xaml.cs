@@ -11,7 +11,7 @@ namespace Videospieldatenbank
         private readonly ProfilSettings _profilSettings = new ProfilSettings();
 
         /// <summary>
-        /// Läd die Profilseite.
+        ///     Läd die Profilseite.
         /// </summary>
         public Profil()
         {
@@ -20,7 +20,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Aktualisiert die Profilseite.
+        ///     Aktualisiert die Profilseite.
         /// </summary>
         public void ReloadProfil()
         {

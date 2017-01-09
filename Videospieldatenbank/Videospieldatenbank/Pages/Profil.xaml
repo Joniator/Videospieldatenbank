@@ -11,6 +11,6 @@
       Title="Profil">
 
     <Grid>
-        <Frame Name="FrameProfileSettings"></Frame>
+        <Frame Name="FrameProfileSettings" />
     </Grid>
 </Page>

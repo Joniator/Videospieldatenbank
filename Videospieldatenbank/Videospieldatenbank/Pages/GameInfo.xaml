@@ -20,8 +20,9 @@
         <Image Name="Cover" Grid.Column="0"
                HorizontalAlignment="Center"
                VerticalAlignment="Center" Stretch="Uniform" />
-        
-        <Button Name="StartButton" Content="Start" Width="150" Height="45" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+
+        <Button Name="StartButton" Content="Start" Width="150" Height="45" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
                 Grid.Column="1" Grid.Row="1" />
         <ListBox Name="ListBoxInfo" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0"
                  Grid.Row="1">
