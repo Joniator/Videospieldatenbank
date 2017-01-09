@@ -13,7 +13,7 @@ namespace Videospieldatenbank.Windows
         }
 
         /// <summary>
-        /// Setzt das neue Passwort.
+        ///     Setzt das neue Passwort.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

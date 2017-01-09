@@ -17,7 +17,7 @@ namespace Videospieldatenbank.Pages
         }
 
         /// <summary>
-        /// Fügt ein Spiel vom Browser der Datenbank hinzu.
+        ///     Fügt ein Spiel vom Browser der Datenbank hinzu.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -32,9 +32,10 @@ namespace Videospieldatenbank.Pages
                 using (GameDatabaseConnector gameDatabaseConnector = new GameDatabaseConnector())
                 {
                     if (LoginWindow.UserDatabaseConnector.OwnsGame(ChromiumWebBrowser.Address))
-                    MessageBox.Show(gameDatabaseConnector.GetGameInfo(ChromiumWebBrowser.Address).Name + " erfolgreich hinzugefügt!", "");
+                        MessageBox.Show(
+                                        gameDatabaseConnector.GetGameInfo(ChromiumWebBrowser.Address).Name +
+                                        " erfolgreich hinzugefügt!", "");
                 }
-               
             }
         }
     }

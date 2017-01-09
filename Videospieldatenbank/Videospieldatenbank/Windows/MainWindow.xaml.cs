@@ -55,7 +55,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Zeigt die Bibliothek.
+        ///     Zeigt die Bibliothek.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -124,7 +124,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Zeigt den Shop.
+        ///     Zeigt den Shop.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -141,8 +141,8 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Zeigt eine MessageBox, die fragt ob man wirklich das Programm verlassen will.
-        /// Wenn ja, dann wird dieses beendet. Bei nein Schließt sich nur die Box.
+        ///     Zeigt eine MessageBox, die fragt ob man wirklich das Programm verlassen will.
+        ///     Wenn ja, dann wird dieses beendet. Bei nein Schließt sich nur die Box.
         /// </summary>
         /// <returns></returns>
         private bool ExitMessageBox()
@@ -161,7 +161,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Ruft beim beenden des Programms die Methode ExitMessageBox() auf.
+        ///     Ruft beim beenden des Programms die Methode ExitMessageBox() auf.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

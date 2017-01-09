@@ -23,8 +23,8 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Aktualisiert die FriendsList und füg die Menuitems Profil und Löschen hinzu,
-        /// welche das Profil eines Freundes anzeigt oder einen Freund löscht.
+        ///     Aktualisiert die FriendsList und füg die Menuitems Profil und Löschen hinzu,
+        ///     welche das Profil eines Freundes anzeigt oder einen Freund löscht.
         /// </summary>
         private void RefreshFriendsList()
         {
@@ -58,7 +58,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Speichert beim rechtsklicken auf einen Freund dessen Namen zwischen.
+        ///     Speichert beim rechtsklicken auf einen Freund dessen Namen zwischen.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -69,7 +69,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Öffnet das Profil vom ausgewählten Freund.
+        ///     Öffnet das Profil vom ausgewählten Freund.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -87,7 +87,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Löscht den ausgwählten Freund.
+        ///     Löscht den ausgwählten Freund.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -104,7 +104,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Setzt das Objekt vom "Friends"-Window in MainWindow beim Schließen des Fensters gleich null. 
+        ///     Setzt das Objekt vom "Friends"-Window in MainWindow beim Schließen des Fensters gleich null.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -114,7 +114,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        /// Fügt einen Vorhandenen User als Freund hinzu, welcher in durch die Textbox ausgwählt wurde. 
+        ///     Fügt einen Vorhandenen User als Freund hinzu, welcher in durch die Textbox ausgwählt wurde.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

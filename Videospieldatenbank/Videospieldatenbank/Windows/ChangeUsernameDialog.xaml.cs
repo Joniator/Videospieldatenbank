@@ -13,7 +13,7 @@ namespace Videospieldatenbank.Windows
         }
 
         /// <summary>
-        /// Setzt den neuen Usernamen.
+        ///     Setzt den neuen Usernamen.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

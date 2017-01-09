@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Videospieldatenbank"
         mc:Ignorable="d"
         Title="Freunde" Height="500" Width="250" MinHeight="500" MinWidth="250" MaxHeight="750" MaxWidth="375"
-        WindowStartupLocation="CenterScreen" Visibility="Visible" WindowStyle="ToolWindow" Closed="Friends_OnClosed" Background="LightGray">
+        WindowStartupLocation="CenterScreen" Visibility="Visible" WindowStyle="ToolWindow" Closed="Friends_OnClosed"
+        Background="LightGray">
 
     <Grid>
         <Grid.RowDefinitions>

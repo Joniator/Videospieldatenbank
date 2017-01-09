@@ -117,7 +117,7 @@ namespace Videospieldatenbank.Database
         /// <returns></returns>
         public bool AddFriend(int friendId)
         {
-            if (IsFriend(friendId) || friendId == UserId) return false;
+            if (IsFriend(friendId) || (friendId == UserId)) return false;
             using (MySqlCommand command = MySqlConnection.CreateCommand())
             {
                 command.CommandText = "INSERT INTO friends(user_ID, friend_ID) VALUES (@userID, @friendID)";
