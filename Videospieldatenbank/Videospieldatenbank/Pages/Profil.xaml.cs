@@ -8,16 +8,20 @@ namespace Videospieldatenbank
     /// </summary>
     public partial class Profil : Page
     {
-        private readonly DesignSettings _designSettings = new DesignSettings();
         private readonly ProfilSettings _profilSettings = new ProfilSettings();
 
+        /// <summary>
+        /// Läd die Profilseite.
+        /// </summary>
         public Profil()
         {
             InitializeComponent();
-            FrameLayout.Content = _designSettings;
-            FrameAccount.Content = _profilSettings;
+            FrameProfileSettings.Content = _profilSettings;
         }
 
+        /// <summary>
+        /// Aktualisiert die Profilseite.
+        /// </summary>
         public void ReloadProfil()
         {
             _profilSettings.UserInfos();

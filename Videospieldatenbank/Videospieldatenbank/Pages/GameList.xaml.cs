@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Microsoft.Win32;
 using Videospieldatenbank.Database;
 using Videospieldatenbank.Windows;
 
@@ -14,7 +13,6 @@ namespace Videospieldatenbank
     /// </summary>
     public partial class GameList : Page
     {
-        private static List<Game> listGames;
         private static GameList @this;
         private string _selectedGame;
 
@@ -25,7 +23,11 @@ namespace Videospieldatenbank
             FillGameList(LoginWindow.UserDatabaseConnector.GetGames());
         }
 
-        public void FillGameList(List<string> games)
+        /// <summary>
+        /// Füllt die Listbox mit den Games des Users von der Datenbank.
+        /// </summary>
+        /// <param name="games">Die Liste mit den Games von der Datenbank.</param>
+        private void FillGameList(List<string> games)
         {
             try
             {
@@ -54,24 +56,20 @@ namespace Videospieldatenbank
             }
         }
 
+        /// <summary>
+        /// Aktualisiert die GameList.
+        /// </summary>
         public static void RefreshGameList()
         {
             @this.Listbox_TabItem_Games.Items.Clear();
             @this.FillGameList(LoginWindow.UserDatabaseConnector.GetGames());
         }
 
-        private void MenuItemAdd_OnClick(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.ShowDialog();
-        }
-
-        private void MenuItemEdit_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// Tritt beim löschen eines Spiels auf.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItemDelete_OnClick(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show(
@@ -84,19 +82,6 @@ namespace Videospieldatenbank
             else
             {
                 MessageBox.Show("Abgebrochen.");
-            }
-        }
-
-        public class Game
-        {
-            public string Launcher;
-            public string Name;
-            public string Path;
-
-            public Game(string filename, string safeFileName)
-            {
-                Path = filename;
-                Name = safeFileName.Remove(safeFileName.Length - 4, 4);
             }
         }
     }

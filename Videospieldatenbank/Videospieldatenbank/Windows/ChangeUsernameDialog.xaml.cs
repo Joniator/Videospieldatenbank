@@ -12,6 +12,11 @@ namespace Videospieldatenbank.Windows
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Setzt den neuen Usernamen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             try

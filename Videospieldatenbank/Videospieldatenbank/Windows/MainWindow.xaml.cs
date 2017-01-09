@@ -26,7 +26,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        ///     Disables unused frames and enables used frames.
+        ///     Deaktiviert ungenutzte frames und aktiviert genutzte frames.
         /// </summary>
         /// <param name="frameLR">true = enable frameLR; false = disable frameLR</param>
         private void FrameCheck(bool frameLR)
@@ -55,7 +55,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        ///     Open Library.
+        /// Zeigt die Bibliothek.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -87,7 +87,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        ///     Open FrindsList.
+        ///     Zeigt die Freundeliste.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -107,7 +107,7 @@ namespace Videospieldatenbank
         }
 
         /// <summary>
-        ///     Open Profil/Settings.
+        ///     Zeigt Profil/Settings.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -123,6 +123,28 @@ namespace Videospieldatenbank
             FrameFull.Content = _profil;
         }
 
+        /// <summary>
+        /// Zeigt den Shop.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonShop_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_shop == null)
+                _shop = new Shop();
+
+            FrameCheck(false);
+
+            if (FrameFull.Content != _shop)
+                FrameFull.Content = null;
+            FrameFull.Content = _shop;
+        }
+
+        /// <summary>
+        /// Zeigt eine MessageBox, die fragt ob man wirklich das Programm verlassen will.
+        /// Wenn ja, dann wird dieses beendet. Bei nein Schließt sich nur die Box.
+        /// </summary>
+        /// <returns></returns>
         private bool ExitMessageBox()
         {
             string text = "Willst du wirklich beenden?";
@@ -138,22 +160,15 @@ namespace Videospieldatenbank
             return false;
         }
 
+        /// <summary>
+        /// Ruft beim beenden des Programms die Methode ExitMessageBox() auf.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             if (!ExitMessageBox())
                 e.Cancel = true;
-        }
-
-        private void ButtonShop_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (_shop == null)
-                _shop = new Shop();
-
-            FrameCheck(false);
-
-            if (FrameFull.Content != _shop)
-                FrameFull.Content = null;
-            FrameFull.Content = _shop;
         }
     }
 }
