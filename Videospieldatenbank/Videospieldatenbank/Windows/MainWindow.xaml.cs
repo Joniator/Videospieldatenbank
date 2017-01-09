@@ -21,6 +21,8 @@ namespace Videospieldatenbank
         {
             InitializeComponent();
             @this = this;
+            // Zeigt das Profil des Users an wenn er die App startet.
+            ButtonContent_OnClick(null, null);
         }
 
         /// <summary>

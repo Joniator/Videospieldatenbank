@@ -45,23 +45,17 @@ namespace Videospieldatenbank.Pages.Settings
             {
             }
 
-            ListBoxItemUserName.Content = "Username: " +
-                                          LoginWindow.UserDatabaseConnector.GetUsername(userId);
+            ListBoxItemUserName.Content = "Username: " + LoginWindow.UserDatabaseConnector.GetUsername(userId);
 
-            if (LoginWindow.UserDatabaseConnector.OnlineStatus)
-                ListBoxItemOnlineStatus.Content = "Online";
-            else
-                ListBoxItemOnlineStatus.Content = "Offline";
+            ListBoxItemOnlineStatus.Content = LoginWindow.UserDatabaseConnector.IsOnline(userId)
+                                                  ? "Online"
+                                                  : "Offline";
 
-            ListBoxItemFriends.Content = "Freunde: " + LoginWindow.UserDatabaseConnector.GetFriendsList().Count;
-            List<string> games = LoginWindow.UserDatabaseConnector.GetGames();
+            ListBoxItemFriends.Content = "Freunde: " + LoginWindow.UserDatabaseConnector.GetFriendsList(userId).Count;
+            List<string> games = LoginWindow.UserDatabaseConnector.GetGames(userId);
             ListBoxItemTotalGames.Content = "Spiele: " + games.Count;
-            ListBoxItemTotalPlaytime.Content = "Spielzeit: " +
-                                               games.Select(
-                                                            n =>
-                                                                LoginWindow.UserDatabaseConnector.GetPlayTime(n)
-                                                                           .TotalMinutes)
-                                                    .Sum() + " Minutes";
+            ListBoxItemTotalPlaytime.Content = "Spielzeit: " + games.Select(n => LoginWindow.UserDatabaseConnector.GetPlayTime(n, userId)
+                                                                                            .TotalMinutes).Sum() + " Minutes";
         }
 
         public void UserInfos()
